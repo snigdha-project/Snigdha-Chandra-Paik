@@ -9,6 +9,13 @@ import {
 } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
+// 1. Define the interface to handle optional properties
+interface NavLink {
+  name: string;
+  href: string;
+  special?: boolean; // The '?' makes it optional
+}
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -16,7 +23,6 @@ export default function Navbar() {
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
-    // Hide navbar on scroll down, show on scroll up
     if (latest > previous && latest > 150) {
       setHidden(true);
     } else {
@@ -24,7 +30,8 @@ export default function Navbar() {
     }
   });
 
-  const navLinks = [
+  // 2. Explicitly type the array
+  const navLinks: NavLink[] = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
     { name: "Projects", href: "/projects" },
@@ -37,10 +44,9 @@ export default function Navbar() {
         variants={{ visible: { y: 0 }, hidden: { y: "-100%" } }}
         animate={hidden ? "hidden" : "visible"}
         transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-        // HIGHEST Z-INDEX FOR THE MAIN BAR
         className="fixed top-0 left-0 right-0 z-[1000] grid grid-cols-2 md:grid-cols-3 items-center px-6 md:px-16 py-4 bg-[#F7F3E9] backdrop-blur-md border-b border-[#141B1A]/10"
       >
-        {/* 1. Logo */}
+        {/* Logo */}
         <a
           href="/"
           className="flex flex-col cursor-pointer group text-[#141B1A] justify-self-start relative"
@@ -51,7 +57,7 @@ export default function Navbar() {
           <motion.div className="absolute -bottom-1 left-0 h-[1px] bg-[#A64D32] w-0 group-hover:w-full transition-all duration-500" />
         </a>
 
-        {/* 2. Desktop Nav */}
+        {/* Desktop Nav */}
         <div className="hidden md:flex gap-10 justify-self-center items-center text-[10px] font-black uppercase tracking-[0.2em] text-[#141B1A]">
           {navLinks.map((link) => (
             <a key={link.name} href={link.href} className="relative group py-1">
@@ -61,7 +67,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* 3. Contact & Mobile Toggle */}
+        {/* Contact & Mobile Toggle */}
         <div className="flex items-center justify-self-end gap-6">
           <a
             href="/contact"
@@ -89,7 +95,6 @@ export default function Navbar() {
             animate={{ clipPath: "circle(150% at 90% 5%)" }}
             exit={{ clipPath: "circle(0% at 90% 5%)" }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-            // ABSOLUTE MAXIMUM Z-INDEX FOR OVERLAY
             className="fixed inset-0 z-[10000] bg-[#141B1A] flex flex-col justify-center items-center"
           >
             <button
