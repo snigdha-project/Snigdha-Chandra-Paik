@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "title": "AMJ Conversent AI",
+    "description": "An advanced AI-driven interface built to bridge the gap between complex automation and seamless user conversation.",
+    "category": "Automation / AI",
+    "tech": ["Webflow", "SEO", "AI Ops"],
+    "image": "/projects/AMJ.png",
+    "link": "https://www.amaginationtechnology.ai/",
+    "featured": true,
+    "colorKey": "webflow"
+  },
+  {
+    "id": 2,
+    "title": "Daikin TMI",
+    "description": "High-fidelity digital architecture for a global climate leader, focusing on technical precision and performance.",
+    "category": "Corporate / Webflow",
+    "tech": ["Webflow", "Interactions", "SEO"],
+    "image": "/projects/daikin.png",
+    "link": "https://www.daikin-tmi.com/",
+    "featured": true,
+    "colorKey": "webflow"
+  },
+  {
+    "id": 3,
+    "title": "The House of Abigail",
+    "description": "A luxury e-commerce ecosystem designed for high-conversion fashion retailing with a minimalist, premium feel.",
+    "category": "E-Commerce / Shopify",
+    "tech": ["Shopify", "Liquid", "UX Design"],
+    "image": "/projects/HOA.png",
+    "link": "https://thehouseofabigail.uk/",
+    "featured": true,
+    "colorKey": "shopify"
+  },
+  {
+    "id": 4,
+    "title": "Cute Mirror",
+    "description": "An interactive web experience using real-time face detection to synthesize emotional compliments and positive energy.",
+    "category": "Web App / Next.js",
+    "tech": ["Next.js", "Face Detection AI", "Vercel"],
+    "image": "/projects/mirror.png",
+    "link": "https://digital-mirror-psi.vercel.app/",
+    "featured": true,
+    "colorKey": "ai"
+  }
+]
