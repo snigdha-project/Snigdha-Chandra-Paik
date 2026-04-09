@@ -9,14 +9,18 @@ import { Compass, Fingerprint } from "lucide-react";
 function GuidanceFluid({
   containerRef,
 }: {
-  containerRef: React.RefObject<HTMLElement>;
+  // FIXED: Added | null to match the useRef type and satisfy the compiler
+  containerRef: React.RefObject<HTMLElement | null>;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
+
+    // Safety check already exists here, so the code remains safe
     if (!canvas || !container) return;
+
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
