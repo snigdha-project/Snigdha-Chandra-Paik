@@ -5,10 +5,12 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { Heart, ShieldCheck, Utensils, Sprout } from "lucide-react";
 
+// --- Scoped Multi-Line Heart Balloon Simulation ---
 function HeartVineTrail({
   containerRef,
 }: {
-  containerRef: React.RefObject<HTMLElement>;
+  // FIXED: Added | null to match the useRef type
+  containerRef: React.RefObject<HTMLElement | null>;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -16,9 +18,11 @@ function HeartVineTrail({
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
+
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // 4 Overlapping lines for the "Balloon" effect
     const trails = [
       { points: [] as any[], maxAge: 50, color: "255, 182, 193", offset: 0 },
       { points: [] as any[], maxAge: 60, color: "197, 110, 61", offset: 15 },
@@ -114,9 +118,7 @@ export default function Parents() {
     >
       <HeartVineTrail containerRef={sectionRef} />
 
-      {/* Main Content Container - Ensures left alignment for everything */}
       <div className="max-w-[1400px] w-full mx-auto relative z-20">
-        {/* Header - No longer absolute so it follows the container's padding */}
         <div className="mb-16 md:mb-24">
           <motion.span
             initial={{ opacity: 0 }}
@@ -133,9 +135,7 @@ export default function Parents() {
           </h2>
         </div>
 
-        {/* Grid aligned with the header */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-32 items-center">
-          {/* MOTHER SECTION */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -173,7 +173,6 @@ export default function Parents() {
             </div>
           </motion.div>
 
-          {/* FATHER SECTION */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -189,7 +188,7 @@ export default function Parents() {
                 className="object-cover transition-transform duration-1000 group-hover:scale-110"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#141B1A]/80 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#141B1A]/70 via-transparent to-transparent" />
               <ShieldCheck
                 className="absolute bottom-6 left-6 text-[#FFB6C1]"
                 size={20}
