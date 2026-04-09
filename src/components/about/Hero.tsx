@@ -13,14 +13,17 @@ function FluidSimulation({
 }: {
   activeTarget: "button" | "image" | null;
   targetPos: { x: number; y: number } | null;
-  containerRef: React.RefObject<HTMLElement>;
+  // FIXED: Added | null to the RefObject type to match useRef initialization
+  containerRef: React.RefObject<HTMLElement | null>;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
-    if (!canvas || !container || !containerRef.current) return;
+
+    // Safety check: if either is null, we exit early
+    if (!canvas || !container) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -77,7 +80,6 @@ function FluidSimulation({
     }
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Logic to get coordinates relative to the Hero section
       const rect = container.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -125,7 +127,6 @@ function FluidSimulation({
       height = canvas.height = container.offsetHeight;
     };
 
-    // Scoped listener: Only tracks mouse when inside the hero container
     container.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("resize", resize);
     resize();
