@@ -8,45 +8,45 @@ import { Leaf } from "lucide-react";
 const hobbyData = [
   {
     title: "Gardening",
-    desc: "Plants can talk. They are honest and loyal. They don't cheat me like humans.",
+    desc: "A conversation with nature. In every bloom, I find the loyalty and pure honesty of the earth.",
     img: "/hobbies/Garden.png",
     rotate: -5,
-    align: "justify-start", // Left
+    align: "justify-start",
   },
   {
     title: "Aquarium",
-    desc: "Nature understands emotion. Oscars and Discus are my peace. Fish understand us.",
+    desc: "My underwater sanctuary. Watching my Oscars is a silent meditation that brings peace.",
     img: "/hobbies/Aquarium.png",
     rotate: 3,
-    align: "justify-center", // Center
+    align: "justify-center",
   },
   {
     title: "Pet Caring",
-    desc: "Bunnies, dogs, monkeys. I feed every animal. Animals are far better than humans.",
+    desc: "Kindness in its purest form. Animals teach us how to love without conditions or boundaries.",
     img: "/hobbies/animal.png",
     rotate: -3,
-    align: "justify-end", // Right
+    align: "justify-end",
   },
   {
     title: "Writing",
-    desc: "My therapy. Story, poems, and thoughts. I'm not a good writer, but it's mine.",
+    desc: "Ink and soul. Every poem is a step toward discovery and a way to turn thoughts into art.",
     img: "/hobbies/writing.png",
     rotate: 4,
-    align: "justify-start", // Left
+    align: "justify-start",
   },
   {
     title: "Listening Music",
-    desc: "Love and sad songs for solitude, or dancing mode with friends. Night energy.",
+    desc: "The rhythm of life. Whether soulful or high energy, music is the fuel for my fire.",
     img: "/hobbies/music.png",
     rotate: -4,
-    align: "justify-center", // Center
+    align: "justify-center",
   },
   {
     title: "Motivate People",
-    desc: "My underrated hobby. Always trying to push others forward and give strength.",
+    desc: "Spreading the light. There is a special kind of strength found in lifting others up.",
     img: "/hobbies/motivation.png",
     rotate: 2,
-    align: "justify-end", // Right
+    align: "justify-end",
   },
 ];
 
@@ -71,11 +71,10 @@ function HobbyCard({ item, index, activeIndex, setActiveIndex }: any) {
   const isSomeoneElseHovered = activeIndex !== null && activeIndex !== index;
 
   return (
-    // OUTER WRAPPER: Handles horizontal spread (Left/Center/Right)
     <div
       className={`flex w-full ${item.align} mb-28 md:mb-40 last:mb-0 relative`}
     >
-      {/* WIND WRAPPER: Handles the constant breeze swaying */}
+      {/* 🌪️ WIND LAYER: This div ONLY handles the constant swaying loop */}
       <motion.div
         animate={{
           rotateZ: [item.rotate - 1.5, item.rotate + 1.5, item.rotate - 1.5],
@@ -88,7 +87,7 @@ function HobbyCard({ item, index, activeIndex, setActiveIndex }: any) {
         className="w-full md:w-fit flex justify-center sticky top-24 md:top-auto"
         style={{ zIndex: isHovered ? 100 : index }}
       >
-        {/* INTERACTIVE CARD: Handles Tilt, Hover, and Blur */}
+        {/* ✨ INTERACTIVE LAYER: This handles Tilt, Scale, and Focus Blur */}
         <motion.div
           ref={cardRef}
           onMouseMove={handleMouseMove}
@@ -113,10 +112,10 @@ function HobbyCard({ item, index, activeIndex, setActiveIndex }: any) {
             scale: isHovered ? 1.05 : 1,
             opacity: isSomeoneElseHovered ? 0.4 : 1,
           }}
-          whileHover={{ rotateZ: 0 }}
+          whileHover={{ rotateZ: 0 }} // Straightens on hover
           className="w-full md:w-[480px] bg-white p-6 pb-20 shadow-2xl border border-[#141B1A]/5 rounded-sm cursor-grab active:cursor-grabbing group transition-all duration-500"
         >
-          {/* Polaroid Frame */}
+          {/* Image */}
           <div
             style={{ transform: "translateZ(80px)" }}
             className="relative aspect-square overflow-hidden bg-[#F7F3E9] mb-10 pointer-events-none shadow-inner"
@@ -138,7 +137,7 @@ function HobbyCard({ item, index, activeIndex, setActiveIndex }: any) {
               {item.title}
             </h3>
             <p className="text-sm md:text-base leading-relaxed font-semibold opacity-50 italic">
-              "{item.desc}"
+              {item.desc}
             </p>
           </div>
 
@@ -152,6 +151,7 @@ function HobbyCard({ item, index, activeIndex, setActiveIndex }: any) {
 export default function Hobbies() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
+  // 🍃 Increased Leaf Density for the "Forest/Green" theme
   const backgroundLeaves = [
     {
       delay: 0,
@@ -211,7 +211,7 @@ export default function Hobbies() {
           "radial-gradient(circle at center, #FFF9E9 0%, #FFFDFA 75%)",
       }}
     >
-      {/* GREEN LEAVES LAYER */}
+      {/* Green Leaves Layer */}
       {backgroundLeaves.map((leaf, i) => (
         <motion.div
           key={`leaf-${i}`}
@@ -240,7 +240,7 @@ export default function Hobbies() {
         </motion.div>
       ))}
 
-      {/* SUN PARTICLES LAYER */}
+      {/* Sun Dust Particles */}
       {[0, 3, 6].map((delay, i) => (
         <motion.div
           key={i}
@@ -273,7 +273,6 @@ export default function Hobbies() {
           </h2>
         </div>
 
-        {/* THE STACK CONTAINER */}
         <div className="relative flex flex-col w-full pb-20">
           {hobbyData.map((item, i) => (
             <HobbyCard
@@ -288,7 +287,7 @@ export default function Hobbies() {
 
         <div className="border-t border-[#141B1A]/10 pt-16 text-center">
           <p className="text-[10px] md:text-[12px] uppercase tracking-[0.5em] md:tracking-[1.2em] font-black text-[#141B1A] opacity-20 px-4 leading-relaxed">
-            " Animals are far better than humans "
+            Kind to Nature, Loyal to Life
           </p>
         </div>
       </div>
