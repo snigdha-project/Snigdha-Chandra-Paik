@@ -11,16 +11,22 @@ import {
 } from "@react-three/drei";
 import * as THREE from "three";
 
-// CSS to stop long-press and text selection globally for the model
 const disableTouchStyles = `
   .no-touch {
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none;   /* Safari */
-    -khtml-user-select: none;    /* Konqueror HTML */
-    -moz-user-select: none;      /* Firefox */
-    -ms-user-select: none;       /* Internet Explorer/Edge */
-    user-select: none;           /* Non-prefixed version, currently supported by Chrome and Opera */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     -webkit-tap-highlight-color: transparent;
+  }
+  @keyframes blink {
+    0%, 90%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+  }
+  .animate-blink {
+    animation: blink 4s infinite;
   }
 `;
 
@@ -30,32 +36,32 @@ function Face({ expression }: { expression: string }) {
       transform
       occlude={false}
       center
-      distanceFactor={3}
-      position={[0, 0, 1.02]}
-      /* Apply the no-touch class here */
+      distanceFactor={2.5}
+      position={[0, 0, 0]}
       className="select-none pointer-events-none no-touch"
     >
-      <div className="flex flex-col items-center justify-center gap-2">
-        <div className="flex gap-5 mb-1">
-          <div className="w-10 h-10 bg-black rounded-full relative overflow-hidden">
+      <div className="flex flex-col items-center justify-center pointer-events-none">
+        <div className="flex gap-6 mb-2">
+          {[1, 2].map((i) => (
             <div
-              className={`w-10 h-10 bg-black animate-blink ${expression === "drag" ? "h-3 mt-4" : ""}`}
+              key={i}
+              className="w-10 h-10 bg-black rounded-full relative overflow-hidden"
             >
-              <div className="absolute top-2 left-2 w-3 h-3 bg-white rounded-full opacity-90" />
+              <div
+                className={`w-full h-full bg-black animate-blink origin-center transition-all duration-300 ${
+                  expression === "drag" ? "scale-y-[0.3] mt-3" : ""
+                }`}
+              >
+                <div className="absolute top-2 left-2 w-3 h-3 bg-white rounded-full opacity-90" />
+              </div>
             </div>
-          </div>
-          <div className="w-10 h-10 bg-black rounded-full relative overflow-hidden">
-            <div
-              className={`w-10 h-10 bg-black animate-blink ${expression === "drag" ? "h-3 mt-4" : ""}`}
-            >
-              <div className="absolute top-2 left-2 w-3 h-3 bg-white rounded-full opacity-90" />
-            </div>
-          </div>
+          ))}
         </div>
+
         <div
           className={`transition-all duration-300 border-black flex items-center justify-center ${
             expression === "drag"
-              ? "w-14 h-14 border-[6px] rounded-full"
+              ? "w-12 h-12 border-[6px] rounded-full"
               : "w-16 h-4 border-b-[8px] rounded-full"
           }`}
         />
@@ -68,34 +74,49 @@ function JellyPet() {
   const containerGroup = useRef<THREE.Group>(null);
   const materialRef = useRef<any>(null);
   const [drag, setDrag] = useState(false);
-  const mousePos = useRef({ x: 0, y: 0 });
+
+  // Track mouse coordinates
+  const mouse = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Inject the CSS to disable long-press
-    if (!document.getElementById("no-touch-styles")) {
-      const style = document.createElement("style");
-      style.id = "no-touch-styles";
-      style.innerHTML = disableTouchStyles;
-      document.head.appendChild(style);
-    }
+    if (typeof window !== "undefined") {
+      if (!document.getElementById("no-touch-styles")) {
+        const style = document.createElement("style");
+        style.id = "no-touch-styles";
+        style.innerHTML = disableTouchStyles;
+        document.head.appendChild(style);
+      }
 
-    const handleGlobalMouseMove = (e: MouseEvent) => {
-      mousePos.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mousePos.current.y = (e.clientY / window.innerHeight) * 2 - 1;
-    };
-    window.addEventListener("mousemove", handleGlobalMouseMove);
-    return () => window.removeEventListener("mousemove", handleGlobalMouseMove);
+      const onMouseMove = (e: MouseEvent) => {
+        // Normalizing coordinates for Three.js tracking
+        mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      };
+
+      window.addEventListener("mousemove", onMouseMove);
+      return () => window.removeEventListener("mousemove", onMouseMove);
+    }
   }, []);
 
   useFrame((state, delta) => {
     if (!containerGroup.current || !materialRef.current) return;
-    const targetRotY = (mousePos.current.x * Math.PI) / 6;
-    const targetRotX = (mousePos.current.y * Math.PI) / 6;
-    containerGroup.current.rotation.y +=
-      (targetRotY - containerGroup.current.rotation.y) * 0.1;
-    containerGroup.current.rotation.x +=
-      (targetRotX - containerGroup.current.rotation.x) * 0.1;
 
+    // Rotation tracking (Eye/Face follows cursor)
+    const targetRotY = (mouse.current.x * Math.PI) / 6;
+    const targetRotX = (-mouse.current.y * Math.PI) / 6;
+
+    containerGroup.current.rotation.y = THREE.MathUtils.lerp(
+      containerGroup.current.rotation.y,
+      targetRotY,
+      0.1,
+    );
+    containerGroup.current.rotation.x = THREE.MathUtils.lerp(
+      containerGroup.current.rotation.x,
+      targetRotX,
+      0.1,
+    );
+
+    // Distortion physics
     const targetSpeed = drag ? 5 : 1.5;
     const targetDistort = drag ? 0.4 : 0.2;
     materialRef.current.speed = THREE.MathUtils.lerp(
@@ -109,6 +130,7 @@ function JellyPet() {
       delta * 5,
     );
 
+    // Scale feedback
     const weave = drag ? Math.sin(state.clock.elapsedTime * 15) * 0.05 : 0;
     const currentScale = drag ? 1.15 + weave : 1;
     containerGroup.current.scale.lerp(
@@ -119,13 +141,11 @@ function JellyPet() {
 
   return (
     <group ref={containerGroup}>
-      <Float speed={drag ? 0 : 2} rotationIntensity={0.1} floatIntensity={0.2}>
+      <Float speed={drag ? 0 : 2} rotationIntensity={0.2} floatIntensity={0.5}>
         <Sphere
           args={[1, 64, 64]}
-          /* Prevent context menu on long-press */
           onContextMenu={(e: any) => e.nativeEvent.preventDefault()}
           onPointerDown={(e) => {
-            // Fix for mobile: prevents the browser from thinking this is a scroll/save action
             (e.target as any).releasePointerCapture(e.pointerId);
             setDrag(true);
           }}
@@ -143,22 +163,31 @@ function JellyPet() {
 export default function AboutModel() {
   return (
     <div
-      className="relative w-full h-[400px] flex items-center justify-center overflow-visible no-touch"
-      onContextMenu={(e) => e.preventDefault()} // Final fallback for the container
+      className="relative w-full h-[450px] flex items-center justify-center overflow-visible no-touch select-none z-10"
+      onContextMenu={(e) => e.preventDefault()}
     >
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 40 }}
+        camera={{ position: [0, 0, 5], fov: 35 }}
         className="overflow-visible"
-        style={{ pointerEvents: "auto", touchAction: "none" }} // touchAction: 'none' is key for mobile
+        style={{ pointerEvents: "auto", touchAction: "none" }}
       >
         <ambientLight intensity={1.5} />
         <pointLight position={[10, 10, 10]} intensity={2} />
+        <spotLight
+          position={[-10, 10, 10]}
+          angle={0.15}
+          penumbra={1}
+          intensity={1}
+        />
+
         <JellyPet />
+
         <ContactShadows
-          position={[0, -1.6, 0]}
+          position={[0, -1.8, 0]}
           opacity={0.4}
-          scale={6}
+          scale={8}
           blur={2.5}
+          far={4}
         />
       </Canvas>
     </div>
