@@ -12,7 +12,6 @@ import Image from "next/image";
 
 // Import your data
 import projectData from "@/data/projects.json";
-import colorData from "@/data/colors.json";
 
 export default function Projects() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -23,7 +22,8 @@ export default function Projects() {
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
-  const displayProjects = projectData.slice(0, 4);
+  // UPDATED LOGIC: Filter projects where featured is true
+  const displayProjects = projectData.filter((project) => project.featured);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     mouseX.set(e.clientX);
