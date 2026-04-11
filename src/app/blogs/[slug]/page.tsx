@@ -8,25 +8,26 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-// 1. HELPER TO CLEAN HTML
+// 1. HELPER TO CLEAN HTML STRINGS
 const decodeHTML = (html: string) => {
   if (!html) return "";
   return html
     .replace(/&#8217;/g, "'")
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
-    .replace(/&#8211;/g, "–");
+    .replace(/&#8211;/g, "–")
+    .replace(/<[^>]+>/g, ""); // Strips tags for SEO title
 };
 
 // 2. DYNAMIC SEO METADATA
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+
+  // DYNAMIC URL LOGIC: Fixes the Vercel 500 error
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
   try {
-    const res = await fetch(`${baseUrl}/api/wp-proxy?slug=${slug}`, {
-      cache: "no-store",
-    });
+    const res = await fetch(`${baseUrl}/api/wp-proxy?slug=${slug}&_embed`);
     const posts = await res.json();
     const post = posts[0];
 
@@ -35,45 +36,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const seo = post.yoast_head_json;
     return {
       title: seo?.title || decodeHTML(post.title.rendered),
-      description: seo?.description || "The Night Journal Editorial",
+      description: seo?.description || "Read this story on The Night Journal",
     };
   } catch (error) {
-    return { title: "The Night Journal" };
+    return { title: "The Night Journal // Editorial" };
   }
 }
 
-// 3. THE MAIN PAGE COMPONENT
+// 3. THE SINGLE POST COMPONENT
 export default async function SingleBlogPost({ params }: Props) {
-  const { slug } = await params; // Unwrapping the promise
+  const { slug } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
-  // FETCHING WITH NO-STORE TO PREVENT "UNTOLD DEVELOPER" GHOSTING
-  const res = await fetch(`${baseUrl}/api/wp-proxy?slug=${slug}`, {
-    cache: "no-store",
+  // We fetch with _embed to get the Featured Image
+  const res = await fetch(`${baseUrl}/api/wp-proxy?slug=${slug}&_embed`, {
+    next: { revalidate: 3600 },
   });
 
   if (!res.ok) notFound();
 
   const posts = await res.json();
+  const post = posts[0];
 
-  // Logic check: ensure the post we got actually matches the slug we asked for
-  const post = posts.find((p: any) => p.slug === slug) || posts[0];
+  if (!post) notFound();
 
-  if (
-    !post ||
-    (posts.length > 0 && post.slug !== slug && slug !== "hello-world")
-  ) {
-    // This extra check ensures that if the API fails to filter, we don't show the wrong post
-    console.error("Slug mismatch! Expected:", slug, "Got:", post?.slug);
-  }
-
-  // IMAGE LOGIC
+  // IMAGE LOGIC: Pulling from WordPress Featured Image
   let featuredImage = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
+
+  // Fallback if Featured Image isn't set but an image exists in content
   if (!featuredImage) {
     const match = post.content.rendered.match(/<img[^>]+src="([^">]+)"/);
     if (match) featuredImage = match[1];
   }
-  if (featuredImage?.includes("localhost")) {
+
+  // THE WASMER FIX: Correct localhost images
+  if (featuredImage && featuredImage.includes("localhost")) {
     featuredImage = featuredImage.replace(
       /http:\/\/localhost(:\d+)?/,
       "https://blogsforme.wasmer.app",
@@ -86,8 +83,9 @@ export default async function SingleBlogPost({ params }: Props) {
   const readTime = Math.ceil(wordCount / 200);
 
   return (
-    <main className="min-h-screen bg-[#E8E4D9] selection:bg-[#141B1A] selection:text-[#E8E4D9] pb-32 relative">
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.15] mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
+    <main className="min-h-screen bg-[#E8E4D9] selection:bg-[#141B1A] selection:text-[#E8E4D9] pb-32 relative text-[#141B1A]">
+      {/* Texture Overlay - Stay at z-0 */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.12] mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
 
       <div className="relative z-10">
         <nav className="p-6 md:p-10 border-b-2 border-[#141B1A]/10 flex justify-between items-center">
@@ -101,8 +99,8 @@ export default async function SingleBlogPost({ params }: Props) {
             />
             Back to Journal
           </Link>
-          <div className="text-[10px] font-black uppercase tracking-widest text-[#141B1A]/40 font-mono uppercase">
-            {post.slug} // Dispatch #{post.id}
+          <div className="text-[10px] font-black uppercase tracking-widest text-[#141B1A]/40 font-mono">
+            Wasmer Edition // Dispatch #{post.id}
           </div>
         </nav>
 
@@ -128,18 +126,19 @@ export default async function SingleBlogPost({ params }: Props) {
               </div>
 
               <h1 className="font-[family-name:var(--font-fraunces)] text-5xl md:text-8xl lg:text-9xl text-[#141B1A] font-black tracking-tighter leading-[0.9] uppercase mb-16">
-                {decodeHTML(post.title.rendered)}
+                {post.title.rendered.replace(/&#8217;/g, "'")}
               </h1>
             </div>
           </header>
 
+          {/* FEATURED IMAGE - Fixed Visibility */}
           {featuredImage && (
             <section className="py-12 md:py-20">
-              <div className="relative w-full aspect-[21/9] border-2 border-[#141B1A] p-2 bg-white/50">
-                <div className="relative w-full h-full overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+              <div className="relative w-full aspect-[21/9] border-2 border-[#141B1A] p-2 bg-[#DED9CC] shadow-2xl">
+                <div className="relative w-full h-full overflow-hidden grayscale contrast-125 brightness-90 transition-all hover:grayscale-0 duration-700">
                   <Image
                     src={featuredImage}
-                    alt="Cover"
+                    alt="Editorial Visual"
                     fill
                     className="object-cover"
                     priority
@@ -150,28 +149,39 @@ export default async function SingleBlogPost({ params }: Props) {
           )}
 
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 py-16">
-            <aside className="hidden lg:block lg:col-span-3 space-y-12 border-t-2 border-[#141B1A] pt-12 text-[#141B1A]">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-[#C56E3D] mb-5 underline decoration-2 underline-offset-4">
-                Dispatch From
-              </h4>
-              <p className="text-sm font-bold uppercase tracking-wider">
-                Wasmer Cloud // {slug}
-              </p>
+            <aside className="hidden lg:block lg:col-span-3 space-y-12 border-t-2 border-[#141B1A] pt-12">
+              <div>
+                <h4 className="text-[10px] font-black uppercase tracking-widest text-[#C56E3D] mb-5 underline decoration-2 underline-offset-4">
+                  Dispatch From
+                </h4>
+                <p className="text-sm font-bold text-[#141B1A] uppercase tracking-wider">
+                  Wasmer Cloud // {slug}
+                </p>
+              </div>
             </aside>
 
+            {/* CONTENT BODY - Fixed White Text & New Lines */}
             <div className="lg:col-span-8 lg:col-start-5">
               <div
                 className="prose prose-xl prose-stone max-w-none 
-                  prose-p:text-[#141B1A] prose-p:leading-relaxed prose-p:font-medium prose-p:text-lg md:prose-p:text-xl
-                  prose-headings:font-[family-name:var(--font-fraunces)] prose-headings:uppercase prose-headings:font-black prose-headings:text-[#141B1A]
-                  prose-strong:text-[#C56E3D] prose-strong:font-black
-                  prose-img:border-2 prose-img:border-[#141B1A] prose-img:p-1
+                  prose-p:text-[#141B1A] prose-p:leading-relaxed prose-p:mb-10 prose-p:block
+                  prose-headings:text-[#141B1A] prose-headings:font-black prose-headings:uppercase prose-headings:mt-12 prose-headings:mb-6
+                  prose-strong:text-[#141B1A] prose-strong:font-black
+                  prose-li:text-[#141B1A]
                   first-letter:text-8xl first-letter:font-black first-letter:mr-4 first-letter:float-left first-letter:text-[#C56E3D] first-letter:leading-[0.85] first-letter:mt-2"
                 dangerouslySetInnerHTML={{ __html: post.content.rendered }}
               />
             </div>
           </section>
         </article>
+
+        <footer className="max-w-[1400px] mx-auto px-6 md:px-16 lg:px-24 mt-24">
+          <div className="border-t-4 border-double border-[#141B1A] pt-16 text-center">
+            <p className="font-[family-name:var(--font-playfair)] italic text-3xl md:text-5xl text-[#141B1A]">
+              End of Dispatch.
+            </p>
+          </div>
+        </footer>
       </div>
     </main>
   );
