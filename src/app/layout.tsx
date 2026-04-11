@@ -68,10 +68,22 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${playfair.variable} ${sans.variable} ${signature.variable} scroll-smooth`}
+      className={`
+        ${fraunces.variable} 
+        ${playfair.variable} 
+        ${sans.variable} 
+        ${signature.variable}
+        scroll-smooth
+      `}
     >
       <head>
-        {/* 1. GTM SCRIPT: MUST BE THE VERY FIRST ITEM IN HEAD */}
+        {/* 1. GOOGLE SITE VERIFICATION META TAG */}
+        <meta
+          name="google-site-verification"
+          content="j5HdTVTmf3ju_RKwdas2ivk-s80JFO7-E_j59titvE0"
+        />
+
+        {/* 2. GTM SCRIPT: MUST BE THE FIRST ITEM IN HEAD AFTER META */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -81,13 +93,11 @@ export default function RootLayout({
             })(window,document,'script','dataLayer','GTM-M225DLQQ');`,
           }}
         />
-        {/* ---------------------------------------------------- */}
       </head>
       <body
         className="bg-[#F7F3E9] text-[#141B1A] antialiased font-sans"
         suppressHydrationWarning={true}
       >
-        {/* 2. NOSCRIPT: MUST BE IMMEDIATELY AFTER THE OPENING BODY TAG */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-M225DLQQ"
@@ -96,9 +106,7 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
-        {/* ----------------------------------------------------------- */}
 
-        {/* 3. YOUR APP COMPONENTS COME AFTER THE GTM SNIPPETS */}
         <SmoothScroll>
           <Navbar />
           <main>{children}</main>
