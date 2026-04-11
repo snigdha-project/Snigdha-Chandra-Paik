@@ -77,7 +77,7 @@ export default function RootLayout({
       `}
     >
       <head>
-        {/* 1. GTM SCRIPT MUST BE THE ABSOLUTE FIRST ITEM IN HEAD */}
+        {/* 1. GTM SCRIPT: MUST BE THE FIRST ITEM IN HEAD */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -93,7 +93,7 @@ export default function RootLayout({
         className="bg-[#F7F3E9] text-[#141B1A] antialiased font-sans"
         suppressHydrationWarning={true}
       >
-        {/* 2. NOSCRIPT MUST BE IMMEDIATELY AFTER THE OPENING BODY TAG */}
+        {/* 2. NOSCRIPT: MUST BE IMMEDIATELY AFTER THE OPENING BODY TAG */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-M225DLQQ"
@@ -104,7 +104,7 @@ export default function RootLayout({
         </noscript>
         {/* ----------------------------------------------------------- */}
 
-        {/* 3. WRAPPERS LIKE SMOOTHSCROLL MUST COME AFTER THE GTM SNIPPETS */}
+        {/* 3. APP COMPONENTS: MUST COME AFTER THE GTM SNIPPETS */}
         <SmoothScroll>
           <Navbar />
           <main>{children}</main>
