@@ -3,32 +3,17 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight, Loader2 } from "lucide-react";
+import { getWPPosts } from "@/lib/wordpress";
 
-const blogPosts = [
-  {
-    title: "Nature as a Mentor: My Gardening Path",
-    category: "Philosophy",
-    img: "/hobbies/Garden.png",
-    slug: "nature-mentor",
-    gridClass: "md:col-span-2 md:row-span-2",
-  },
-  {
-    title: "Aquatic Scaping Art",
-    category: "Lifestyle",
-    img: "/hobbies/Aquarium.png",
-    slug: "aquatic-art",
-    gridClass: "md:col-span-1 md:row-span-1",
-  },
-  {
-    title: "Design for Life",
-    category: "Design",
-    img: "/hobbies/animal.png",
-    slug: "designing-life",
-    gridClass: "md:col-span-1 md:row-span-1",
-  },
-];
+// Helper to clean WordPress titles
+const decodeHTML = (html: string) => {
+  if (typeof window === "undefined") return html;
+  const txt = document.createElement("textarea");
+  txt.innerHTML = html;
+  return txt.value;
+};
 
 function MagneticButton() {
   const mouseX = useMotionValue(0);
@@ -56,7 +41,6 @@ function MagneticButton() {
     mouseY.set(0);
   };
 
-  // Convert spotlight values into a CSS string for the background
   const background = useTransform(
     [spotlightX, spotlightY],
     ([x, y]) =>
@@ -86,14 +70,15 @@ function MagneticButton() {
   );
 }
 
-function BentoCard({
-  post,
-  index,
-}: {
-  post: (typeof blogPosts)[0];
-  index: number;
-}) {
+function BentoCard({ post, index }: { post: any; index: number }) {
   const [isHovered, setIsHovered] = useState(false);
+
+  // Maintain your specific grid layout logic
+  const gridClasses = [
+    "md:col-span-2 md:row-span-2", // First post is large
+    "md:col-span-1 md:row-span-1", // Second is small
+    "md:col-span-1 md:row-span-1", // Third is small
+  ];
 
   return (
     <motion.div
@@ -103,7 +88,7 @@ function BentoCard({
       transition={{ delay: index * 0.1, duration: 0.6 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`group relative overflow-hidden rounded-2xl border border-white/5 bg-[#1A2421] ${post.gridClass}`}
+      className={`group relative overflow-hidden rounded-2xl border border-white/5 bg-[#1A2421] ${gridClasses[index] || ""}`}
     >
       <Link
         href={`/blogs/${post.slug}`}
@@ -111,7 +96,7 @@ function BentoCard({
       >
         <div className="absolute inset-0 z-0 overflow-hidden">
           <Image
-            src={post.img}
+            src={post.image}
             alt={post.title}
             fill
             className="object-cover opacity-30 transition-all duration-1000 group-hover:scale-105 group-hover:opacity-50"
@@ -134,7 +119,7 @@ function BentoCard({
 
           <div>
             <h3 className="font-[family-name:var(--font-fraunces)] text-2xl md:text-4xl font-bold text-white leading-tight tracking-tight">
-              {post.title}
+              {decodeHTML(post.title)}
             </h3>
             <div className="mt-4 h-[1px] w-0 bg-[#C56E3D] transition-all duration-500 group-hover:w-full" />
           </div>
@@ -145,8 +130,25 @@ function BentoCard({
 }
 
 export default function Blogs() {
+  const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLatest = async () => {
+      try {
+        const latest = await getWPPosts(3, 0);
+        setPosts(latest);
+      } catch (err) {
+        console.error("Home Blog Fetch Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLatest();
+  }, []);
+
   return (
-    <section className="bg-[#141B1A] h-screen min-h-[700px] max-h-screen py-12 md:py-20 px-6 md:px-16 relative overflow-hidden flex flex-col">
+    <section className="bg-[#141B1A] min-h-screen py-12 md:py-20 px-6 md:px-16 relative overflow-hidden flex flex-col">
       <div className="max-w-[1400px] w-full mx-auto mb-10 md:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
         <div className="max-w-2xl">
           <span className="text-[10px] uppercase tracking-[1em] text-[#C56E3D] font-black block mb-3">
@@ -162,10 +164,16 @@ export default function Blogs() {
         <MagneticButton />
       </div>
 
-      <div className="max-w-[1400px] w-full mx-auto flex-1 grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4 md:gap-6">
-        {blogPosts.map((post, i) => (
-          <BentoCard key={i} post={post} index={i} />
-        ))}
+      <div className="max-w-[1400px] w-full mx-auto flex-1 grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4 md:gap-6 min-h-[600px]">
+        {loading ? (
+          <div className="col-span-full flex items-center justify-center h-64">
+            <Loader2 className="animate-spin text-[#C56E3D]" size={32} />
+          </div>
+        ) : (
+          posts.map((post, i) => (
+            <BentoCard key={post.slug} post={post} index={i} />
+          ))
+        )}
       </div>
 
       <div className="absolute top-0 right-0 w-80 h-80 bg-[#C56E3D]/5 rounded-full blur-[120px] pointer-events-none" />
