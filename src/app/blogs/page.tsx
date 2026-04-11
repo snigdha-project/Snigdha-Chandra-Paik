@@ -6,9 +6,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Loader2, Newspaper } from "lucide-react";
-import { getWPPosts } from "@/lib/wordpress";
+// 1. Updated Import: Pointing to local JSON service
+import { getLocalPosts } from "@/lib/blogService";
 
-// Helper to clean WordPress titles (converts &#8217; to ')
+/**
+ * Helper to clean HTML entities
+ * Since we are using local JSON, we can write clean text,
+ * but this remains for safety if you paste HTML into your JSON.
+ */
 const decodeHTML = (html: string) => {
   if (typeof window === "undefined") return html;
   const txt = document.createElement("textarea");
@@ -38,14 +43,15 @@ export default function BlogPage() {
     setIsLoading(true);
     try {
       const offset = posts.length;
-      const newWPPosts = await getWPPosts(3, offset);
+      // 2. Updated Fetch: Calling local service instead of WP proxy
+      const newLocalPosts = await getLocalPosts(3, offset);
 
-      if (!newWPPosts || newWPPosts.length === 0) {
+      if (!newLocalPosts || newLocalPosts.length === 0) {
         setHasMore(false);
       } else {
         setPosts((prev) => {
           const existingSlugs = new Set(prev.map((p) => p.slug));
-          const uniqueNew = newWPPosts.filter(
+          const uniqueNew = newLocalPosts.filter(
             (p) => !existingSlugs.has(p.slug),
           );
 
@@ -58,7 +64,7 @@ export default function BlogPage() {
         });
       }
     } catch (error) {
-      console.error("Wasmer Sync Failure:", error);
+      console.error("Local Data Sync Failure:", error);
       setHasMore(false);
     } finally {
       setIsLoading(false);
@@ -82,6 +88,7 @@ export default function BlogPage() {
 
   return (
     <main className="min-h-screen bg-[#E8E4D9] selection:bg-[#141B1A] selection:text-[#E8E4D9] overflow-x-hidden">
+      {/* Newspaper Texture Overlay */}
       <div className="fixed inset-0 pointer-events-none z-50 opacity-20 mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
 
       <header className="pt-24 md:pt-32 pb-12 px-6 md:px-16 lg:px-24 border-b-4 border-double border-[#141B1A]">
@@ -92,7 +99,7 @@ export default function BlogPage() {
                 Late Night Edition
               </span>
               <span className="text-[9px] md:text-[10px] font-black tracking-widest text-[#141B1A]/60 uppercase">
-                {currentMonthYear} // FROM WASMER
+                {currentMonthYear} // FROM DISPATCH
               </span>
             </div>
             <h1 className="font-[family-name:var(--font-fraunces)] text-[15vw] md:text-[11rem] text-[#141B1A] font-black tracking-tighter leading-[0.8] uppercase break-words">
@@ -117,7 +124,7 @@ export default function BlogPage() {
             >
               {/* RESPONSIVE IMAGE BOX */}
               <div className="relative w-full md:absolute md:right-0 md:top-0 md:h-full md:w-1/2 md:-z-10 overflow-hidden">
-                {/* Mobile View: Standard visibility */}
+                {/* Mobile View */}
                 <div className="block md:hidden relative w-full aspect-[16/10] opacity-40 grayscale contrast-125 brightness-90">
                   <Image
                     src={post.image}
@@ -126,7 +133,7 @@ export default function BlogPage() {
                     className="object-cover mix-blend-multiply"
                   />
                 </div>
-                {/* Desktop View: Hover Reveal (Hidden by default) */}
+                {/* Desktop View: Hover Reveal */}
                 <div className="hidden md:block w-full h-full">
                   <AnimatePresence>
                     {hoveredSlug === post.slug && (
@@ -164,7 +171,6 @@ export default function BlogPage() {
                     {post.date}
                   </span>
                 </div>
-                {/* Fluid font size for desktop, fixed size for mobile */}
                 <h2 className="font-[family-name:var(--font-fraunces)] text-4xl md:text-7xl text-[#141B1A] font-black tracking-tighter uppercase leading-[0.95] md:leading-[0.9] group-hover:text-[#C56E3D] transition-colors duration-500">
                   {decodeHTML(post.title)}
                 </h2>

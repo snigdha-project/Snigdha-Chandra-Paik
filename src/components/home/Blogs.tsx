@@ -5,9 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Loader2 } from "lucide-react";
-import { getWPPosts } from "@/lib/wordpress";
+// Updated to import from local blogService
+import { getLocalPosts } from "@/lib/blogService";
 
-// Helper to clean WordPress titles
+// Helper to clean HTML entities for titles
 const decodeHTML = (html: string) => {
   if (typeof window === "undefined") return html;
   const txt = document.createElement("textarea");
@@ -73,11 +74,11 @@ function MagneticButton() {
 function BentoCard({ post, index }: { post: any; index: number }) {
   const [isHovered, setIsHovered] = useState(false);
 
-  // Maintain your specific grid layout logic
+  // Layout logic preserved for the 3-item grid
   const gridClasses = [
-    "md:col-span-2 md:row-span-2", // First post is large
-    "md:col-span-1 md:row-span-1", // Second is small
-    "md:col-span-1 md:row-span-1", // Third is small
+    "md:col-span-2 md:row-span-2",
+    "md:col-span-1 md:row-span-1",
+    "md:col-span-1 md:row-span-1",
   ];
 
   return (
@@ -136,7 +137,8 @@ export default function Blogs() {
   useEffect(() => {
     const fetchLatest = async () => {
       try {
-        const latest = await getWPPosts(3, 0);
+        // Updated to use the local service function
+        const latest = await getLocalPosts(3, 0);
         setPosts(latest);
       } catch (err) {
         console.error("Home Blog Fetch Error:", err);
@@ -176,6 +178,7 @@ export default function Blogs() {
         )}
       </div>
 
+      {/* Decorative Orbs */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-[#C56E3D]/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#2D4B44]/10 rounded-full blur-[120px] pointer-events-none" />
     </section>
