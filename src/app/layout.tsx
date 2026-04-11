@@ -68,16 +68,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`
-        ${fraunces.variable} 
-        ${playfair.variable} 
-        ${sans.variable} 
-        ${signature.variable}
-        scroll-smooth
-      `}
+      className={`${fraunces.variable} ${playfair.variable} ${sans.variable} ${signature.variable} scroll-smooth`}
     >
       <head>
-        {/* --- GOOGLE TAG MANAGER (Head Script) --- */}
+        {/* 1. GTM MUST BE THE FIRST THING IN HEAD */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -87,20 +81,12 @@ export default function RootLayout({
             })(window,document,'script','dataLayer','GTM-M225DLQQ');`,
           }}
         />
-        {/* ---------------------------------------- */}
       </head>
       <body
-        className="
-          bg-[#F7F3E9] 
-          text-[#141B1A] 
-          antialiased 
-          font-sans
-          selection:bg-[#A64D32] 
-          selection:text-[#F7F3E9]
-        "
+        className="bg-[#F7F3E9] text-[#141B1A] antialiased font-sans"
         suppressHydrationWarning={true}
       >
-        {/* --- GOOGLE TAG MANAGER (Body Noscript) --- */}
+        {/* 2. NOSCRIPT MUST BE IMMEDIATELY AFTER BODY START */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-M225DLQQ"
@@ -109,8 +95,8 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
-        {/* ------------------------------------------- */}
 
+        {/* 3. YOUR APP COMPONENTS COME AFTER GTM */}
         <SmoothScroll>
           <Navbar />
           <main>{children}</main>
