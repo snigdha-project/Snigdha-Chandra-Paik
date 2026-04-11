@@ -68,16 +68,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`
-        ${fraunces.variable} 
-        ${playfair.variable} 
-        ${sans.variable} 
-        ${signature.variable}
-        scroll-smooth
-      `}
+      className={`${fraunces.variable} ${playfair.variable} ${sans.variable} ${signature.variable} scroll-smooth`}
     >
       <head>
-        {/* 1. GTM SCRIPT: MUST BE THE FIRST ITEM IN HEAD */}
+        {/* 1. GTM SCRIPT: MUST BE THE VERY FIRST ITEM IN HEAD */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -104,7 +98,7 @@ export default function RootLayout({
         </noscript>
         {/* ----------------------------------------------------------- */}
 
-        {/* 3. APP COMPONENTS: MUST COME AFTER THE GTM SNIPPETS */}
+        {/* 3. YOUR APP COMPONENTS COME AFTER THE GTM SNIPPETS */}
         <SmoothScroll>
           <Navbar />
           <main>{children}</main>
