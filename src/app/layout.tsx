@@ -38,12 +38,10 @@ const signature = Monsieur_La_Doulaise({
   display: "swap",
 });
 
-// DYNAMIC METADATA: Title and Description per page
+// FIXED METADATA: Changed title back to a string to resolve Type Error
 export const metadata: Metadata = {
   metadataBase: new URL("https://snigdhachandrapaik.vercel.app"),
-  title: {
-    default: "Snigdha Chandra Paik | Creative Developer",
-  },
+  title: "Snigdha Chandra Paik | Creative Developer",
   description:
     "Interactive Website and 3D Developer Portfolio specializing in Webflow, SEO, and Next.js.",
   keywords: [
