@@ -1,19 +1,17 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
+  const baseUrl = "https://snigdhachandrapaik.vercel.app"; // replace with custom domain later
+
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/admin/"], // Hide your private routes
-      },
-      {
-        // Block AI crawlers from using your content for training if desired
-        userAgent: ["GPTBot", "ChatGPT-User", "CCBot"],
-        disallow: "/",
+        disallow: ["/api/", "/admin/"],
       },
     ],
-    sitemap: "https://snigdhachandrapaik.vercel.app/sitemap.xml",
+    sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
   };
 }
