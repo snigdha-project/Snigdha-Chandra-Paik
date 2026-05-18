@@ -82,11 +82,11 @@ export default function Projects() {
                     <p className="text-sm md:text-base text-[#141B1A]/70 font-medium max-w-xl md:opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                       {project.description}
                     </p>
-                    <div className="flex flex-wrap gap-2 md:opacity-0 group-hover:opacity-100 transition-opacity delay-200">
+                    <div className="flex flex-wrap gap-2">
                       {project.tech.map((t, idx) => (
                         <span
                           key={idx}
-                          className="text-[8px] md:text-[9px] font-black uppercase px-3 py-1 bg-[#141B1A] text-white rounded-full"
+                          className="text-[8px] md:text-[9px] font-black uppercase tracking-wider px-3 py-1 bg-[#141B1A] text-white rounded-full"
                         >
                           {t}
                         </span>

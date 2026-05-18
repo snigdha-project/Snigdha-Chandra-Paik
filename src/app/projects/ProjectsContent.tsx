@@ -3,14 +3,14 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useRef } from "react";
-import { ArrowUpRight, Sparkles } from "lucide-react";
+import { useRef, useState } from "react";
+import { ArrowUpRight } from "lucide-react";
 
 // Data Imports
 import projectsData from "@/data/projects.json";
 
-function ProjectCard({ project, index }: { project: any; index: number }) {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+function ProjectCard({ project }: { project: any }) {
+  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -23,71 +23,83 @@ function ProjectCard({ project, index }: { project: any; index: number }) {
   };
 
   return (
-    <motion.div
+    <motion.article
       ref={cardRef}
       onMouseMove={handleMouseMove}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="group relative flex flex-col justify-between overflow-hidden rounded-[2.5rem] bg-[#0F0F0F] p-8 md:p-10 aspect-[4/5] border border-white/5 transition-all duration-500 hover:border-white/20 hover:scale-[1.01]"
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-[#0F0F0F] border border-white/5 transition-all duration-500 hover:border-white/15 hover:-translate-y-1"
     >
-      {/* 1. DYNAMIC COLOR GLOW - Based on project's custom color */}
+      {/* Mouse-following radial glow */}
       <div
-        className="absolute inset-0 z-0 opacity-0 transition-opacity duration-700 group-hover:opacity-40"
+        className="absolute inset-0 z-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none"
         style={{
-          background: `radial-gradient(600px circle at ${mousePos.x}% ${mousePos.y}%, ${project.color || "#C56E3D"}30, transparent 40%)`,
+          background: `radial-gradient(500px circle at ${mousePos.x}% ${mousePos.y}%, rgba(197,110,61,0.12), transparent 50%)`,
         }}
       />
 
-      {/* 2. BACKGROUND IMAGE - Made much clearer and visible on hover */}
-      <div className="absolute inset-0 z-0 opacity-[0.15] group-hover:opacity-60 transition-all duration-1000">
+      {/* Image — top, sharp, fixed 16:10 ratio */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#141414]">
         <Image
           src={project.image}
           alt={`${project.title} — ${project.category} built by Snigdha Chandra Paik`}
           fill
-          className="object-cover scale-105 group-hover:scale-100 transition-transform duration-1000"
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          className="object-cover transition-transform duration-[1200ms] group-hover:scale-105"
         />
-        {/* Subtle dark tint to keep text readable */}
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0F] via-transparent to-transparent" />
+
+        {/* Category chip floating over image */}
+        <span className="absolute top-4 left-4 text-[9px] font-black uppercase tracking-[0.3em] px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-white/80 border border-white/10">
+          {project.category}
+        </span>
       </div>
 
-      {/* 3. CARD CONTENT */}
-      <div className="relative z-10 flex flex-col h-full">
-        <div className="flex justify-between items-center">
-          <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-3xl group-hover:bg-[#C56E3D]/10 group-hover:border-[#C56E3D]/40 transition-all">
-            <Sparkles size={20} className="text-[#C56E3D]" />
-          </div>
-          <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/50">
-            {project.category}
+      {/* Content */}
+      <div className="relative z-10 flex flex-col flex-1 p-7 md:p-8 gap-5">
+        <h2 className="font-[family-name:var(--font-fraunces)] text-3xl md:text-[2rem] text-white font-black tracking-tight leading-[1.05] group-hover:text-[#C56E3D] transition-colors">
+          {project.title}
+        </h2>
+
+        <p className="text-white/55 text-sm leading-relaxed font-medium">
+          {project.description || project.desc}
+        </p>
+
+        {project.tech && project.tech.length > 0 && (
+          <ul className="flex flex-wrap gap-1.5 mt-1">
+            {project.tech.map((t: string) => (
+              <li
+                key={t}
+                className="text-[9px] font-black uppercase tracking-[0.15em] px-2.5 py-1 rounded-md border border-white/10 bg-white/[0.03] text-white/65 transition-colors group-hover:border-[#C56E3D]/30 group-hover:text-white/85"
+              >
+                {t}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Spacer pushes CTA to bottom */}
+        <div className="flex-1" />
+
+        {/* CTA — full-width divider + arrow */}
+        <Link
+          href={project.link || "#"}
+          target="_blank"
+          rel="noopener"
+          className="group/link flex items-center justify-between gap-4 pt-5 mt-1 border-t border-white/5 text-[10px] font-black uppercase tracking-[0.3em] text-white/70 hover:text-white transition-colors"
+        >
+          <span>View Live Project</span>
+          <span className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center transition-all group-hover/link:bg-[#C56E3D] group-hover/link:border-[#C56E3D]">
+            <ArrowUpRight
+              size={14}
+              className="transition-transform group-hover/link:rotate-45"
+            />
           </span>
-        </div>
-
-        <div className="mt-auto">
-          <h2 className="font-[family-name:var(--font-fraunces)] text-4xl text-white font-black tracking-tighter leading-tight mb-4 group-hover:text-[#C56E3D] transition-colors">
-            {project.title}
-          </h2>
-          <p className="text-white/60 text-[15px] leading-relaxed max-w-[280px] font-medium">
-            {project.description || project.desc}
-          </p>
-        </div>
-
-        <div className="mt-8">
-          <Link
-            href={project.link || "#"}
-            target="_blank"
-            className="group/link inline-flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em] text-white/80 hover:text-white transition-all"
-          >
-            View Live Project
-            <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover/link:bg-[#C56E3D] group-hover/link:border-[#C56E3D] transition-all">
-              <ArrowUpRight
-                size={16}
-                className="group-hover/link:rotate-45 transition-transform"
-              />
-            </div>
-          </Link>
-        </div>
+        </Link>
       </div>
-    </motion.div>
+    </motion.article>
   );
 }
 
@@ -120,8 +132,8 @@ export default function ProjectsPage() {
       {/* PROJECT GRID */}
       <section className="px-8 md:px-16 lg:px-24 pb-40 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-          {projectsData.map((project: any, index: number) => (
-            <ProjectCard key={project.id} project={project} index={index} />
+          {projectsData.map((project: any) => (
+            <ProjectCard key={project.id} project={project} />
           ))}
         </div>
       </section>

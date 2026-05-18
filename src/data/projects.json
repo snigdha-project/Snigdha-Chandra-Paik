@@ -108,5 +108,16 @@
     "link": "https://digital-mirror-psi.vercel.app/",
     "featured": true,
     "colorKey": "ai"
+  },
+  {
+    "id": 11,
+    "title": "Hamara Khet",
+    "description": "An AI Mandi for Bharat's farmers — an agritech platform pairing LLM-driven crop advisory and FLUX image generation with a real-time marketplace, built to give Indian growers fair pricing and accessible intelligence in their language.",
+    "category": "Agritech / AI Platform",
+    "tech": ["Next.js", "TypeScript", "Framer Motion", "Lenis", "Hugging Face", "Llama 3.3 70B", "FLUX.1-schnell", "NVIDIA NIM", "Supabase"],
+    "image": "/projects/hamarakhet.png",
+    "link": "https://hamarakhet.vercel.app/",
+    "featured": true,
+    "colorKey": "ai"
   }
 ]
