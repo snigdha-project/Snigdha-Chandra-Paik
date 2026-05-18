@@ -1,12 +1,23 @@
 import postsData from "@/content/posts.json";
 
+export type Post = {
+  id: string;
+  slug: string;
+  title: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  category: string;
+  date: string;
+  image: string;
+  excerpt: string;
+  content: string;
+};
+
 export async function getLocalPosts(limit = 3, offset = 0) {
-  // Simulate an async fetch
-  const posts = postsData.slice(offset, offset + limit);
+  const posts = (postsData as Post[]).slice(offset, offset + limit);
   return posts.map((post) => ({
     ...post,
     id: `VOL. ${post.id}`,
-    // Ensure dates are formatted correctly
     date: new Date(post.date)
       .toLocaleDateString("en-GB", {
         day: "2-digit",
@@ -17,6 +28,6 @@ export async function getLocalPosts(limit = 3, offset = 0) {
   }));
 }
 
-export async function getPostBySlug(slug: string) {
-  return postsData.find((p) => p.slug === slug) || null;
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  return (postsData as Post[]).find((p) => p.slug === slug) ?? null;
 }

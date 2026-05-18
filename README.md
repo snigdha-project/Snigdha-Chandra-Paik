@@ -175,7 +175,7 @@ Open <http://localhost:3000> and edit `src/app/page.tsx` — hot reload covers a
 
 ## Adding a project
 
-Append a new entry to [`src/data/projects.json`](src/data/projects.json). The Home `Selected Works` grid auto-shows entries with `featured: true`; the `/projects` page lists every entry.
+Append a new entry to [`src/data/projects.json`](src/data/projects.json). The Home `Selected Works` grid auto-shows entries with `featured: true`; the `/projects` page lists every entry. Drop the thumbnail into `public/projects/` first.
 
 ```json
 {
@@ -191,11 +191,57 @@ Append a new entry to [`src/data/projects.json`](src/data/projects.json). The Ho
 }
 ```
 
-Drop the thumbnail into `public/projects/`. The sitemap, `CollectionPage → ItemList` JSON-LD, Home grid, and `/projects` page update automatically on the next build.
+### Field reference — projects
+
+| Field | Type | Required | What it does |
+|---|---|---|---|
+| `id` | number | yes | Unique integer; sort order in the grid. Increment from the highest existing id. |
+| `title` | string | yes | Displayed in the project card heading and `CreativeWork.name` in JSON-LD. |
+| `description` | string | yes | 1–2 sentences. Shown under the title on `/projects` and on hover in the Home Selected Works section. Becomes `CreativeWork.description` in schema. |
+| `category` | string | yes | Short label shown in the floating chip on the image, e.g. `"E-Commerce / Fashion"`, `"Agritech / AI Platform"`. |
+| `tech` | string[] | yes | Tech-stack pills rendered on every project card. Also becomes `CreativeWork.keywords` (comma-joined) in JSON-LD. |
+| `image` | string | yes | Path under `public/`, starting with `/`. Recommended 1200×750 (16:10) for the card hero. |
+| `link` | string | yes | Live URL — opens in a new tab with `rel="noopener"`. Used as `CreativeWork.url`. |
+| `featured` | boolean | yes | `true` → appears in the Home `Selected Works` section as well. `false` → only on `/projects`. |
+| `colorKey` | string | yes | Theme accent token, currently one of `"webflow"`, `"wordpress"`, `"shopify"`, `"ai"` (see [`src/data/colors.json`](src/data/colors.json)). |
+
+The sitemap, `CollectionPage → ItemList` JSON-LD, Home grid, and `/projects` page update automatically on the next build.
 
 ## Adding a blog post
 
-Append to [`src/content/posts.json`](src/content/posts.json) — slug becomes the URL at `/blogs/<slug>`. The post inherits the `BlogPosting` schema with word count auto-calculated from HTML content.
+Append to [`src/content/posts.json`](src/content/posts.json) — slug becomes the URL at `/blogs/<slug>`. Drop the hero image into `public/blogs/` first.
+
+```json
+{
+  "id": "02",
+  "slug": "your-post-slug",
+  "title": "Your Visible Post Title",
+  "metaTitle": "Keyword-rich SEO Title Under 60 Chars",
+  "metaDescription": "Compelling 140–160 char meta description with target keywords near the front and a clear value prop for searchers.",
+  "category": "TECH",
+  "date": "2026-05-20",
+  "image": "/blogs/your-image.png",
+  "excerpt": "Visible card excerpt shown in the blog listing.",
+  "content": "<p>HTML content with <h2>, <h3>, <ul>, <table>, etc.</p>"
+}
+```
+
+### Field reference — blog posts
+
+| Field | Type | Required | What it does |
+|---|---|---|---|
+| `id` | string | yes | Two-digit volume number (`"01"`, `"02"` …) displayed as `VOL. 01` next to the post in the index. |
+| `slug` | string | yes | URL segment at `/blogs/<slug>`. Use lowercase kebab-case. Must be unique. Also keys the `<link rel="canonical">`. |
+| `title` | string | yes | Visible `<h1>` on the post page and the heading shown in the blog index. Used as `BlogPosting.headline` in JSON-LD. |
+| `metaTitle` | string | optional | Used as the `<title>` tag, `og:title`, `twitter:title` and `BlogPosting.name`. Falls back to `title` if omitted. Aim for 50–60 chars. |
+| `metaDescription` | string | optional | Used as `<meta name="description">`, `og:description`, `twitter:description` and `BlogPosting.description`. Falls back to `excerpt` if omitted. Aim for 140–160 chars. |
+| `category` | string | yes | Short uppercase label (`"TECH"`, `"SEO"`, `"DESIGN"`). Drives the related-posts logic at the bottom of every post. |
+| `date` | string (ISO) | yes | `YYYY-MM-DD`. Used in the post header, sitemap `lastModified`, and `BlogPosting.datePublished` / `dateModified`. |
+| `image` | string | yes | Path under `public/`, starting with `/`. Recommended 21:9 (e.g. 1200×514) for the post header. Also used as `og:image` and `BlogPosting.image`. |
+| `excerpt` | string | yes | Visible preview shown on `/blogs`. SEO fallback if `metaDescription` is missing. |
+| `content` | string (HTML) | yes | The post body, rendered via `dangerouslySetInnerHTML`. Use `<h2>` for sections (auto-extracted into the sidebar Outline TOC), `<h3>` for sub-sections, plus `<p>`, `<ul>`, `<table>`, `<strong>`, `<em>`. Word count auto-derived for `BlogPosting.wordCount`. |
+
+The slug page emits a full `BlogPosting` JSON-LD block, the `/blogs` index updates its `Blog → blogPost[]` schema, and the sitemap picks up the new URL — all on the next build.
 
 ## Deployment
 

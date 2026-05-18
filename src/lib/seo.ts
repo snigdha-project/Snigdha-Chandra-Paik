@@ -185,7 +185,15 @@ export function projectsCollectionSchema() {
 }
 
 export function blogCollectionSchema(
-  posts: { slug: string; title: string; excerpt: string; date: string; image: string }[],
+  posts: {
+    slug: string;
+    title: string;
+    metaTitle?: string;
+    metaDescription?: string;
+    excerpt: string;
+    date: string;
+    image: string;
+  }[],
 ) {
   return {
     "@context": "https://schema.org",
@@ -199,7 +207,8 @@ export function blogCollectionSchema(
     blogPost: posts.map((post) => ({
       "@type": "BlogPosting",
       headline: post.title,
-      description: post.excerpt,
+      name: post.metaTitle ?? post.title,
+      description: post.metaDescription ?? post.excerpt,
       image: `${SITE_URL}${post.image}`,
       datePublished: post.date,
       dateModified: post.date,
@@ -212,6 +221,8 @@ export function blogCollectionSchema(
 export function blogPostingSchema(post: {
   slug: string;
   title: string;
+  metaTitle?: string;
+  metaDescription?: string;
   excerpt: string;
   date: string;
   image: string;
@@ -222,7 +233,8 @@ export function blogPostingSchema(post: {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
-    description: post.excerpt,
+    name: post.metaTitle ?? post.title,
+    description: post.metaDescription ?? post.excerpt,
     image: `${SITE_URL}${post.image}`,
     datePublished: post.date,
     dateModified: post.date,

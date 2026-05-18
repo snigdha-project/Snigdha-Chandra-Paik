@@ -17,22 +17,27 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-// 1. DYNAMIC SEO METADATA
+// 1. DYNAMIC SEO METADATA — prefers `metaTitle` / `metaDescription` from posts.json,
+//    falls back to the visible `title` / `excerpt` when those fields are absent.
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return { title: "Post Not Found" };
+
+  const seoTitle = post.metaTitle ?? `${post.title} | Snigdha Chandra Paik`;
+  const seoDescription = post.metaDescription ?? post.excerpt;
   const canonical = `/blogs/${slug}`;
+
   return {
-    title: `${post.title} | Snigdha Chandra Paik`,
-    description: post.excerpt,
+    title: seoTitle,
+    description: seoDescription,
     alternates: {
       canonical,
       languages: { "en-IN": canonical },
     },
     openGraph: {
-      title: post.title,
-      description: post.excerpt,
+      title: seoTitle,
+      description: seoDescription,
       url: canonical,
       siteName: "Snigdha Chandra Paik",
       locale: "en_IN",
@@ -50,8 +55,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt,
+      title: seoTitle,
+      description: seoDescription,
       images: [post.image],
     },
   };
