@@ -216,8 +216,8 @@ Append to [`src/content/posts.json`](src/content/posts.json) — slug becomes th
   "id": "02",
   "slug": "your-post-slug",
   "title": "Your Visible Post Title",
-  "metaTitle": "Keyword-rich SEO Title Under 60 Chars",
-  "metaDescription": "Compelling 140–160 char meta description with target keywords near the front and a clear value prop for searchers.",
+  "metaTitle": "Keyword-rich SEO Title Under 50 Chars",
+  "metaDescription": "Compelling 140–150 char meta description with target keywords near the front and a clear value prop for searchers.",
   "category": "TECH",
   "date": "2026-05-20",
   "image": "/blogs/your-image.png",
@@ -233,8 +233,8 @@ Append to [`src/content/posts.json`](src/content/posts.json) — slug becomes th
 | `id` | string | yes | Two-digit volume number (`"01"`, `"02"` …) displayed as `VOL. 01` next to the post in the index. |
 | `slug` | string | yes | URL segment at `/blogs/<slug>`. Use lowercase kebab-case. Must be unique. Also keys the `<link rel="canonical">`. |
 | `title` | string | yes | Visible `<h1>` on the post page and the heading shown in the blog index. Used as `BlogPosting.headline` in JSON-LD. |
-| `metaTitle` | string | optional | Used as the `<title>` tag, `og:title`, `twitter:title` and `BlogPosting.name`. Falls back to `title` if omitted. Aim for 50–60 chars. |
-| `metaDescription` | string | optional | Used as `<meta name="description">`, `og:description`, `twitter:description` and `BlogPosting.description`. Falls back to `excerpt` if omitted. Aim for 140–160 chars. |
+| `metaTitle` | string | optional | Used as the `<title>` tag, `og:title`, `twitter:title` and `BlogPosting.name`. Falls back to `title` if omitted. Aim for 30–50 chars. |
+| `metaDescription` | string | optional | Used as `<meta name="description">`, `og:description`, `twitter:description` and `BlogPosting.description`. Falls back to `excerpt` if omitted. Aim for 130–150 chars. |
 | `category` | string | yes | Short uppercase label (`"TECH"`, `"SEO"`, `"DESIGN"`). Drives the related-posts logic at the bottom of every post. |
 | `date` | string (ISO) | yes | `YYYY-MM-DD`. Used in the post header, sitemap `lastModified`, and `BlogPosting.datePublished` / `dateModified`. |
 | `image` | string | yes | Path under `public/`, starting with `/`. Recommended 21:9 (e.g. 1200×514) for the post header. Also used as `og:image` and `BlogPosting.image`. |
