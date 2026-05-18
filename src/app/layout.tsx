@@ -11,6 +11,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
+import UniversalLoader from "@/components/UniversalLoader";
 import {
   personSchema,
   professionalServiceSchema,
@@ -162,6 +163,7 @@ export default function RootLayout({
           ></iframe>
         </noscript>
 
+        <UniversalLoader />
         <SmoothScroll>
           <Navbar />
           <main>{children}</main>
