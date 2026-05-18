@@ -10,6 +10,8 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { getPostBySlug, getLocalPosts } from "@/lib/blogService";
+import JsonLd from "@/components/JsonLd";
+import { SITE_URL, blogPostingSchema, breadcrumbSchema } from "@/lib/seo";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -20,10 +22,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return { title: "Post Not Found" };
+  const canonical = `/blogs/${slug}`;
   return {
-    title: post.title,
+    title: `${post.title} | Snigdha Chandra Paik`,
     description: post.excerpt,
+    alternates: {
+      canonical,
+      languages: { "en-IN": canonical },
+    },
     openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      url: canonical,
+      siteName: "Snigdha Chandra Paik",
+      locale: "en_IN",
+      type: "article",
+      publishedTime: post.date,
+      authors: ["Snigdha Chandra Paik"],
+      images: [
+        {
+          url: post.image,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
       images: [post.image],
@@ -67,6 +93,16 @@ export default async function SingleBlogPost({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-[#E8E4D9] text-[#141B1A] relative selection:bg-[#C56E3D] selection:text-white scroll-smooth">
+      <JsonLd
+        data={[
+          breadcrumbSchema([
+            { name: "Home", url: SITE_URL },
+            { name: "Blogs", url: `${SITE_URL}/blogs` },
+            { name: post.title, url: `${SITE_URL}/blogs/${slug}` },
+          ]),
+          blogPostingSchema(post),
+        ]}
+      />
       {/* Newspaper Texture Overlay */}
       <div
         className="fixed inset-0 pointer-events-none z-0 opacity-10 mix-blend-multiply"

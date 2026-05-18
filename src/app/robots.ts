@@ -1,8 +1,7 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://snigdhachandrapaik.vercel.app"; // replace with custom domain later
-
   return {
     rules: [
       {
@@ -11,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/admin/"],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

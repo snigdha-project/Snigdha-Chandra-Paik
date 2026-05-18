@@ -154,7 +154,7 @@ export default function Hero() {
             <div className="absolute inset-0 rounded-2xl overflow-hidden border border-[#141B1A]/10 bg-[#F7F3E9] shadow-2xl">
               <Image
                 src="/images/myImage.jpg"
-                alt="Snigdha"
+                alt="Snigdha Chandra Paik — Frontend Developer & SEO Specialist from West Bengal"
                 fill
                 priority
                 className="object-cover"

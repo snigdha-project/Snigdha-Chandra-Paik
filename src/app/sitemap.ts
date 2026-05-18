@@ -1,62 +1,49 @@
-import { MetadataRoute } from "next";
-import { getLocalPosts } from "@/lib/blogService";
-import projectData from "@/data/projects.json";
+import type { MetadataRoute } from "next";
+import postsData from "@/content/posts.json";
+import { SITE_URL } from "@/lib/seo";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://snigdhachandrapaik.vercel.app"; // replace later with custom domain
+export default function sitemap(): MetadataRoute.Sitemap {
+  const now = new Date();
 
-  // 1. Blog URLs
-  const posts = await getLocalPosts(100, 0);
-
-  const blogUrls = posts.map((post) => ({
-    url: `${baseUrl}/blogs/${post.slug}`,
-    lastModified: post.date ? new Date(post.date) : new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
-
-  // 2. Project URLs (FIXED)
-  const projectUrls = projectData.map((project) => ({
-    url: `${baseUrl}/projects/${project.id}`,
-    lastModified: new Date(), // ✅ FIX: removed updatedAt
-    changeFrequency: "monthly" as const,
-    priority: 0.9,
-  }));
-
-  // 3. Static URLs
-  const staticUrls = [
+  const staticUrls: MetadataRoute.Sitemap = [
     {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "yearly" as const,
+      url: `${SITE_URL}/`,
+      lastModified: now,
+      changeFrequency: "monthly",
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/projects`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
+      url: `${SITE_URL}/about`,
+      lastModified: now,
+      changeFrequency: "monthly",
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/blogs`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
+      url: `${SITE_URL}/projects`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/blogs`,
+      lastModified: now,
+      changeFrequency: "weekly",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: "yearly" as const,
+      url: `${SITE_URL}/contact`,
+      lastModified: now,
+      changeFrequency: "monthly",
       priority: 0.6,
     },
   ];
 
-  // 4. Final sitemap
-  return [...staticUrls, ...blogUrls, ...projectUrls];
+  const blogUrls: MetadataRoute.Sitemap = postsData.map((post) => ({
+    url: `${SITE_URL}/blogs/${post.slug}`,
+    lastModified: post.date ? new Date(post.date) : now,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...staticUrls, ...blogUrls];
 }

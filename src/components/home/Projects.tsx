@@ -63,7 +63,7 @@ export default function Projects() {
                 <div className="block md:hidden w-full aspect-[16/10] relative overflow-hidden rounded-[2rem] shadow-sm mb-2">
                   <Image
                     src={project.image}
-                    alt={project.title}
+                    alt={`${project.title} — ${project.category} built by Snigdha Chandra Paik`}
                     fill
                     className="object-cover"
                   />
@@ -152,7 +152,7 @@ export default function Projects() {
           >
             <Image
               src={displayProjects[hoveredIndex].image}
-              alt={displayProjects[hoveredIndex].title}
+              alt={`${displayProjects[hoveredIndex].title} — ${displayProjects[hoveredIndex].category} built by Snigdha Chandra Paik`}
               fill
               className="object-cover"
               priority

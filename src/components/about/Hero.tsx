@@ -191,7 +191,7 @@ export default function AboutHero() {
           >
             <Image
               src="/images/MyAboutImage.jpg"
-              alt="Snigdha Chandra Paik"
+              alt="Snigdha Chandra Paik working on Next.js & Three.js frontend projects"
               fill
               className="object-cover"
               priority
