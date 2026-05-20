@@ -13,7 +13,9 @@ import {
   SubmitButton,
   fieldInput,
   fieldTextarea,
+  fieldLabel,
 } from "./FormShell";
+import HtmlEditor from "./HtmlEditor";
 
 const initialState: ActionState = {};
 
@@ -154,19 +156,18 @@ export default function PostForm({ initial }: { initial?: PostFormInitial }) {
         />
       </Field>
 
-      <Field
-        label="Content (HTML)"
-        hint="Full post body. Same HTML format as your existing posts."
-      >
-        <textarea
+      <div>
+        <span className={fieldLabel}>Content (HTML)</span>
+        <HtmlEditor
           name="content"
-          required
-          rows={16}
           defaultValue={initial?.content ?? ""}
-          className={fieldTextarea}
           placeholder="<p>In 2026, the choice between WordPress and Webflow...</p>"
+          minHeight="480px"
         />
-      </Field>
+        <span className="text-[10px] text-white/30 font-medium mt-1.5 block tracking-wide">
+          Full post body. Same HTML format as your existing posts.
+        </span>
+      </div>
 
       <div className="flex items-center justify-between gap-6 pt-2">
         <FormStatus error={state.error} message={state.message} ok={state.ok} />

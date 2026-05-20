@@ -14,7 +14,9 @@ import {
   SubmitButton,
   fieldInput,
   fieldTextarea,
+  fieldLabel,
 } from "./FormShell";
+import HtmlEditor from "./HtmlEditor";
 
 const initialState: ActionState = {};
 
@@ -193,18 +195,18 @@ export default function ProjectForm({
         />
       </Field>
 
-      <Field
-        label="Case study (HTML)"
-        hint="Optional. If provided, a /projects/<slug> case-study page is generated."
-      >
-        <textarea
+      <div>
+        <span className={fieldLabel}>Case study (HTML)</span>
+        <HtmlEditor
           name="case_study"
-          rows={10}
           defaultValue={initial?.caseStudy ?? ""}
-          className={fieldTextarea}
           placeholder="<h2>The brief</h2><p>...</p>"
+          minHeight="360px"
         />
-      </Field>
+        <span className="text-[10px] text-white/30 font-medium mt-1.5 block tracking-wide">
+          Optional. If provided, a /projects/&lt;slug&gt; case-study page is generated.
+        </span>
+      </div>
 
       <Field
         label="Case study meta title"

@@ -46,6 +46,9 @@ export const metadata: Metadata = {
 
 export default async function ProjectsPage() {
   const projects = await getProjects();
+  const caseStudyProjects = projects.filter((p) => p.hasCaseStudy);
+  const otherProjects = projects.filter((p) => !p.hasCaseStudy);
+
   return (
     <>
       <JsonLd
@@ -57,7 +60,10 @@ export default async function ProjectsPage() {
           projectsCollectionSchema(projects),
         ]}
       />
-      <ProjectsContent projects={projects} />
+      <ProjectsContent
+        caseStudyProjects={caseStudyProjects}
+        otherProjects={otherProjects}
+      />
     </>
   );
 }
