@@ -112,6 +112,9 @@ export const metadata: Metadata = {
   },
   verification: {
     google: "j5HdTVTmf3ju_RKwdas2ivk-s80JFO7-E_j59titvE0",
+    other: {
+      "msvalidate.01": "30F82C4C88351015AA2877D49D9982C1",
+    },
   },
   category: "technology",
 };
