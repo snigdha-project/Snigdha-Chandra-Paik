@@ -7,11 +7,8 @@ import {
   Monsieur_La_Doulaise,
 } from "next/font/google";
 import "./globals.css";
-import SmoothScroll from "@/components/SmoothScroll";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
-import UniversalLoader from "@/components/UniversalLoader";
+import SiteChrome from "@/components/SiteChrome";
 import {
   personSchema,
   professionalServiceSchema,
@@ -163,12 +160,7 @@ export default function RootLayout({
           ></iframe>
         </noscript>
 
-        <UniversalLoader />
-        <SmoothScroll>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </SmoothScroll>
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

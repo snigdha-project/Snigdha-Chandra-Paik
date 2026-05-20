@@ -10,10 +10,9 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-// Import your data
-import projectData from "@/data/projects.json";
+import type { Project } from "@/lib/projectService";
 
-export default function Projects() {
+export default function Projects({ projects }: { projects: Project[] }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -22,8 +21,7 @@ export default function Projects() {
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
-  // UPDATED LOGIC: Filter projects where featured is true
-  const displayProjects = projectData.filter((project) => project.featured);
+  const displayProjects = projects;
 
   const handleMouseMove = (e: React.MouseEvent) => {
     mouseX.set(e.clientX);
@@ -108,8 +106,8 @@ export default function Projects() {
                   }}
                 >
                   <Link
-                    href={project.link}
-                    target="_blank"
+                    href={project.hasCaseStudy ? `/projects/${project.slug}` : project.link ?? "#"}
+                    target={project.hasCaseStudy ? "_self" : "_blank"}
                     className="w-16 h-16 md:w-24 md:h-24 rounded-full border border-[#141B1A]/20 flex items-center justify-center transition-all duration-500 text-2xl md:text-3xl bg-transparent text-[#141B1A] hover:bg-[#A64D32] hover:border-[#A64D32] hover:text-[#F7F3E9] hover:scale-110 shadow-sm cursor-pointer"
                   >
                     <span className="relative bottom-[1px] md:bottom-[2px]">

@@ -7,6 +7,7 @@ import Hobbies from "@/components/home/Hobbies";
 import Blogs from "@/components/home/Blogs";
 import JsonLd from "@/components/JsonLd";
 import { SITE_URL, breadcrumbSchema } from "@/lib/seo";
+import { getFeaturedProjects } from "@/lib/projectService";
 
 const TITLE = "Snigdha Chandra Paik | Frontend & SEO Developer";
 const DESCRIPTION =
@@ -43,7 +44,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  const featuredProjects = await getFeaturedProjects();
   return (
     <>
       <JsonLd
@@ -52,7 +54,7 @@ export default function Home() {
       <Hero />
       <About />
       <Tech />
-      <Projects />
+      <Projects projects={featuredProjects} />
       <Hobbies />
       <Blogs />
     </>

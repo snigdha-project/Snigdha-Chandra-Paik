@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
-import postsData from "@/content/posts.json";
 import {
   SITE_URL,
   blogCollectionSchema,
   breadcrumbSchema,
 } from "@/lib/seo";
+import { getAllPostsForSeo } from "@/lib/blogService";
 import BlogsContent from "./BlogsContent";
 
 const TITLE = "Frontend & SEO Blog | Snigdha Chandra Paik";
@@ -44,7 +44,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BlogsRoute() {
+export default async function BlogsRoute() {
+  const posts = await getAllPostsForSeo();
   return (
     <>
       <JsonLd
@@ -53,7 +54,7 @@ export default function BlogsRoute() {
             { name: "Home", url: SITE_URL },
             { name: "Blogs", url: CANONICAL },
           ]),
-          blogCollectionSchema(postsData),
+          blogCollectionSchema(posts),
         ]}
       />
       <BlogsContent />

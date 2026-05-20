@@ -1,4 +1,4 @@
-import projectsData from "@/data/projects.json";
+import type { Project } from "./projectService";
 
 export const SITE_URL = "https://snigdhachandrapaik.vercel.app";
 export const SITE_NAME = "Snigdha Chandra Paik";
@@ -157,7 +157,7 @@ export const contactPageSchema = {
   mainEntity: { "@id": PERSON_ID },
 };
 
-export function projectsCollectionSchema() {
+export function projectsCollectionSchema(projects: Project[]) {
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -167,14 +167,16 @@ export function projectsCollectionSchema() {
     isPartOf: { "@id": WEBSITE_ID },
     mainEntity: {
       "@type": "ItemList",
-      itemListElement: projectsData.map((project, index) => ({
+      itemListElement: projects.map((project, index) => ({
         "@type": "ListItem",
         position: index + 1,
         item: {
           "@type": "CreativeWork",
           name: project.title,
-          url: project.link,
-          image: `${SITE_URL}${project.image}`,
+          url: project.hasCaseStudy
+            ? `${SITE_URL}/projects/${project.slug}`
+            : project.link ?? `${SITE_URL}/projects`,
+          image: project.image,
           description: project.description,
           keywords: project.tech.join(", "),
           creator: { "@id": PERSON_ID },
@@ -209,7 +211,7 @@ export function blogCollectionSchema(
       headline: post.title,
       name: post.metaTitle ?? post.title,
       description: post.metaDescription ?? post.excerpt,
-      image: `${SITE_URL}${post.image}`,
+      image: post.image,
       datePublished: post.date,
       dateModified: post.date,
       author: { "@id": PERSON_ID },
@@ -235,7 +237,7 @@ export function blogPostingSchema(post: {
     headline: post.title,
     name: post.metaTitle ?? post.title,
     description: post.metaDescription ?? post.excerpt,
-    image: `${SITE_URL}${post.image}`,
+    image: post.image,
     datePublished: post.date,
     dateModified: post.date,
     wordCount,

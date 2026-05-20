@@ -5,11 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
+import type { Project } from "@/lib/projectService";
 
-// Data Imports
-import projectsData from "@/data/projects.json";
-
-function ProjectCard({ project }: { project: any }) {
+function ProjectCard({ project }: { project: Project }) {
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -64,7 +62,7 @@ function ProjectCard({ project }: { project: any }) {
         </h2>
 
         <p className="text-white/55 text-sm leading-relaxed font-medium">
-          {project.description || project.desc}
+          {project.description}
         </p>
 
         {project.tech && project.tech.length > 0 && (
@@ -85,12 +83,12 @@ function ProjectCard({ project }: { project: any }) {
 
         {/* CTA — full-width divider + arrow */}
         <Link
-          href={project.link || "#"}
-          target="_blank"
-          rel="noopener"
+          href={project.hasCaseStudy ? `/projects/${project.slug}` : project.link ?? "#"}
+          target={project.hasCaseStudy ? "_self" : "_blank"}
+          rel={project.hasCaseStudy ? undefined : "noopener"}
           className="group/link flex items-center justify-between gap-4 pt-5 mt-1 border-t border-white/5 text-[10px] font-black uppercase tracking-[0.3em] text-white/70 hover:text-white transition-colors"
         >
-          <span>View Live Project</span>
+          <span>{project.hasCaseStudy ? "Read Case Study" : "View Live Project"}</span>
           <span className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center transition-all group-hover/link:bg-[#C56E3D] group-hover/link:border-[#C56E3D]">
             <ArrowUpRight
               size={14}
@@ -103,7 +101,7 @@ function ProjectCard({ project }: { project: any }) {
   );
 }
 
-export default function ProjectsPage() {
+export default function ProjectsPage({ projects }: { projects: Project[] }) {
   return (
     <main className="min-h-screen bg-[#050505] overflow-x-hidden selection:bg-[#C56E3D] selection:text-white">
       {/* IMPROVED HEADER - Clearer for clients */}
@@ -132,7 +130,7 @@ export default function ProjectsPage() {
       {/* PROJECT GRID */}
       <section className="px-8 md:px-16 lg:px-24 pb-40 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-          {projectsData.map((project: any) => (
+          {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>

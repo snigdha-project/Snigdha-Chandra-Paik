@@ -5,6 +5,7 @@ import {
   breadcrumbSchema,
   projectsCollectionSchema,
 } from "@/lib/seo";
+import { getProjects } from "@/lib/projectService";
 import ProjectsContent from "./ProjectsContent";
 
 const TITLE = "Frontend Projects | Snigdha Chandra Paik";
@@ -43,7 +44,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const projects = await getProjects();
   return (
     <>
       <JsonLd
@@ -52,10 +54,10 @@ export default function ProjectsPage() {
             { name: "Home", url: SITE_URL },
             { name: "Projects", url: CANONICAL },
           ]),
-          projectsCollectionSchema(),
+          projectsCollectionSchema(projects),
         ]}
       />
-      <ProjectsContent />
+      <ProjectsContent projects={projects} />
     </>
   );
 }
