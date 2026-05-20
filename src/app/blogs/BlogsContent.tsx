@@ -125,12 +125,12 @@ export default function BlogPage() {
               {/* RESPONSIVE IMAGE BOX */}
               <div className="relative w-full md:absolute md:right-0 md:top-0 md:h-full md:w-1/2 md:-z-10 overflow-hidden">
                 {/* Mobile View */}
-                <div className="block md:hidden relative w-full aspect-[16/10] opacity-40 grayscale contrast-125 brightness-90">
+                <div className="block md:hidden relative w-full aspect-[16/10]">
                   <Image
                     src={post.image}
                     alt={decodeHTML(post.title)}
                     fill
-                    className="object-cover mix-blend-multiply"
+                    className="object-cover"
                   />
                 </div>
                 {/* Desktop View: Hover Reveal */}
@@ -139,16 +139,16 @@ export default function BlogPage() {
                     {hoveredSlug === post.slug && (
                       <motion.div
                         initial={{ x: 100, opacity: 0 }}
-                        animate={{ x: 0, opacity: 0.35 }}
+                        animate={{ x: 0, opacity: 0.55 }}
                         exit={{ x: -100, opacity: 0 }}
                         transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
-                        className="relative w-full h-full grayscale contrast-150 brightness-75"
+                        className="relative w-full h-full"
                       >
                         <Image
                           src={post.image}
                           alt={decodeHTML(post.title)}
                           fill
-                          className="object-cover mix-blend-multiply"
+                          className="object-cover"
                         />
                       </motion.div>
                     )}

@@ -83,7 +83,7 @@ export default async function SingleBlogPost({ params }: Props) {
   // 4. TOC EXTRACTION & CONTENT ID INJECTION
   let modifiedContent = post.content;
   const headings: { text: string; id: string }[] = [];
-  modifiedContent = post.content.replace(
+  modifiedContent = modifiedContent.replace(
     /<h2.*?>(.*?)<\/h2>/g,
     (match, title) => {
       const cleanTitle = title.replace(/<[^>]*>?/gm, "").trim();
@@ -93,11 +93,18 @@ export default async function SingleBlogPost({ params }: Props) {
     },
   );
 
+  // 5. WRAP TABLES so they scroll horizontally on narrow screens instead of
+  //    blowing out the page width.
+  modifiedContent = modifiedContent.replace(
+    /<table[\s\S]*?<\/table>/g,
+    (table) => `<div class="blog-table-wrap">${table}</div>`,
+  );
+
   const wordCount = post.content.replace(/<[^>]+>/g, "").split(" ").length;
   const readTime = Math.ceil(wordCount / 200);
 
   return (
-    <main className="min-h-screen bg-[#E8E4D9] text-[#141B1A] relative selection:bg-[#C56E3D] selection:text-white scroll-smooth">
+    <main className="min-h-screen bg-[#E8E4D9] text-[#141B1A] relative selection:bg-[#C56E3D] selection:text-white scroll-smooth overflow-x-clip">
       <JsonLd
         data={[
           breadcrumbSchema([
@@ -144,15 +151,17 @@ export default async function SingleBlogPost({ params }: Props) {
                 <span>/</span>
                 <Clock3 size={12} /> {readTime} Min Read
               </div>
-              <h1 className="font-[family-name:var(--font-fraunces)] text-5xl md:text-8xl font-black tracking-tighter leading-none uppercase mb-10">
+              <h1 className="font-[family-name:var(--font-fraunces)] text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.95] uppercase mb-10 break-words">
                 {post.title}
               </h1>
-              <div className="relative aspect-[21/9] w-full border-2 border-[#141B1A] p-1 bg-white">
+              <div className="w-full border-2 border-[#141B1A] p-1 bg-white">
                 <Image
                   src={post.image}
                   alt={post.title}
-                  fill
-                  className="object-cover"
+                  width={1600}
+                  height={900}
+                  sizes="(max-width: 768px) 100vw, 1100px"
+                  className="w-full h-auto block"
                   priority
                 />
               </div>
@@ -164,11 +173,13 @@ export default async function SingleBlogPost({ params }: Props) {
                 [&_p]:text-lg md:[&_p]:text-xl [&_p]:leading-relaxed [&_p]:mb-8 [&_p]:text-[#141B1A]/80
                 [&_h2]:text-3xl md:[&_h2]:text-5xl [&_h2]:font-black [&_h2]:uppercase [&_h2]:tracking-tighter [&_h2]:mt-16 [&_h2]:mb-8 [&_h2]:font-[family-name:var(--font-fraunces)] [&_h2]:scroll-mt-24 [&_h2]:border-l-8 [&_h2]:border-[#C56E3D] [&_h2]:pl-6
                 [&_h3]:text-xl [&_h3]:font-black [&_h3]:uppercase [&_h3]:mt-10 [&_h3]:mb-4
+                [&_a]:text-[#C56E3D] [&_a]:font-semibold [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-[#C56E3D]/40 hover:[&_a]:text-[#141B1A] hover:[&_a]:decoration-[#141B1A] [&_a]:transition-colors
                 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-8 [&_li]:mb-2 [&_li]:font-medium
-                [&_table]:w-full [&_table]:my-10 [&_table]:border-2 [&_table]:border-[#141B1A]
+                [&_.blog-table-wrap]:my-10 [&_.blog-table-wrap]:max-w-full [&_.blog-table-wrap]:overflow-x-auto [&_.blog-table-wrap]:[scrollbar-width:thin]
+                [&_table]:w-full [&_table]:min-w-[640px] [&_table]:border-2 [&_table]:border-[#141B1A] [&_table]:border-collapse
                 [&_thead]:bg-[#141B1A] [&_thead]:text-[#E8E4D9]
-                [&_th]:p-4 [&_th]:text-[10px] [&_th]:uppercase [&_th]:tracking-widest [&_th]:text-left
-                [&_td]:p-4 [&_td]:border [&_td]:border-[#141B1A]/10 [&_td]:text-base
+                [&_th]:p-3 md:[&_th]:p-4 [&_th]:text-[10px] [&_th]:uppercase [&_th]:tracking-widest [&_th]:text-left [&_th]:whitespace-nowrap
+                [&_td]:p-3 md:[&_td]:p-4 [&_td]:border [&_td]:border-[#141B1A]/10 [&_td]:text-sm md:[&_td]:text-base [&_td]:align-top
                 [&_p:first-of-type]:first-letter:text-6xl [&_p:first-of-type]:first-letter:font-black [&_p:first-of-type]:first-letter:float-left [&_p:first-of-type]:first-letter:mr-3 [&_p:first-of-type]:first-letter:text-[#C56E3D] [&_p:first-of-type]:first-letter:leading-none [&_p:first-of-type]:first-letter:mt-1
               "
               dangerouslySetInnerHTML={{ __html: modifiedContent }}
