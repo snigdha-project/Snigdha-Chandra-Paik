@@ -181,7 +181,7 @@ export default function CaseStudyView({
                   [&_h4]:text-xs md:[&_h4]:text-sm [&_h4]:font-black [&_h4]:uppercase [&_h4]:tracking-[0.3em] [&_h4]:mt-10 [&_h4]:mb-3 [&_h4]:text-[#C56E3D]
                   [&_strong]:text-white [&_strong]:font-bold
                   [&_em]:font-[family-name:var(--font-playfair)] [&_em]:italic [&_em]:text-white/95
-                  [&_a]:text-[#C56E3D] [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-[#C56E3D]/40 hover:[&_a]:text-white hover:[&_a]:decoration-white/70 [&_a]:transition-colors
+                  [&_a]:text-[#C56E3D] [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-[#C56E3D]/40 [&_a:hover]:text-white [&_a:hover]:decoration-white/70 [&_a]:transition-colors
                   [&_ul]:list-none [&_ul]:pl-0 [&_ul]:mb-8 [&_ul]:space-y-3
                   [&_ul_li]:relative [&_ul_li]:pl-6 [&_ul_li]:text-white/75 [&_ul_li]:font-medium [&_ul_li]:leading-relaxed [&_ul_li]:before:content-[''] [&_ul_li]:before:absolute [&_ul_li]:before:left-0 [&_ul_li]:before:top-[0.7em] [&_ul_li]:before:w-2 [&_ul_li]:before:h-[2px] [&_ul_li]:before:bg-[#C56E3D]/70
                   [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-8 [&_ol]:marker:text-[#C56E3D]/70 [&_ol]:marker:font-black

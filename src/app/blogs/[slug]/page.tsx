@@ -173,7 +173,7 @@ export default async function SingleBlogPost({ params }: Props) {
                 [&_p]:text-lg md:[&_p]:text-xl [&_p]:leading-relaxed [&_p]:mb-8 [&_p]:text-[#141B1A]/80
                 [&_h2]:text-3xl md:[&_h2]:text-5xl [&_h2]:font-black [&_h2]:uppercase [&_h2]:tracking-tighter [&_h2]:mt-16 [&_h2]:mb-8 [&_h2]:font-[family-name:var(--font-fraunces)] [&_h2]:scroll-mt-24 [&_h2]:border-l-8 [&_h2]:border-[#C56E3D] [&_h2]:pl-6
                 [&_h3]:text-xl [&_h3]:font-black [&_h3]:uppercase [&_h3]:mt-10 [&_h3]:mb-4
-                [&_a]:text-[#C56E3D] [&_a]:font-semibold [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-[#C56E3D]/40 hover:[&_a]:text-[#141B1A] hover:[&_a]:decoration-[#141B1A] [&_a]:transition-colors
+                [&_a]:text-[#C56E3D] [&_a]:font-semibold [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-[#C56E3D]/40 [&_a:hover]:text-[#141B1A] [&_a:hover]:decoration-[#141B1A] [&_a]:transition-colors
                 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-8 [&_li]:mb-2 [&_li]:font-medium
                 [&_.blog-table-wrap]:my-10 [&_.blog-table-wrap]:max-w-full [&_.blog-table-wrap]:overflow-x-auto [&_.blog-table-wrap]:[scrollbar-width:thin]
                 [&_table]:w-full [&_table]:min-w-[640px] [&_table]:border-2 [&_table]:border-[#141B1A] [&_table]:border-collapse
