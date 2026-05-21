@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import type { Project, ProjectWithCaseStudy } from "@/lib/projectService";
 import LivePreview from "./LivePreview";
+import CodeBlockEnhancer from "@/components/CodeBlockEnhancer";
 
 function tryHostname(url: string): string {
   try {
@@ -168,36 +169,39 @@ export default function CaseStudyView({
             </aside>
 
             {/* Article body */}
-            <article className="lg:col-span-9">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8 }}
-                className="
-                  [&_p]:text-lg md:[&_p]:text-xl [&_p]:leading-[1.75] [&_p]:mb-8 [&_p]:text-white/75
-                  [&_h2]:text-3xl md:[&_h2]:text-5xl [&_h2]:font-black [&_h2]:tracking-tighter [&_h2]:mt-20 [&_h2]:mb-8 [&_h2]:font-[family-name:var(--font-fraunces)] [&_h2]:scroll-mt-32 [&_h2]:leading-[1.05]
-                  [&_h3]:text-xl md:[&_h3]:text-3xl [&_h3]:font-black [&_h3]:tracking-tight [&_h3]:mt-14 [&_h3]:mb-4 [&_h3]:text-white [&_h3]:font-[family-name:var(--font-fraunces)]
-                  [&_h4]:text-xs md:[&_h4]:text-sm [&_h4]:font-black [&_h4]:uppercase [&_h4]:tracking-[0.3em] [&_h4]:mt-10 [&_h4]:mb-3 [&_h4]:text-[#C56E3D]
-                  [&_strong]:text-white [&_strong]:font-bold
-                  [&_em]:font-[family-name:var(--font-playfair)] [&_em]:italic [&_em]:text-white/95
-                  [&_a]:text-[#C56E3D] [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-[#C56E3D]/40 [&_a:hover]:text-white [&_a:hover]:decoration-white/70 [&_a]:transition-colors
-                  [&_ul]:list-none [&_ul]:pl-0 [&_ul]:mb-8 [&_ul]:space-y-3
-                  [&_ul_li]:relative [&_ul_li]:pl-6 [&_ul_li]:text-white/75 [&_ul_li]:font-medium [&_ul_li]:leading-relaxed [&_ul_li]:before:content-[''] [&_ul_li]:before:absolute [&_ul_li]:before:left-0 [&_ul_li]:before:top-[0.7em] [&_ul_li]:before:w-2 [&_ul_li]:before:h-[2px] [&_ul_li]:before:bg-[#C56E3D]/70
-                  [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-8 [&_ol]:marker:text-[#C56E3D]/70 [&_ol]:marker:font-black
-                  [&_ol_li]:text-white/75 [&_ol_li]:font-medium [&_ol_li]:leading-relaxed [&_ol_li]:mb-2 [&_ol_li]:pl-2
-                  [&_blockquote]:my-12 [&_blockquote]:pl-8 [&_blockquote]:py-2 [&_blockquote]:border-l-2 [&_blockquote]:border-[#C56E3D] [&_blockquote]:italic [&_blockquote]:font-[family-name:var(--font-playfair)] [&_blockquote]:text-xl md:[&_blockquote]:text-2xl [&_blockquote]:text-white/85 [&_blockquote]:leading-snug
-                  [&_img]:rounded-2xl [&_img]:my-12 [&_img]:w-full [&_img]:border [&_img]:border-white/5
-                  [&_hr]:my-14 [&_hr]:border-0 [&_hr]:h-[1px] [&_hr]:bg-white/10
-                  [&_table]:w-full [&_table]:my-12 [&_table]:border [&_table]:border-white/10 [&_table]:rounded-2xl [&_table]:overflow-hidden [&_table]:border-separate [&_table]:border-spacing-0
-                  [&_th]:p-5 [&_th]:text-[10px] [&_th]:uppercase [&_th]:tracking-[0.3em] [&_th]:text-left [&_th]:bg-white/[0.04] [&_th]:font-black [&_th]:text-white
-                  [&_td]:p-5 [&_td]:border-t [&_td]:border-white/5 [&_td]:text-white/75 [&_td]:font-medium
-                  [&_code]:bg-white/[0.06] [&_code]:text-[#E89B73] [&_code]:px-2 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-[0.92em] [&_code]:font-mono [&_code]:border [&_code]:border-white/5
-                  [&_pre]:bg-white/[0.03] [&_pre]:border [&_pre]:border-white/10 [&_pre]:p-6 [&_pre]:rounded-2xl [&_pre]:my-10 [&_pre]:overflow-x-auto
-                  [&_pre_code]:bg-transparent [&_pre_code]:border-0 [&_pre_code]:p-0 [&_pre_code]:text-white/85
-                "
-                dangerouslySetInnerHTML={{ __html: processedContent }}
-              />
+            <article className="lg:col-span-9 min-w-0">
+              <CodeBlockEnhancer>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.8 }}
+                  className="
+                    [&_p]:text-lg md:[&_p]:text-xl [&_p]:leading-[1.75] [&_p]:mb-8 [&_p]:text-white/75
+                    [&_h2]:text-3xl md:[&_h2]:text-5xl [&_h2]:font-black [&_h2]:tracking-tighter [&_h2]:mt-20 [&_h2]:mb-8 [&_h2]:font-[family-name:var(--font-fraunces)] [&_h2]:scroll-mt-32 [&_h2]:leading-[1.05]
+                    [&_h3]:text-xl md:[&_h3]:text-3xl [&_h3]:font-black [&_h3]:tracking-tight [&_h3]:mt-14 [&_h3]:mb-4 [&_h3]:text-white [&_h3]:font-[family-name:var(--font-fraunces)]
+                    [&_h4]:text-xs md:[&_h4]:text-sm [&_h4]:font-black [&_h4]:uppercase [&_h4]:tracking-[0.3em] [&_h4]:mt-10 [&_h4]:mb-3 [&_h4]:text-[#C56E3D]
+                    [&_strong]:text-white [&_strong]:font-bold
+                    [&_em]:font-[family-name:var(--font-playfair)] [&_em]:italic [&_em]:text-white/95
+                    [&_a]:text-[#C56E3D] [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-[#C56E3D]/40 [&_a:hover]:text-white [&_a:hover]:decoration-white/70 [&_a]:transition-colors
+                    [&_ul]:list-none [&_ul]:pl-0 [&_ul]:mb-8 [&_ul]:space-y-3
+                    [&_ul_li]:relative [&_ul_li]:pl-6 [&_ul_li]:text-white/75 [&_ul_li]:font-medium [&_ul_li]:leading-relaxed [&_ul_li]:before:content-[''] [&_ul_li]:before:absolute [&_ul_li]:before:left-0 [&_ul_li]:before:top-[0.7em] [&_ul_li]:before:w-2 [&_ul_li]:before:h-[2px] [&_ul_li]:before:bg-[#C56E3D]/70
+                    [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-8 [&_ol]:marker:text-[#C56E3D]/70 [&_ol]:marker:font-black
+                    [&_ol_li]:text-white/75 [&_ol_li]:font-medium [&_ol_li]:leading-relaxed [&_ol_li]:mb-2 [&_ol_li]:pl-2
+                    [&_blockquote]:my-12 [&_blockquote]:pl-8 [&_blockquote]:py-2 [&_blockquote]:border-l-2 [&_blockquote]:border-[#C56E3D] [&_blockquote]:italic [&_blockquote]:font-[family-name:var(--font-playfair)] [&_blockquote]:text-xl md:[&_blockquote]:text-2xl [&_blockquote]:text-white/85 [&_blockquote]:leading-snug
+                    [&_img]:rounded-2xl [&_img]:my-12 [&_img]:w-full [&_img]:border [&_img]:border-white/5
+                    [&_hr]:my-14 [&_hr]:border-0 [&_hr]:h-[1px] [&_hr]:bg-white/10
+                    [&_table]:w-full [&_table]:my-12 [&_table]:border [&_table]:border-white/10 [&_table]:rounded-2xl [&_table]:overflow-hidden [&_table]:border-separate [&_table]:border-spacing-0
+                    [&_th]:p-5 [&_th]:text-[10px] [&_th]:uppercase [&_th]:tracking-[0.3em] [&_th]:text-left [&_th]:bg-white/[0.04] [&_th]:font-black [&_th]:text-white
+                    [&_td]:p-5 [&_td]:border-t [&_td]:border-white/5 [&_td]:text-white/75 [&_td]:font-medium
+                    [&_code]:bg-white/6 [&_code]:text-[#E89B73] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-md [&_code]:text-[0.88em] [&_code]:font-mono [&_code]:font-medium [&_code]:border [&_code]:border-white/10 [&_code]:wrap-break-word [&_code]:tabular-nums
+                    [&_pre]:relative [&_pre]:my-10 md:[&_pre]:my-14 [&_pre]:bg-linear-to-br [&_pre]:from-white/4 [&_pre]:to-white/1.5 [&_pre]:rounded-2xl [&_pre]:border [&_pre]:border-white/10 [&_pre]:overflow-x-auto [&_pre]:p-5 md:[&_pre]:p-7 [&_pre]:pt-12 md:[&_pre]:pt-14 [&_pre]:text-[12.5px] md:[&_pre]:text-sm [&_pre]:leading-[1.7] [&_pre]:font-mono [&_pre]:text-white/85 [&_pre]:shadow-[0_20px_50px_-25px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.04)] [&_pre]:[scrollbar-width:thin] [&_pre]:[scrollbar-color:rgba(255,255,255,0.18)_transparent]
+                    [&_pre]:before:content-[''] [&_pre]:before:absolute [&_pre]:before:left-6 [&_pre]:before:right-6 [&_pre]:before:top-0 [&_pre]:before:h-px [&_pre]:before:bg-linear-to-r [&_pre]:before:from-transparent [&_pre]:before:via-[#C56E3D]/60 [&_pre]:before:to-transparent
+                    [&_pre_code]:bg-transparent [&_pre_code]:border-0 [&_pre_code]:p-0 [&_pre_code]:text-white/85 [&_pre_code]:font-mono [&_pre_code]:break-normal
+                  "
+                  dangerouslySetInnerHTML={{ __html: processedContent }}
+                />
+              </CodeBlockEnhancer>
             </article>
           </div>
         </section>

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { getPostBySlug, getLocalPosts } from "@/lib/blogService";
 import JsonLd from "@/components/JsonLd";
+import CodeBlockEnhancer from "@/components/CodeBlockEnhancer";
 import { SITE_URL, blogPostingSchema, breadcrumbSchema } from "@/lib/seo";
 
 type Props = {
@@ -144,7 +145,7 @@ export default async function SingleBlogPost({ params }: Props) {
       <article className="max-w-[1400px] mx-auto px-6 md:px-16 lg:px-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
           {/* MAIN COLUMN */}
-          <div className="lg:col-span-8 py-12 md:py-20">
+          <div className="lg:col-span-8 min-w-0 py-12 md:py-20">
             <header className="mb-12">
               <div className="flex items-center gap-4 mb-6 text-[9px] font-black uppercase tracking-widest opacity-40">
                 <CalendarDays size={12} /> {post.date}
@@ -168,22 +169,28 @@ export default async function SingleBlogPost({ params }: Props) {
             </header>
 
             {/* CONTENT BODY - MANUAL STYLING */}
-            <div
-              className="
-                [&_p]:text-lg md:[&_p]:text-xl [&_p]:leading-relaxed [&_p]:mb-8 [&_p]:text-[#141B1A]/80
-                [&_h2]:text-3xl md:[&_h2]:text-5xl [&_h2]:font-black [&_h2]:uppercase [&_h2]:tracking-tighter [&_h2]:mt-16 [&_h2]:mb-8 [&_h2]:font-[family-name:var(--font-fraunces)] [&_h2]:scroll-mt-24 [&_h2]:border-l-8 [&_h2]:border-[#C56E3D] [&_h2]:pl-6
-                [&_h3]:text-xl [&_h3]:font-black [&_h3]:uppercase [&_h3]:mt-10 [&_h3]:mb-4
-                [&_a]:text-[#C56E3D] [&_a]:font-semibold [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-[#C56E3D]/40 [&_a:hover]:text-[#141B1A] [&_a:hover]:decoration-[#141B1A] [&_a]:transition-colors
-                [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-8 [&_li]:mb-2 [&_li]:font-medium
-                [&_.blog-table-wrap]:my-10 [&_.blog-table-wrap]:max-w-full [&_.blog-table-wrap]:overflow-x-auto [&_.blog-table-wrap]:[scrollbar-width:thin]
-                [&_table]:w-full [&_table]:min-w-[640px] [&_table]:border-2 [&_table]:border-[#141B1A] [&_table]:border-collapse
-                [&_thead]:bg-[#141B1A] [&_thead]:text-[#E8E4D9]
-                [&_th]:p-3 md:[&_th]:p-4 [&_th]:text-[10px] [&_th]:uppercase [&_th]:tracking-widest [&_th]:text-left [&_th]:whitespace-nowrap
-                [&_td]:p-3 md:[&_td]:p-4 [&_td]:border [&_td]:border-[#141B1A]/10 [&_td]:text-sm md:[&_td]:text-base [&_td]:align-top
-                [&_p:first-of-type]:first-letter:text-6xl [&_p:first-of-type]:first-letter:font-black [&_p:first-of-type]:first-letter:float-left [&_p:first-of-type]:first-letter:mr-3 [&_p:first-of-type]:first-letter:text-[#C56E3D] [&_p:first-of-type]:first-letter:leading-none [&_p:first-of-type]:first-letter:mt-1
-              "
-              dangerouslySetInnerHTML={{ __html: modifiedContent }}
-            />
+            <CodeBlockEnhancer>
+              <div
+                className="
+                  [&_p]:text-lg md:[&_p]:text-xl [&_p]:leading-relaxed [&_p]:mb-8 [&_p]:text-[#141B1A]/80
+                  [&_h2]:text-3xl md:[&_h2]:text-5xl [&_h2]:font-black [&_h2]:uppercase [&_h2]:tracking-tighter [&_h2]:mt-16 [&_h2]:mb-8 [&_h2]:font-[family-name:var(--font-fraunces)] [&_h2]:scroll-mt-24 [&_h2]:border-l-8 [&_h2]:border-[#C56E3D] [&_h2]:pl-6
+                  [&_h3]:text-xl [&_h3]:font-black [&_h3]:uppercase [&_h3]:mt-10 [&_h3]:mb-4
+                  [&_a]:text-[#C56E3D] [&_a]:font-semibold [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-[#C56E3D]/40 [&_a:hover]:text-[#141B1A] [&_a:hover]:decoration-[#141B1A] [&_a]:transition-colors
+                  [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-8 [&_li]:mb-2 [&_li]:font-medium
+                  [&_.blog-table-wrap]:my-10 [&_.blog-table-wrap]:max-w-full [&_.blog-table-wrap]:overflow-x-auto [&_.blog-table-wrap]:[scrollbar-width:thin]
+                  [&_table]:w-full [&_table]:min-w-[640px] [&_table]:border-2 [&_table]:border-[#141B1A] [&_table]:border-collapse
+                  [&_thead]:bg-[#141B1A] [&_thead]:text-[#E8E4D9]
+                  [&_th]:p-3 md:[&_th]:p-4 [&_th]:text-[10px] [&_th]:uppercase [&_th]:tracking-widest [&_th]:text-left [&_th]:whitespace-nowrap
+                  [&_td]:p-3 md:[&_td]:p-4 [&_td]:border [&_td]:border-[#141B1A]/10 [&_td]:text-sm md:[&_td]:text-base [&_td]:align-top
+                  [&_p:first-of-type]:first-letter:text-6xl [&_p:first-of-type]:first-letter:font-black [&_p:first-of-type]:first-letter:float-left [&_p:first-of-type]:first-letter:mr-3 [&_p:first-of-type]:first-letter:text-[#C56E3D] [&_p:first-of-type]:first-letter:leading-none [&_p:first-of-type]:first-letter:mt-1
+                  [&_code]:bg-[#141B1A]/6 [&_code]:text-[#A64D32] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-md [&_code]:text-[0.88em] [&_code]:font-mono [&_code]:font-medium [&_code]:border [&_code]:border-[#141B1A]/10 [&_code]:wrap-break-word [&_code]:tabular-nums
+                  [&_pre]:relative [&_pre]:my-10 md:[&_pre]:my-14 [&_pre]:bg-[#0F1413] [&_pre]:rounded-2xl [&_pre]:border [&_pre]:border-[#141B1A]/15 [&_pre]:overflow-x-auto [&_pre]:p-5 md:[&_pre]:p-7 [&_pre]:pt-12 md:[&_pre]:pt-14 [&_pre]:text-[12.5px] md:[&_pre]:text-sm [&_pre]:leading-[1.7] [&_pre]:font-mono [&_pre]:text-[#E8E4D9] [&_pre]:shadow-[0_18px_40px_-20px_rgba(20,27,26,0.35),inset_0_1px_0_0_rgba(255,255,255,0.06)] [&_pre]:[scrollbar-width:thin] [&_pre]:[scrollbar-color:rgba(255,255,255,0.18)_transparent]
+                  [&_pre]:before:content-[''] [&_pre]:before:absolute [&_pre]:before:left-6 [&_pre]:before:right-6 [&_pre]:before:top-0 [&_pre]:before:h-px [&_pre]:before:bg-linear-to-r [&_pre]:before:from-transparent [&_pre]:before:via-[#C56E3D] [&_pre]:before:to-transparent [&_pre]:before:opacity-70
+                  [&_pre_code]:bg-transparent [&_pre_code]:border-0 [&_pre_code]:p-0 [&_pre_code]:text-[#E8E4D9] [&_pre_code]:font-mono [&_pre_code]:break-normal
+                "
+                dangerouslySetInnerHTML={{ __html: modifiedContent }}
+              />
+            </CodeBlockEnhancer>
           </div>
 
           {/* SIDEBAR */}
