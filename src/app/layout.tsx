@@ -148,6 +148,21 @@ export default function RootLayout({
             })(window,document,'script','dataLayer','GTM-M225DLQQ');`,
           }}
         />
+        <Script
+          id="gtag-src"
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-TL8FJW1FTY"
+        />
+        <Script
+          id="gtag-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-TL8FJW1FTY');`,
+          }}
+        />
         <JsonLd data={[personSchema, websiteSchema, professionalServiceSchema]} />
       </head>
       <body
