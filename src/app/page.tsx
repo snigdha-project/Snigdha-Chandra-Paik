@@ -12,7 +12,7 @@ import { getFeaturedProjects } from "@/lib/projectService";
 const TITLE = "Snigdha Chandra Paik | Frontend & SEO Developer";
 const DESCRIPTION =
   "Snigdha Chandra Paik — Frontend Developer & SEO specialist crafting animated Next.js, Three.js & React Native web apps from India.";
-
+//meta
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
