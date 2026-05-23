@@ -37,7 +37,7 @@ The personal portfolio of **Snigdha Chandra Paik** — a solo frontend and SEO d
 
 Shipped client work includes Daikin TMI, AMJ Mechanical, The House of Abigail, The British Stripe Co. and Puribazar — the projects gallery is the canonical source of truth.
 
-## Preview
+## Preview 
 
 <table>
   <tr>
