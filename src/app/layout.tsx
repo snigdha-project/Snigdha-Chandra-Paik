@@ -14,6 +14,7 @@ import {
   professionalServiceSchema,
   websiteSchema,
 } from "@/lib/seo";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -179,6 +180,7 @@ export default function RootLayout({
         </noscript>
 
         <SiteChrome>{children}</SiteChrome>
+        <SpeedInsights />
       </body>
     </html>
   );

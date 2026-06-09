@@ -23,6 +23,7 @@
     "@types/three": "^0.183.1",
     "@uiw/codemirror-theme-vscode": "^4.25.9",
     "@uiw/react-codemirror": "^4.25.9",
+    "@vercel/speed-insights": "^2.0.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
     "highlight.js": "^11.11.1",
