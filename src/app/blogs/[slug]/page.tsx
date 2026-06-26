@@ -12,6 +12,9 @@ import {
 import { getPostBySlug, getLocalPosts } from "@/lib/blogService";
 import JsonLd from "@/components/JsonLd";
 import CodeBlockEnhancer from "@/components/CodeBlockEnhancer";
+import { SideCtaRail, InlineCtaBanner } from "@/components/blog/BlogCta";
+import BlogShare from "@/components/blog/BlogShare";
+import MobileStickyCta from "@/components/blog/MobileStickyCta";
 import { SITE_URL, blogPostingSchema, breadcrumbSchema } from "@/lib/seo";
 
 type Props = {
@@ -142,6 +145,13 @@ export default async function SingleBlogPost({ params }: Props) {
         </div>
       </nav>
 
+      {/* FIXED LEAD-CAPTURE SIDE RAILS (xl+) — sit in the article gutters */}
+      <SideCtaRail side="left" label="Let's Talk" />
+      <SideCtaRail side="right" label="Let's Collaborate" />
+
+      {/* RESPONSIVE STICKY CTA (below xl) — only while the article body is in view */}
+      <MobileStickyCta targetId="blog-content" />
+
       <article className="max-w-[1400px] mx-auto px-6 md:px-16 lg:px-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
           {/* MAIN COLUMN */}
@@ -168,9 +178,15 @@ export default async function SingleBlogPost({ params }: Props) {
               </div>
             </header>
 
+            {/* SOCIAL SHARE */}
+            <div className="mb-12">
+              <BlogShare url={`${SITE_URL}/blogs/${slug}`} title={post.title} />
+            </div>
+
             {/* CONTENT BODY - MANUAL STYLING */}
             <CodeBlockEnhancer>
               <div
+                id="blog-content"
                 className="
                   [&_p]:text-lg md:[&_p]:text-xl [&_p]:leading-relaxed [&_p]:mb-8 [&_p]:text-[#141B1A]/80
                   [&_h2]:text-3xl md:[&_h2]:text-5xl [&_h2]:font-black [&_h2]:uppercase [&_h2]:tracking-tighter [&_h2]:mt-16 [&_h2]:mb-8 [&_h2]:font-[family-name:var(--font-fraunces)] [&_h2]:scroll-mt-24 [&_h2]:border-l-8 [&_h2]:border-[#C56E3D] [&_h2]:pl-6
@@ -191,6 +207,9 @@ export default async function SingleBlogPost({ params }: Props) {
                 dangerouslySetInnerHTML={{ __html: modifiedContent }}
               />
             </CodeBlockEnhancer>
+
+            {/* END-OF-ARTICLE LEAD BANNER (all breakpoints) */}
+            <InlineCtaBanner />
           </div>
 
           {/* SIDEBAR */}

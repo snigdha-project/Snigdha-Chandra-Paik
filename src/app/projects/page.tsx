@@ -6,6 +6,7 @@ import {
   projectsCollectionSchema,
 } from "@/lib/seo";
 import { getProjects } from "@/lib/projectService";
+import { SideCtaRail } from "@/components/blog/BlogCta";
 import ProjectsContent from "./ProjectsContent";
 
 const TITLE = "Frontend Projects | Snigdha Chandra Paik";
@@ -60,6 +61,10 @@ export default async function ProjectsPage() {
           projectsCollectionSchema(projects),
         ]}
       />
+      {/* DESKTOP-ONLY FLOATING CTAs (xl+) — both redirect to /contact */}
+      <SideCtaRail side="left" label="Start a Project" tone="accent" />
+      <SideCtaRail side="right" label="Let's Collaborate" tone="accent" />
+
       <ProjectsContent
         caseStudyProjects={caseStudyProjects}
         otherProjects={otherProjects}
