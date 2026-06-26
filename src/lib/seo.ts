@@ -16,6 +16,8 @@ export const personSchema = {
   givenName: "Snigdha",
   familyName: "Paik",
   additionalName: "Chandra",
+  description:
+    "Snigdha Chandra Paik is a frontend developer and SEO specialist from West Bengal, India, specialising in animated Next.js, Three.js and React Native web applications with strong technical SEO. He builds fast, search-optimised, conversion-focused websites for clients worldwide.",
   url: SITE_URL,
   image: [
     `${SITE_URL}/images/myImage.jpg`,
@@ -80,6 +82,8 @@ export const professionalServiceSchema = {
   "@type": "ProfessionalService",
   "@id": BUSINESS_ID,
   name: "Snigdha Chandra Paik — Frontend Developer & SEO Studio",
+  description:
+    "Frontend development and technical SEO studio led by Snigdha Chandra Paik — animated Next.js and Three.js websites, React Native apps, Python/N8N automation, and search optimisation for clients in India, the US, the UK and worldwide.",
   image: `${SITE_URL}/images/myImage.jpg`,
   url: SITE_URL,
   telephone: "+91-8391879168",
@@ -225,6 +229,7 @@ export function blogPostingSchema(post: {
   title: string;
   metaTitle?: string;
   metaDescription?: string;
+  category?: string;
   excerpt: string;
   date: string;
   image: string;
@@ -242,6 +247,10 @@ export function blogPostingSchema(post: {
     dateModified: post.date,
     wordCount,
     inLanguage: "en-IN",
+    // GEO: a free, openly-readable article is a strong "safe to cite" signal for
+    // generative engines; articleSection gives them the topic at a glance.
+    isAccessibleForFree: true,
+    ...(post.category ? { articleSection: post.category } : {}),
     author: { "@id": PERSON_ID },
     publisher: { "@id": PERSON_ID },
     mainEntityOfPage: `${SITE_URL}/blogs/${post.slug}`,
