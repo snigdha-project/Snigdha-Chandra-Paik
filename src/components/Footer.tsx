@@ -10,6 +10,8 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
   const socials = [
@@ -36,15 +38,30 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-16 md:gap-8 items-start md:items-center">
           {/* Column 1: Identity */}
           <div className="flex flex-col gap-6">
-            <a href="/" className="group inline-block">
+            <Link href="/" className="group inline-block">
               <span className="font-[family-name:var(--font-signature)] text-4xl text-[#C58473] group-hover:text-[#F7F3E9] transition-all duration-700">
                 Snigdha Chandra Paik
               </span>
               <div className="h-[1px] w-0 bg-[#C58473] group-hover:w-full transition-all duration-700 mt-2 opacity-30" />
-            </a>
+            </Link>
             <p className="text-[9px] uppercase tracking-[0.4em] text-[#F7F3E9]/40 leading-relaxed font-bold">
               Architecting Digital <br /> Ecosystems & SEO
             </p>
+
+            <Link
+              href="/free-website-audit"
+              className="group inline-flex items-center gap-2.5 self-start rounded-full border border-[#C58473]/30 px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.25em] text-[#C58473] transition-all duration-500 hover:border-[#C58473] hover:bg-[#C58473] hover:text-[#141B1A]"
+            >
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#C58473] opacity-70 group-hover:bg-[#141B1A]" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#C58473] group-hover:bg-[#141B1A]" />
+              </span>
+              Free Website Audit
+              <ArrowUpRight
+                size={12}
+                className="transition-transform group-hover:rotate-45"
+              />
+            </Link>
           </div>
 
           {/* Column 2: Inquiries (Centered vertically) */}
