@@ -60,6 +60,7 @@ export const personSchema = {
     "Figma to Code",
   ],
   sameAs: [
+    "https://www.linkedin.com/in/snigdha-chandra-paik/",
     "https://www.facebook.com/snigdha.chandra.paik",
     "https://www.instagram.com/snigdha_chandra_paik/",
     "https://github.com/snigdha-project",

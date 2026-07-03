@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebookF,
   faInstagram,
+  faLinkedinIn,
   faGithub,
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
@@ -19,6 +20,10 @@ export default function Footer() {
     {
       icon: faInstagram,
       link: "https://www.instagram.com/snigdha_chandra_paik/",
+    },
+    {
+      icon: faLinkedinIn,
+      link: "https://www.linkedin.com/in/snigdha-chandra-paik/",
     },
     { icon: faGithub, link: "https://github.com/snigdha-project" },
     { icon: faWhatsapp, link: "https://wa.me/918391879168" },
