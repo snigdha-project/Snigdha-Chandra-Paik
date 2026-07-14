@@ -7,7 +7,8 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Download } from "lucide-react";
+import Link from "next/link";
 
 // 1. Define the interface to handle optional properties
 interface NavLink {
@@ -15,6 +16,8 @@ interface NavLink {
   href: string;
   special?: boolean; // The '?' makes it optional
 }
+
+const CV_URL = "/CV/Snigdha_Chandra_Paik_Resume.pdf";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +50,7 @@ export default function Navbar() {
         className="fixed top-0 left-0 right-0 z-[1000] grid grid-cols-2 md:grid-cols-3 items-center px-6 md:px-16 py-4 bg-[#F7F3E9] backdrop-blur-md border-b border-[#141B1A]/10"
       >
         {/* Logo */}
-        <a
+        <Link
           href="/"
           className="flex flex-col cursor-pointer group text-[#141B1A] justify-self-start relative"
         >
@@ -55,7 +58,7 @@ export default function Navbar() {
             Snigdha Chandra Paik
           </span>
           <motion.div className="absolute -bottom-1 left-0 h-[1px] bg-[#A64D32] w-0 group-hover:w-full transition-all duration-500" />
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex gap-10 justify-self-center items-center text-[10px] font-black uppercase tracking-[0.2em] text-[#141B1A]">
@@ -67,11 +70,35 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Contact & Mobile Toggle */}
-        <div className="flex items-center justify-self-end gap-6">
+        {/* CV, Contact & Mobile Toggle */}
+        <div className="flex items-center justify-self-end gap-3 lg:gap-4">
+          <motion.a
+            href={CV_URL}
+            download
+            aria-label="Download CV"
+            whileHover={{ y: -3 }}
+            whileTap={{ scale: 0.94, y: 0 }}
+            transition={{ type: "spring", stiffness: 400, damping: 16 }}
+            className="group relative hidden md:flex h-11 items-center gap-2 overflow-hidden rounded-sm bg-[#141B1A] px-4 text-[10px] font-black uppercase tracking-[0.2em] text-[#F7F3E9] shadow-[3px_3px_0px_#C56E3D] transition-shadow duration-300 hover:shadow-[6px_6px_0px_#C56E3D]"
+          >
+            {/* black fill that sweeps across on hover */}
+            <span className="pointer-events-none absolute inset-0 z-0 -translate-x-[105%] bg-black transition-transform duration-300 ease-out group-hover:translate-x-0" />
+            {/* endlessly nudging download icon (orange accent stays) */}
+            <motion.span
+              animate={{ y: [0, 2.5, 0] }}
+              transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
+              className="relative z-10 text-[#C56E3D]"
+            >
+              <Download size={13} strokeWidth={2.75} />
+            </motion.span>
+            <span className="relative z-10">
+              <span className="hidden lg:inline">Download </span>CV
+            </span>
+          </motion.a>
+
           <a
             href="/contact"
-            className="hidden md:block px-5 py-2.5 bg-[#A64D32] text-[#F7F3E9] font-[family-name:var(--font-fraunces)] font-bold text-base lowercase italic rounded-sm shadow-[3px_3px_0px_#141B1A] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-300"
+            className="hidden md:flex h-11 items-center justify-center px-5 bg-[#A64D32] text-[#F7F3E9] font-[family-name:var(--font-fraunces)] font-bold text-base lowercase italic rounded-sm shadow-[3px_3px_0px_#141B1A] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-300"
           >
             Contact
           </a>
@@ -125,6 +152,25 @@ export default function Navbar() {
                   {link.name}
                 </motion.a>
               ))}
+
+              <motion.a
+                href={CV_URL}
+                download
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + (navLinks.length + 1) * 0.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsOpen(false)}
+                className="group mt-6 inline-flex items-center gap-3 self-center rounded-sm border-2 border-[#C58473] px-7 py-3 text-[#F7F3E9] font-[family-name:var(--font-fraunces)] text-2xl font-black uppercase tracking-tight shadow-[4px_4px_0px_#C58473] transition-all duration-300 hover:-translate-y-1 hover:bg-[#C58473] hover:text-[#141B1A] hover:shadow-[6px_6px_0px_#F7F3E9]/20"
+              >
+                <motion.span
+                  animate={{ y: [0, 3, 0] }}
+                  transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Download size={20} />
+                </motion.span>
+                Download CV
+              </motion.a>
             </div>
           </motion.div>
         )}
