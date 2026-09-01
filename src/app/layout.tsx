@@ -163,9 +163,10 @@ export default function RootLayout({
             gtag('config', 'G-TL8FJW1FTY');`,
           }}
         />
-        <Script
-          id="adsbygoogle-init"
-          strategy="afterInteractive"
+        {/* Plain <script> (not next/script) so the tag is present in the
+            server-rendered HTML — the AdSense verification crawler reads raw
+            HTML and does not run hydration. */}
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3704963890684560"
           crossOrigin="anonymous"
