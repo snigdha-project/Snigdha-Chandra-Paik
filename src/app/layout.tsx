@@ -163,6 +163,13 @@ export default function RootLayout({
             gtag('config', 'G-TL8FJW1FTY');`,
           }}
         />
+        <Script
+          id="adsbygoogle-init"
+          strategy="afterInteractive"
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3704963890684560"
+          crossOrigin="anonymous"
+        />
         <JsonLd data={[personSchema, websiteSchema, professionalServiceSchema]} />
       </head>
       <body
