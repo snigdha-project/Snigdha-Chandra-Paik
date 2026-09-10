@@ -3,9 +3,9 @@ import JsonLd from "@/components/JsonLd";
 import { SITE_URL, PERSON_ID, breadcrumbSchema, faqSchema } from "@/lib/seo";
 import UKContent from "./UKContent";
 
-const TITLE = "Web Development Company for UK Businesses | Snigdha Chandra Paik";
+const TITLE = "Custom Web Development Company for UK & London Businesses | Snigdha Chandra Paik";
 const DESCRIPTION =
-  "A UK web development company and Shopify developer: fast, animated Next.js & Shopify websites built remotely with same-day replies in UK hours. Free consultation.";
+  "Bespoke custom web development for UK and London businesses: fast, animated Next.js & Shopify websites built remotely with same-day replies in UK hours.";
 const CANONICAL = `${SITE_URL}/website-developer-uk`;
 
 export const metadata: Metadata = {
@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   keywords: [
     "web development company uk",
     "website development company uk",
+    "custom web development uk",
+    "bespoke web design agency",
+    "web development london",
+    "web development company london",
     "website developer uk",
     "web developer uk",
     "shopify developer uk",
@@ -72,6 +76,14 @@ const faqs = [
   {
     q: "Do you build Shopify stores specifically for UK fashion and interiors brands?",
     a: "Yes, that's a specific focus. The House of Abigail and The British Stripe Co. are both live, custom-coded Shopify builds for UK fashion and interiors brands, not templated themes.",
+  },
+  {
+    q: "Which is the best web development company in the UK?",
+    a: "That depends on the brief. For a bespoke, custom-coded Next.js or Shopify site with direct developer access and no agency markup, that's the specialism here. For a large in-house team handling dozens of projects at once, a bigger London agency may be the better fit.",
+  },
+  {
+    q: "Do you build websites for London businesses specifically?",
+    a: "Yes. London fashion and interiors brands are the strongest track record so far (The House of Abigail, The British Stripe Co.), but the same custom web development process applies to any UK city.",
   },
 ];
 

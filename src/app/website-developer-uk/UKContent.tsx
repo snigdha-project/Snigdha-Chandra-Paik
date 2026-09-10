@@ -12,7 +12,7 @@ const config: LandingConfig = {
   h1Accent: "UK businesses",
   h1Post: "built remotely, delivered on time.",
   subhead:
-    "A one-person web development company offering fast, animated Next.js and Shopify websites for UK businesses, built remotely from India on a night-owl schedule that means same-day replies during UK working hours, with technical SEO handled in-house.",
+    "A one-person web development company offering bespoke, custom web development for UK businesses, from London to Manchester: animated Next.js and Shopify websites, built remotely from India on a night-owl schedule that means same-day replies during UK working hours, with technical SEO handled in-house.",
   heroChips: ["Next.js", "Shopify Developer", "WooCommerce", "Technical SEO", "Same-Day UK Replies"],
   trustLine: "Web Development Company Serving UK Businesses, Remotely",
   heroImages: [
@@ -40,12 +40,12 @@ const config: LandingConfig = {
   servicesEyebrow: "Services for UK Businesses",
   servicesTitle: "A full web team, without the UK agency day rate",
   servicesIntro:
-    "Next.js development, Shopify builds and technical SEO, delivered remotely at a fraction of a typical UK web design agency's day rate, without cutting corners on quality.",
+    "Bespoke, custom web development, Shopify builds and technical SEO, delivered remotely at a fraction of a typical UK web design agency's day rate, without cutting corners on quality.",
   services: [
     {
       icon: Code2,
-      title: "Custom Next.js Websites",
-      desc: "Animated, high-performance websites built with Next.js and Framer Motion, a step up from the templated sites most UK web design agencies ship at this price point.",
+      title: "Custom Web Development",
+      desc: "Bespoke, animated, high-performance websites built with Next.js and Framer Motion, a step up from the templated sites most UK web design agencies ship at this price point.",
     },
     {
       icon: ShoppingCart,
@@ -106,10 +106,10 @@ const config: LandingConfig = {
     },
   ],
   regionEyebrow: "Remote-First, UK Hours",
-  regionTitle: "Built in India, delivered on UK time",
+  regionTitle: "Web development for London businesses, and beyond",
   regionParagraphs: [
     "Working remotely doesn't mean working out of sync. Development happens on a night-owl IST schedule specifically so UK clients get same-day replies and overlapping working hours for calls.",
-    "From London fashion and interiors brands to regional service businesses, the process is identical: a free audit or consultation, one fixed quote in GBP or USD, then a site built to rank on Google.co.uk.",
+    "London fashion and interiors brands are the strongest fit so far, but the process is identical for Manchester, Birmingham or anywhere else: a free audit or consultation, one fixed quote in GBP or USD, then a site built to rank on Google.co.uk.",
   ],
   regionAreas: ["London", "Manchester", "Birmingham", "Fashion & Retail", "Interiors", "Ecommerce", "Professional Services", "Startups"],
   processEyebrow: "The Process",
@@ -150,6 +150,14 @@ const config: LandingConfig = {
     {
       q: "Do you build Shopify stores specifically for UK fashion and interiors brands?",
       a: "Yes, that's a specific focus. The House of Abigail and The British Stripe Co. are both live, custom-coded Shopify builds for UK fashion and interiors brands, not templated themes.",
+    },
+    {
+      q: "Which is the best web development company in the UK?",
+      a: "That depends on the brief. For a bespoke, custom-coded Next.js or Shopify site with direct developer access and no agency markup, that's the specialism here. For a large in-house team handling dozens of projects at once, a bigger London agency may be the better fit.",
+    },
+    {
+      q: "Do you build websites for London businesses specifically?",
+      a: "Yes. London fashion and interiors brands are the strongest track record so far (The House of Abigail, The British Stripe Co.), but the same custom web development process applies to any UK city.",
     },
   ],
   formHeading: "Get your free UK project quote",

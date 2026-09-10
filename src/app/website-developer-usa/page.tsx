@@ -3,17 +3,19 @@ import JsonLd from "@/components/JsonLd";
 import { SITE_URL, PERSON_ID, breadcrumbSchema, faqSchema } from "@/lib/seo";
 import USAContent from "./USAContent";
 
-const TITLE = "HVAC Web Design & Web Development Company for US Businesses | Snigdha Chandra Paik";
+const TITLE = "HVAC Website Design & Web Development Company for US Businesses | Snigdha Chandra Paik";
 const DESCRIPTION =
-  "HVAC web design and a web development company for US businesses: fast, animated Next.js, Shopify & Webflow websites built remotely with US time-zone overlap.";
+  "HVAC website design and a web development company for US businesses: fast, animated Next.js, Shopify & Webflow websites built remotely with US time-zone overlap.";
 const CANONICAL = `${SITE_URL}/website-developer-usa`;
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   keywords: [
+    "hvac website design",
     "hvac web design",
     "hvac website design company",
+    "hvac web design agency",
     "web development company usa",
     "web development company in usa",
     "web development agency usa",
@@ -73,6 +75,14 @@ const faqs = [
   {
     q: "How much does HVAC website design cost?",
     a: "It depends on scope, but expect a meaningfully lower cost than an HVAC-specialist marketing agency for a comparable, custom-built (not templated) site. You'll get one fixed quote in USD after a free consultation.",
+  },
+  {
+    q: "What makes a good HVAC website?",
+    a: "Speed, a visible phone number and emergency-call CTA above the fold, service-area pages that actually match where the business operates, and LocalBusiness schema so Google understands the service area. All four live HVAC and home-service sites here are built on that checklist.",
+  },
+  {
+    q: "Who designs the best HVAC websites?",
+    a: "Dedicated HVAC marketing agencies are a solid option if you want a full ad and lead-gen package. If you just need a fast, custom-built site handled by the developer directly, that's the fit here, backed by four live HVAC and home-service client sites.",
   },
 ];
 

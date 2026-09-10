@@ -65,6 +65,9 @@ export const personSchema = {
     "https://www.instagram.com/snigdha_chandra_paik/",
     "https://github.com/snigdha-project",
     "https://wa.me/918391879168",
+    // Secondary Webflow portfolio — same person/business, kept here so Google
+    // resolves both domains to a single entity instead of treating them as unrelated.
+    "https://snigdha-chandras-portfolio.webflow.io/",
   ],
 };
 

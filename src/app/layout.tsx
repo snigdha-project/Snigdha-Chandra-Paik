@@ -136,7 +136,7 @@ export default function RootLayout({
       `}
       data-scroll-behavior="smooth"
     >
-      <head>
+      <head suppressHydrationWarning={true}>
         <Script
           id="gtm-loader"
           strategy="afterInteractive"
@@ -165,7 +165,12 @@ export default function RootLayout({
         />
         {/* Plain <script> (not next/script) so the tag is present in the
             server-rendered HTML — the AdSense verification crawler reads raw
-            HTML and does not run hydration. */}
+            HTML and does not run hydration. Once this loads, AdSense's own
+            runtime injects a further "managed/js/adsense/..." script into
+            <head> via a raw DOM mutation outside React's control, which is
+            what the (harmless, dev-only) hydration warning below is about —
+            not something fixable from application code. suppressHydrationWarning
+            on <head> matches the same pattern already used on <body>. */}
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3704963890684560"

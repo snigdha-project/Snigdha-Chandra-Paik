@@ -71,6 +71,10 @@ const faqs = [
     q: "How is this different from a website designer in Kolkata who only does design?",
     a: "A website designer without a development or SEO background can make a site look good but not necessarily rank or convert. Here, design, development and technical SEO come from the same person, so nothing gets lost between a designer, a developer and an SEO freelancer.",
   },
+  {
+    q: "What is the best website design company in Kolkata?",
+    a: "It depends on what you need. A larger agency suits businesses that want an account manager and a bigger team; an independent developer suits businesses that want direct access, a modern tech stack and technical SEO handled by the person actually writing the code, without the agency markup.",
+  },
 ];
 
 const serviceSchema = {
