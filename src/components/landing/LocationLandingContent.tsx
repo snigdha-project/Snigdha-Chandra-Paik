@@ -10,7 +10,7 @@ import {
   useTransform,
   animate,
 } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Check, MapPin, ShieldCheck, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, MapPin, ShieldCheck, Sparkle, X } from "lucide-react";
 import LeadForm from "./LeadForm";
 import MagneticCta from "./MagneticCta";
 import StickyLeadCta from "./StickyLeadCta";
@@ -294,6 +294,50 @@ export default function LocationLandingContent({ config }: { config: LandingConf
 
           <Reveal delay={0.2} className="mt-14 flex justify-center">
             <MagneticCta variant="ghost">Get a Fixed Quote</MagneticCta>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ───────────────── NICHE SPOTLIGHT ───────────────── */}
+      <section className="bg-[#F1ECE0] px-6 md:px-16 py-20 md:py-28">
+        <div className="mx-auto grid max-w-[1200px] items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <Reveal>
+            <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.4em] text-[#C56E3D]">
+              <Sparkle size={13} />
+              {c.nicheSpotlight.eyebrow}
+            </span>
+            <h2 className="mt-4 font-[family-name:var(--font-fraunces)] text-3xl md:text-5xl font-black uppercase tracking-tighter">
+              {c.nicheSpotlight.title}
+            </h2>
+            <p className="mt-4 text-sm md:text-base font-medium leading-relaxed text-[#141B1A]/60">
+              {c.nicheSpotlight.paragraph}
+            </p>
+            <ul className="mt-6 space-y-3">
+              {c.nicheSpotlight.bullets.map((b) => (
+                <li key={b} className="flex items-start gap-3 text-sm font-bold text-[#141B1A]/80">
+                  <Check size={16} className="mt-0.5 shrink-0 text-[#C56E3D]" strokeWidth={3} />
+                  {b}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8">
+              <MagneticCta variant="light">Get This Kind of Site</MagneticCta>
+            </div>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 250, damping: 20 }}
+              className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border-2 border-[#141B1A] shadow-xl"
+            >
+              <Image
+                src={c.nicheSpotlight.image.src}
+                alt={c.nicheSpotlight.image.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 560px"
+                className="object-cover"
+              />
+            </motion.div>
           </Reveal>
         </div>
       </section>

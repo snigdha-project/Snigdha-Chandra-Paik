@@ -3,9 +3,9 @@ import JsonLd from "@/components/JsonLd";
 import { SITE_URL, PERSON_ID, breadcrumbSchema, faqSchema } from "@/lib/seo";
 import IndiaContent from "./IndiaContent";
 
-const TITLE = "Website Developer in India | Snigdha Chandra Paik: Next.js & SEO";
+const TITLE = "Website Developer & Ecommerce Website Development in India | Snigdha Chandra Paik";
 const DESCRIPTION =
-  "Hire an independent website developer in India for animated, SEO-ready Next.js and ecommerce websites. Direct communication, fixed pricing, free consultation.";
+  "Independent website developer in India for animated Next.js sites and ecommerce website development: Shopify, WooCommerce & Dokan marketplaces. Free consultation.";
 const CANONICAL = `${SITE_URL}/website-developer-india`;
 
 export const metadata: Metadata = {
@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   keywords: [
     "website developer in india",
+    "ecommerce website development india",
+    "shopify developer india",
     "web developer india",
     "website development company india",
     "website design company india",
@@ -61,6 +63,14 @@ const faqs = [
   {
     q: "Which industries have you built websites for?",
     a: "Ecommerce and marketplaces, agritech, SaaS platforms, HVAC and home services, and fashion/retail brands, among others.",
+  },
+  {
+    q: "Do you do ecommerce website development for multi-vendor marketplaces, not just single stores?",
+    a: "Yes. Puribazar is a live multi-vendor marketplace built on WooCommerce and Dokan, with proper vendor onboarding, product structure and ecommerce SEO, not a single-product storefront.",
+  },
+  {
+    q: "Are you a Shopify developer as well as a WordPress/WooCommerce developer?",
+    a: "Yes, both. Shopify tends to suit DTC and retail brands better, while WooCommerce and Dokan suit multi-vendor marketplaces. Which one fits gets covered in the free consultation.",
   },
 ];
 

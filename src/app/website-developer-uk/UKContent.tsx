@@ -7,18 +7,30 @@ import type { LandingConfig } from "@/components/landing/types";
 const config: LandingConfig = {
   slug: "website-developer-uk",
   market: "the UK",
-  eyebrow: "Website Developer for UK Businesses",
-  h1Pre: "A website developer for",
+  eyebrow: "Web Development Company for UK Businesses",
+  h1Pre: "A web development company for",
   h1Accent: "UK businesses",
   h1Post: "built remotely, delivered on time.",
   subhead:
-    "Fast, animated Next.js and Shopify websites for UK businesses, built remotely from India on a night-owl schedule that means same-day replies during UK working hours, with technical SEO handled in-house.",
-  heroChips: ["Next.js", "Shopify", "WooCommerce", "Technical SEO", "Same-Day UK Replies"],
-  trustLine: "Remote Website Developer Serving UK Businesses",
+    "A one-person web development company offering fast, animated Next.js and Shopify websites for UK businesses, built remotely from India on a night-owl schedule that means same-day replies during UK working hours, with technical SEO handled in-house.",
+  heroChips: ["Next.js", "Shopify Developer", "WooCommerce", "Technical SEO", "Same-Day UK Replies"],
+  trustLine: "Web Development Company Serving UK Businesses, Remotely",
   heroImages: [
     { src: "/projects/HOA.png", alt: "The House of Abigail, a live Shopify store for a UK interior design brand" },
     { src: "/projects/britishco.png", alt: "The British Stripe Co., a live Shopify store for a UK fashion brand" },
   ],
+  nicheSpotlight: {
+    eyebrow: "Shopify Developer, UK",
+    title: "The Shopify developer UK fashion and interiors brands already trust",
+    paragraph:
+      "Generic Shopify agencies reuse the same three themes. Here, every UK Shopify build is custom-coded with Tailwind CSS, starting from two live stores already trading: The House of Abigail and The British Stripe Co. If you need a Shopify website design that doesn't look like every other store on the platform, this is the specialism.",
+    bullets: [
+      "Two live UK Shopify stores already trading, not mockups",
+      "Tailwind CSS custom builds, not templated themes",
+      "Product, collection and checkout structure built for UK ecommerce SEO",
+    ],
+    image: { src: "/projects/britishco.png", alt: "The British Stripe Co., a custom Tailwind CSS Shopify build for a UK fashion brand" },
+  },
   stats: [
     { to: 11, suffix: "+", label: "Projects Shipped" },
     { to: 4, suffix: "", label: "Countries Served" },
@@ -130,6 +142,14 @@ const config: LandingConfig = {
     {
       q: "What if I already have a UK web design agency and I'm not happy with them?",
       a: "A free audit is the easiest starting point. It flags exactly what's underperforming, whether that's speed, SEO or conversion, before you decide on a rebuild.",
+    },
+    {
+      q: "Are you a web development company or a freelance developer?",
+      a: "Both, in the sense that matters. It's a one-person web development studio, not a large agency: you get the same fixed-quote, professionally managed process, but every line of code and every SEO decision comes from the person you're actually talking to.",
+    },
+    {
+      q: "Do you build Shopify stores specifically for UK fashion and interiors brands?",
+      a: "Yes, that's a specific focus. The House of Abigail and The British Stripe Co. are both live, custom-coded Shopify builds for UK fashion and interiors brands, not templated themes.",
     },
   ],
   formHeading: "Get your free UK project quote",

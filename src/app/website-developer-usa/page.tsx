@@ -3,19 +3,23 @@ import JsonLd from "@/components/JsonLd";
 import { SITE_URL, PERSON_ID, breadcrumbSchema, faqSchema } from "@/lib/seo";
 import USAContent from "./USAContent";
 
-const TITLE = "Website Developer for US Businesses | Snigdha Chandra Paik";
+const TITLE = "HVAC Web Design & Web Development Company for US Businesses | Snigdha Chandra Paik";
 const DESCRIPTION =
-  "Fast, animated Next.js, Shopify & Webflow websites for US businesses, built remotely with US time-zone overlap. Technical SEO included. Free consultation.";
+  "HVAC web design and a web development company for US businesses: fast, animated Next.js, Shopify & Webflow websites built remotely with US time-zone overlap.";
 const CANONICAL = `${SITE_URL}/website-developer-usa`;
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   keywords: [
+    "hvac web design",
+    "hvac website design company",
+    "web development company usa",
+    "web development company in usa",
+    "web development agency usa",
     "website developer usa",
     "web developer usa",
     "website development company usa",
-    "web development agency usa",
     "website designer usa",
     "web developer united states",
     "hire a web developer usa",
@@ -61,6 +65,14 @@ const faqs = [
   {
     q: "What if I already have a US web design agency and I'm not happy with them?",
     a: "A free audit is the easiest starting point. It flags exactly what's underperforming, whether that's speed, SEO or conversion, before you decide on a rebuild.",
+  },
+  {
+    q: "Do you specialise in HVAC website design, or just build any kind of site?",
+    a: "HVAC and home-service websites are a specific focus, not a one-off. Four live client sites (Daikin TMI, AMJ Mechanical, Unlimited Heating & Refrigeration, Countryside Sewer & Septic) are built around the searches homeowners actually use: emergency service, financing and service-area coverage.",
+  },
+  {
+    q: "How much does HVAC website design cost?",
+    a: "It depends on scope, but expect a meaningfully lower cost than an HVAC-specialist marketing agency for a comparable, custom-built (not templated) site. You'll get one fixed quote in USD after a free consultation.",
   },
 ];
 

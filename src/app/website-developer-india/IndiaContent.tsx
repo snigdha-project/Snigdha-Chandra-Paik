@@ -19,6 +19,18 @@ const config: LandingConfig = {
     { src: "/projects/hamarakhet.png", alt: "Hamara Khet agritech platform for Bharat's farmers, a live Next.js project" },
     { src: "/projects/puribazar.png", alt: "Puribazar ecommerce marketplace, a live Indian web project" },
   ],
+  nicheSpotlight: {
+    eyebrow: "Ecommerce Website Development, India",
+    title: "The ecommerce website development India brands actually need",
+    paragraph:
+      "Most ecommerce website development in India comes down to a WooCommerce or Shopify theme with a logo swapped in. Puribazar is a real multi-vendor marketplace built on Dokan and WooCommerce, and it's the kind of ecommerce build this handles: proper vendor management, product structure and SEO, not a single-product storefront pretending to be a marketplace.",
+    bullets: [
+      "Multi-vendor WooCommerce and Dokan marketplaces, not just storefronts",
+      "Shopify developer for India-based DTC and retail brands",
+      "Product, category and checkout structure built for ecommerce SEO from day one",
+    ],
+    image: { src: "/projects/puribazar.png", alt: "Puribazar, a live multi-vendor WooCommerce and Dokan marketplace built in India" },
+  },
   stats: [
     { to: 11, suffix: "+", label: "Projects Shipped" },
     { to: 4, suffix: "", label: "Countries Served" },
@@ -138,6 +150,14 @@ const config: LandingConfig = {
     {
       q: "Which industries have you built websites for?",
       a: "Ecommerce and marketplaces, agritech, SaaS platforms, HVAC and home services, and fashion/retail brands, among others.",
+    },
+    {
+      q: "Do you do ecommerce website development for multi-vendor marketplaces, not just single stores?",
+      a: "Yes. Puribazar is a live multi-vendor marketplace built on WooCommerce and Dokan, with proper vendor onboarding, product structure and ecommerce SEO, not a single-product storefront.",
+    },
+    {
+      q: "Are you a Shopify developer as well as a WordPress/WooCommerce developer?",
+      a: "Yes, both. Shopify tends to suit DTC and retail brands better, while WooCommerce and Dokan suit multi-vendor marketplaces. Which one fits gets covered in the free consultation.",
     },
   ],
   formHeading: "Get your free India project quote",

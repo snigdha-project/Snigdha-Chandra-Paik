@@ -3,18 +3,21 @@ import JsonLd from "@/components/JsonLd";
 import { SITE_URL, PERSON_ID, breadcrumbSchema, faqSchema } from "@/lib/seo";
 import UKContent from "./UKContent";
 
-const TITLE = "Website Developer for UK Businesses | Snigdha Chandra Paik";
+const TITLE = "Web Development Company for UK Businesses | Snigdha Chandra Paik";
 const DESCRIPTION =
-  "Fast, animated Next.js & Shopify websites for UK businesses, built remotely with same-day replies in UK hours. Technical SEO included. Free consultation.";
+  "A UK web development company and Shopify developer: fast, animated Next.js & Shopify websites built remotely with same-day replies in UK hours. Free consultation.";
 const CANONICAL = `${SITE_URL}/website-developer-uk`;
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   keywords: [
+    "web development company uk",
+    "website development company uk",
     "website developer uk",
     "web developer uk",
-    "website development company uk",
+    "shopify developer uk",
+    "shopify agency uk",
     "website designer uk",
     "freelance web developer uk",
     "web design agency uk",
@@ -61,6 +64,14 @@ const faqs = [
   {
     q: "What if I already have a UK web design agency and I'm not happy with them?",
     a: "A free audit is the easiest starting point. It flags exactly what's underperforming, whether that's speed, SEO or conversion, before you decide on a rebuild.",
+  },
+  {
+    q: "Are you a web development company or a freelance developer?",
+    a: "Both, in the sense that matters. It's a one-person web development studio, not a large agency: you get the same fixed-quote, professionally managed process, but every line of code and every SEO decision comes from the person you're actually talking to.",
+  },
+  {
+    q: "Do you build Shopify stores specifically for UK fashion and interiors brands?",
+    a: "Yes, that's a specific focus. The House of Abigail and The British Stripe Co. are both live, custom-coded Shopify builds for UK fashion and interiors brands, not templated themes.",
   },
 ];
 

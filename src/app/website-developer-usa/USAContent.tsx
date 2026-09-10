@@ -7,18 +7,30 @@ import type { LandingConfig } from "@/components/landing/types";
 const config: LandingConfig = {
   slug: "website-developer-usa",
   market: "the USA",
-  eyebrow: "Website Developer for US Businesses",
-  h1Pre: "A website developer for",
+  eyebrow: "Web Development Company for US Businesses",
+  h1Pre: "A web development company for",
   h1Accent: "US businesses",
   h1Post: "built remotely, delivered on time.",
   subhead:
-    "Fast, animated Next.js, Shopify and Webflow websites for US businesses, built remotely from India on a schedule built around US time zones, with technical SEO handled by the same person who writes the code.",
-  heroChips: ["Next.js", "Shopify", "Webflow", "Technical SEO", "US Time-Zone Overlap"],
-  trustLine: "Remote Website Developer Serving US Businesses",
+    "A one-person web development company offering fast, animated Next.js, Shopify and Webflow websites for US businesses, built remotely from India on a schedule built around US time zones, with technical SEO handled by the same person who writes the code.",
+  heroChips: ["Next.js", "HVAC Web Design", "Shopify", "Webflow", "US Time-Zone Overlap"],
+  trustLine: "Web Development Company Serving US Businesses, Remotely",
   heroImages: [
     { src: "/projects/daikin.png", alt: "Daikin TMI, a live Webflow website for a US HVAC company" },
     { src: "/projects/countryside.png", alt: "Countryside Sewer & Septic, a live Webflow website for a US plumbing company" },
   ],
+  nicheSpotlight: {
+    eyebrow: "HVAC Web Design",
+    title: "HVAC web design that turns an emergency search into a call",
+    paragraph:
+      "Generic web design agencies treat an HVAC website like any other brochure site. It isn't: someone searching \"hvac web design\" or \"hvac website design company\" is usually trying to solve their own customer's problem, an emergency call, financing, service area coverage, fast. Four live HVAC and home-service sites are already built and running on that logic, not just design polish.",
+    bullets: [
+      "Four live HVAC and home-service client sites: Daikin TMI, AMJ Mechanical, Unlimited Heating & Refrigeration, Countryside Sewer & Septic",
+      "Built for emergency-call, financing and service-area search intent, not just brand pages",
+      "LocalBusiness and service-area schema markup from launch",
+    ],
+    image: { src: "/projects/daikin.png", alt: "Daikin TMI, a live HVAC web design project with Webflow and custom code" },
+  },
   stats: [
     { to: 11, suffix: "+", label: "Projects Shipped" },
     { to: 4, suffix: "", label: "Countries Served" },
@@ -146,6 +158,14 @@ const config: LandingConfig = {
     {
       q: "What if I already have a US web design agency and I'm not happy with them?",
       a: "A free audit is the easiest starting point. It flags exactly what's underperforming, whether that's speed, SEO or conversion, before you decide on a rebuild.",
+    },
+    {
+      q: "Do you specialise in HVAC website design, or just build any kind of site?",
+      a: "HVAC and home-service websites are a specific focus, not a one-off. Four live client sites (Daikin TMI, AMJ Mechanical, Unlimited Heating & Refrigeration, Countryside Sewer & Septic) are built around the searches homeowners actually use: emergency service, financing and service-area coverage.",
+    },
+    {
+      q: "How much does HVAC website design cost?",
+      a: "It depends on scope, but expect a meaningfully lower cost than an HVAC-specialist marketing agency for a comparable, custom-built (not templated) site. You'll get one fixed quote in USD after a free consultation.",
     },
   ],
   formHeading: "Get your free US project quote",

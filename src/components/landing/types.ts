@@ -36,6 +36,14 @@ export type LandingConfig = {
   trustLine: string;
   /** Two real project screenshots that float beside the hero copy on desktop. */
   heroImages: { src: string; alt: string }[];
+  /** A focused sub-niche this market can realistically rank for (lower competition, backed by real proof). */
+  nicheSpotlight: {
+    eyebrow: string;
+    title: string;
+    paragraph: string;
+    bullets: string[];
+    image: { src: string; alt: string };
+  };
   stats: { to: number; suffix: string; label: string }[];
   servicesEyebrow: string;
   servicesTitle: string;

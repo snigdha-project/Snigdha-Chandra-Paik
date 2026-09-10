@@ -3,9 +3,9 @@ import JsonLd from "@/components/JsonLd";
 import { SITE_URL, PERSON_ID, breadcrumbSchema, faqSchema } from "@/lib/seo";
 import KolkataContent from "./KolkataContent";
 
-const TITLE = "Website Developer in Kolkata | Snigdha Chandra Paik";
+const TITLE = "Website Developer & SEO Expert in Kolkata | Snigdha Chandra Paik";
 const DESCRIPTION =
-  "Hire a website developer in Kolkata for fast, animated, SEO-ready websites: Next.js, ecommerce & WordPress. Based in South 24 Parganas. Free consultation, reply within 24 hours.";
+  "Hire a website developer and SEO expert in Kolkata for fast, animated Next.js, ecommerce and WordPress websites. Free consultation, reply within 24 hours.";
 const CANONICAL = `${SITE_URL}/website-developer-kolkata`;
 
 export const metadata: Metadata = {
@@ -62,6 +62,14 @@ const faqs = [
   {
     q: "How long does a typical website project take?",
     a: "A brochure or portfolio site usually launches in 2–3 weeks; ecommerce stores and custom web apps take longer depending on scope. You'll get a realistic timeline in the proposal.",
+  },
+  {
+    q: "I just need an SEO expert in Kolkata, not a new website. Do you help with that?",
+    a: "Yes. The free technical and local SEO audit is a standalone starting point for businesses that already have a site and just need schema markup, Core Web Vitals and Kolkata-specific keyword work done properly.",
+  },
+  {
+    q: "How is this different from a website designer in Kolkata who only does design?",
+    a: "A website designer without a development or SEO background can make a site look good but not necessarily rank or convert. Here, design, development and technical SEO come from the same person, so nothing gets lost between a designer, a developer and an SEO freelancer.",
   },
 ];
 

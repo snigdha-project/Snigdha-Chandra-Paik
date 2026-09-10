@@ -19,6 +19,18 @@ const config: LandingConfig = {
     { src: "/projects/puribazar.png", alt: "Puribazar ecommerce marketplace, a live Kolkata-area web project" },
     { src: "/projects/hamarakhet.png", alt: "Hamara Khet agritech platform, a live Next.js project" },
   ],
+  nicheSpotlight: {
+    eyebrow: "SEO Expert in Kolkata",
+    title: "Also the SEO expert Kolkata businesses call first",
+    paragraph:
+      "Most website designer in Kolkata shops treat SEO as an afterthought. Here, every site ships with on-page, technical and local SEO already built in, and the free audit used to scope every project doubles as a standalone service for businesses that just need an SEO expert in Kolkata, not a full rebuild.",
+    bullets: [
+      "Free technical and local SEO audit before any commitment",
+      "Schema markup, Core Web Vitals and Kolkata-specific keyword targeting",
+      "Works on existing WordPress, Webflow or Shopify sites, no rebuild required",
+    ],
+    image: { src: "/projects/monalisamandal.png", alt: "Monalisa Mandal portfolio site, an SEO-optimised WordPress project in Kolkata" },
+  },
   stats: [
     { to: 11, suffix: "+", label: "Projects Shipped" },
     { to: 4, suffix: "", label: "Countries Served" },
@@ -103,7 +115,7 @@ const config: LandingConfig = {
     },
   ],
   regionEyebrow: "Local & Remote",
-  regionTitle: "Based in South 24 Parganas, serving all of Kolkata",
+  regionTitle: "Based in Kolkata, serving all of West Bengal",
   regionParagraphs: [
     "Working with a Kolkata-based developer means no time-zone friction, no confusing overseas contracts, and a phone number that's genuinely local. Video calls, WhatsApp or in person, whatever's easiest for you.",
     "Whether you're a Park Street retailer, a Salt Lake IT company, a Howrah manufacturer or a New Town startup, the process is the same: a free audit or consultation first, a fixed quote, then a site built to rank.",
@@ -139,6 +151,14 @@ const config: LandingConfig = {
     {
       q: "How long does a typical website project take?",
       a: "A brochure or portfolio site usually launches in 2 to 3 weeks; ecommerce stores and custom web apps take longer depending on scope. You'll get a realistic timeline in the proposal.",
+    },
+    {
+      q: "I just need an SEO expert in Kolkata, not a new website. Do you help with that?",
+      a: "Yes. The free technical and local SEO audit is a standalone starting point for businesses that already have a site and just need schema markup, Core Web Vitals and Kolkata-specific keyword work done properly.",
+    },
+    {
+      q: "How is this different from a website designer in Kolkata who only does design?",
+      a: "A website designer without a development or SEO background can make a site look good but not necessarily rank or convert. Here, design, development and technical SEO come from the same person, so nothing gets lost between a designer, a developer and an SEO freelancer.",
     },
   ],
   formHeading: "Get your free Kolkata web project quote",
