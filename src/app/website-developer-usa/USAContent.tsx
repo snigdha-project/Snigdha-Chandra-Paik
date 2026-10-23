@@ -125,9 +125,9 @@ const config: LandingConfig = {
   regionTitle: "Built in India, delivered on US time",
   regionParagraphs: [
     "Distance doesn't mean delay. Work is scheduled around US time zones so calls and revisions overlap with your working day, not just late-night emails.",
-    "From Texas HVAC and mechanical service companies to SaaS platforms, the process is identical: a free audit or consultation, one fixed quote in USD, then a site engineered to rank in Google.",
+    "HVAC and mechanical service clients are spread across the US, not tied to one state. From a single-location contractor to a multi-state operation, the process is identical: a free audit or consultation, one fixed quote in USD, then a site engineered to rank in Google.",
   ],
-  regionAreas: ["HVAC & Mechanical", "Home Services", "SaaS & Automation", "Ecommerce & DTC", "Texas", "Nationwide Remote"],
+  regionAreas: ["HVAC & Mechanical", "Home Services", "SaaS & Automation", "Ecommerce & DTC", "Nationwide Remote"],
   processEyebrow: "The Process",
   processTitle: "From brief to launch, on US time",
   steps: [
