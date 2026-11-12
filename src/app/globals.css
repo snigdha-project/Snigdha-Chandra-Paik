@@ -36,3 +36,23 @@ pre code.hljs *::selection {
   background: #c56e3d;
   color: #fff;
 }
+/* Hobbies card sway — pure CSS so it costs no JS/main-thread time per frame */
+@keyframes hobby-sway {
+  0%,
+  100% {
+    transform: rotate(calc(var(--r, 0deg) - 1.5deg)) translateX(0);
+  }
+  50% {
+    transform: rotate(calc(var(--r, 0deg) + 1.5deg)) translateX(6px);
+  }
+}
+.hobby-sway {
+  animation: hobby-sway 6s ease-in-out infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hobby-sway {
+    animation: none;
+    transform: rotate(var(--r, 0deg));
+  }
+}

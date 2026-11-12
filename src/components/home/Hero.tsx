@@ -117,9 +117,9 @@ export default function Hero() {
 
         {/* INTERACTIVE CARD - Interactions disabled on Mobile */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, delay: 0.5 }}
+          initial={{ scale: 0.94 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.9 }}
           className="lg:col-span-5 flex items-center justify-center relative order-1 lg:order-2"
           style={{ perspective: isMobile ? "none" : 2000 }}
         >

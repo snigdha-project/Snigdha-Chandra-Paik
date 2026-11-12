@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import {
   Fraunces,
   Playfair_Display,
@@ -9,6 +8,7 @@ import {
 import "./globals.css";
 import JsonLd from "@/components/JsonLd";
 import SiteChrome from "@/components/SiteChrome";
+import DeferredTags from "@/components/DeferredTags";
 import {
   personSchema,
   professionalServiceSchema,
@@ -137,44 +137,11 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
     >
       <head suppressHydrationWarning={true}>
-        <Script
-          id="gtm-loader"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-M225DLQQ');`,
-          }}
-        />
-        <Script
-          id="gtag-src"
-          strategy="lazyOnload"
-          src="https://www.googletagmanager.com/gtag/js?id=G-TL8FJW1FTY"
-        />
-        <Script
-          id="gtag-init"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-TL8FJW1FTY');`,
-          }}
-        />
-        {/* Plain <script> (not next/script) so the tag is present in the
-            server-rendered HTML — the AdSense verification crawler reads raw
-            HTML and does not run hydration. Once this loads, AdSense's own
-            runtime injects a further "managed/js/adsense/..." script into
-            <head> via a raw DOM mutation outside React's control, which is
-            what the (harmless, dev-only) hydration warning below is about —
-            not something fixable from application code. suppressHydrationWarning
-            on <head> matches the same pattern already used on <body>. */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3704963890684560"
-          crossOrigin="anonymous"
+        {/* AdSense site verification via meta tag; the ad script itself is
+            loaded after load / first interaction (see DeferredTags). */}
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-3704963890684560"
         />
         <JsonLd data={[personSchema, websiteSchema, professionalServiceSchema]} />
       </head>
@@ -191,6 +158,8 @@ export default function RootLayout({
           ></iframe>
         </noscript>
 
+        {/* GTM + GA4 are injected after load / first interaction */}
+        <DeferredTags />
         <SiteChrome>{children}</SiteChrome>
       </body>
     </html>

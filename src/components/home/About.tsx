@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import LazyOnView from "../LazyOnView";
 
 const AboutModel = dynamic(() => import("./AboutModel"), { ssr: false });
 
@@ -86,7 +87,9 @@ export default function AboutSection() {
               </p>
             </motion.div>
 
-            <AboutModel />
+            <LazyOnView className="w-full min-h-[450px]" rootMargin="0px">
+              <AboutModel />
+            </LazyOnView>
           </div>
 
           <div className="w-full grid grid-cols-2 gap-y-10 gap-x-6 border-t border-[#141B1A]/10 pt-10">

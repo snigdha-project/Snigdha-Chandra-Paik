@@ -8,6 +8,7 @@ import Blogs from "@/components/home/Blogs";
 import JsonLd from "@/components/JsonLd";
 import { SITE_URL, breadcrumbSchema } from "@/lib/seo";
 import { getFeaturedProjects } from "@/lib/projectService";
+import { getLocalPosts } from "@/lib/blogService";
 
 const TITLE = "Snigdha Chandra Paik | Frontend & SEO Developer";
 const DESCRIPTION =
@@ -45,7 +46,10 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const featuredProjects = await getFeaturedProjects();
+  const [featuredProjects, latestPosts] = await Promise.all([
+    getFeaturedProjects(),
+    getLocalPosts(3, 0),
+  ]);
   return (
     <>
       <JsonLd
@@ -56,7 +60,7 @@ export default async function Home() {
       <Tech />
       <Projects projects={featuredProjects} />
       <Hobbies />
-      <Blogs />
+      <Blogs posts={latestPosts} />
     </>
   );
 }

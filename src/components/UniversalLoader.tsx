@@ -6,17 +6,20 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const CYCLE_WORDS = ["FRONTEND", "ANIMATION", "SEO", "CREATIVE"];
 
-const COLD_LOAD_MS = 1100;
 const ROUTE_CHANGE_MS = 500;
 
 export default function UniversalLoader() {
   const pathname = usePathname();
-  const [isLoading, setIsLoading] = useState(true);
+  // Not shown on the first (cold) load: a full-screen splash delays LCP and
+  // blocks interaction for no real gain. It only plays on client navigations.
+  const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const isFirstMount = useRef(true);
+  const lastPath = useRef(pathname);
 
   useEffect(() => {
-    const duration = isFirstMount.current ? COLD_LOAD_MS : ROUTE_CHANGE_MS;
+    if (lastPath.current === pathname) return;
+    lastPath.current = pathname;
+    const duration = ROUTE_CHANGE_MS;
     setIsLoading(true);
     setProgress(0);
 
@@ -32,7 +35,6 @@ export default function UniversalLoader() {
       } else {
         setTimeout(() => {
           setIsLoading(false);
-          isFirstMount.current = false;
         }, 200);
       }
     };

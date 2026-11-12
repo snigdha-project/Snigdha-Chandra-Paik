@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactCompiler: true,
   experimental: {
+    // Inline the (small) CSS into the HTML so it no longer blocks first paint.
+    inlineCss: true,
     serverActions: {
       bodySizeLimit: "10mb",
     },

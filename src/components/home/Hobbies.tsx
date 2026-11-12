@@ -4,6 +4,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import LazyOnView from "../LazyOnView";
 
 const FallingLeaves = dynamic(() => import("./FallingLeaves"), { ssr: false });
 
@@ -75,17 +76,15 @@ function HobbyCard({ item, index, activeIndex, setActiveIndex }: any) {
   return (
     <div className="flex w-full relative">
       {/* 🌪️ WIND LAYER: This div ONLY handles the constant swaying loop */}
-      <motion.div
-        animate={{
-          rotateZ: [item.rotate - 1.5, item.rotate + 1.5, item.rotate - 1.5],
-          x: [0, 6, 0],
-        }}
-        transition={{
-          rotateZ: { repeat: Infinity, duration: 5 + index, ease: "easeInOut" },
-          x: { repeat: Infinity, duration: 6 + index, ease: "easeInOut" },
-        }}
-        className="w-full flex justify-center"
-        style={{ zIndex: isHovered ? 100 : index }}
+      <div
+        className="w-full flex justify-center hobby-sway"
+        style={
+          {
+            zIndex: isHovered ? 100 : index,
+            "--r": `${item.rotate}deg`,
+            animationDuration: `${5 + index}s`,
+          } as React.CSSProperties
+        }
       >
         {/* ✨ INTERACTIVE LAYER: This handles Tilt, Scale, and Focus Blur */}
         <motion.div
@@ -140,7 +139,7 @@ function HobbyCard({ item, index, activeIndex, setActiveIndex }: any) {
 
           <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-28 h-12 bg-[#A64D32]/15 backdrop-blur-md -rotate-2 pointer-events-none" />
         </motion.div>
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -157,7 +156,12 @@ export default function Hobbies() {
       }}
     >
       {/* Falling leaves (tsparticles) */}
-      <FallingLeaves />
+      <LazyOnView
+        className="absolute inset-0 z-0 pointer-events-none"
+        rootMargin="0px"
+      >
+        <FallingLeaves />
+      </LazyOnView>
 
       <div className="max-w-[1500px] mx-auto relative z-10">
         <div className="mb-20 md:mb-32">

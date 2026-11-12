@@ -3,10 +3,8 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Loader2 } from "lucide-react";
-// Updated to import from local blogService
-import { getLocalPosts } from "@/lib/blogService";
+import { useState } from "react";
+import { ArrowUpRight } from "lucide-react";
 
 // Helper to clean HTML entities for titles
 const decodeHTML = (html: string) => {
@@ -131,25 +129,9 @@ function BentoCard({ post, index }: { post: any; index: number }) {
   );
 }
 
-export default function Blogs() {
-  const [posts, setPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchLatest = async () => {
-      try {
-        // Updated to use the local service function
-        const latest = await getLocalPosts(3, 0);
-        setPosts(latest);
-      } catch (err) {
-        console.error("Home Blog Fetch Error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchLatest();
-  }, []);
-
+// Posts are fetched on the server (see app/page.tsx) so the Supabase client
+// never ships in the home-page bundle.
+export default function Blogs({ posts }: { posts: any[] }) {
   return (
     <section className="bg-[#141B1A] min-h-screen py-12 md:py-20 px-6 md:px-16 relative overflow-hidden flex flex-col">
       <div className="max-w-[1400px] w-full mx-auto mb-10 md:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
@@ -168,15 +150,9 @@ export default function Blogs() {
       </div>
 
       <div className="max-w-[1400px] w-full mx-auto flex-1 grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4 md:gap-6 min-h-[600px]">
-        {loading ? (
-          <div className="col-span-full flex items-center justify-center h-64">
-            <Loader2 className="animate-spin text-[#C56E3D]" size={32} />
-          </div>
-        ) : (
-          posts.map((post, i) => (
-            <BentoCard key={post.slug} post={post} index={i} />
-          ))
-        )}
+        {posts.map((post, i) => (
+          <BentoCard key={post.slug} post={post} index={i} />
+        ))}
       </div>
 
       {/* Decorative Orbs */}
