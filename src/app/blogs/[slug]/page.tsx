@@ -9,7 +9,11 @@ import {
   Bookmark,
   ArrowUpRight,
 } from "lucide-react";
-import { getPostBySlug, getLocalPosts } from "@/lib/blogService";
+import {
+  getPostBySlug,
+  getLocalPosts,
+  getAllPostsForSeo,
+} from "@/lib/blogService";
 import JsonLd from "@/components/JsonLd";
 import CodeBlockEnhancer from "@/components/CodeBlockEnhancer";
 import { SideCtaRail, InlineCtaBanner } from "@/components/blog/BlogCta";
@@ -20,6 +24,14 @@ import { SITE_URL, blogPostingSchema, breadcrumbSchema } from "@/lib/seo";
 type Props = {
   params: Promise<{ slug: string }>;
 };
+
+// Pre-render every post at build time (served as static HTML). New/edited posts
+// are refreshed by revalidatePath() in the admin actions; unknown slugs are
+// still rendered on demand.
+export async function generateStaticParams() {
+  const posts = await getAllPostsForSeo();
+  return posts.map((p) => ({ slug: p.slug }));
+}
 
 // 1. DYNAMIC SEO METADATA — prefers `metaTitle` / `metaDescription` from posts.json,
 //    falls back to the visible `title` / `excerpt` when those fields are absent.
@@ -124,7 +136,7 @@ export default async function SingleBlogPost({ params }: Props) {
         className="fixed inset-0 pointer-events-none z-0 opacity-10 mix-blend-multiply"
         style={{
           backgroundImage:
-            "url('https://www.transparenttextures.com/patterns/paper-fibers.png')",
+            "url('/textures/paper-fibers.webp')",
         }}
       />
 

@@ -5,7 +5,7 @@ import {
   blogCollectionSchema,
   breadcrumbSchema,
 } from "@/lib/seo";
-import { getAllPostsForSeo } from "@/lib/blogService";
+import { getAllPostsForSeo, getLocalPosts } from "@/lib/blogService";
 import BlogsContent from "./BlogsContent";
 
 const TITLE = "Frontend & SEO Blog | Snigdha Chandra Paik";
@@ -45,7 +45,12 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogsRoute() {
-  const posts = await getAllPostsForSeo();
+  // First batch is rendered on the server so the page paints without waiting
+  // for client-side fetching; the rest loads via infinite scroll.
+  const [posts, initialPosts] = await Promise.all([
+    getAllPostsForSeo(),
+    getLocalPosts(3, 0),
+  ]);
   return (
     <>
       <JsonLd
@@ -57,7 +62,7 @@ export default async function BlogsRoute() {
           blogCollectionSchema(posts),
         ]}
       />
-      <BlogsContent />
+      <BlogsContent initialPosts={initialPosts} />
     </>
   );
 }

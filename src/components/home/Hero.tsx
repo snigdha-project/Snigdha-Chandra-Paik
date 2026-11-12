@@ -6,39 +6,35 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [mounted, setMounted] = useState(false);
+  // Only used to switch the mouse-tilt interaction on/off. Layout never
+  // depends on it, so the hero is server-rendered and doesn't shift on hydrate.
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-
-    // Check if user is on mobile to disable interactions
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
-
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener("resize", checkMobile);
-
-    // Resting position for desktop
-    if (window.innerWidth >= 1024) {
-      mouseX.set(-350);
-      mouseY.set(350);
-    }
-
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  // Start at the desktop resting position so nothing animates on mount.
+  const mouseX = useMotionValue(-350);
+  const mouseY = useMotionValue(350);
 
   const springConfig = { damping: 40, stiffness: 60 };
   const smoothedX = useSpring(mouseX, springConfig);
   const smoothedY = useSpring(mouseY, springConfig);
 
   // Desktop-only Transforms
-  const lightX = useTransform(smoothedX, [-800, 800], ["-20%", "120%"]);
-  const lightY = useTransform(smoothedY, [-500, 500], ["-20%", "120%"]);
+  // transform-based (not left/top) so moving the glow never triggers layout
+  const lightX = useTransform(
+    smoothedX,
+    (v) => `calc(${-20 + ((v + 800) / 1600) * 140}vw - 500px)`,
+  );
+  const lightY = useTransform(
+    smoothedY,
+    (v) => `calc(${-20 + ((v + 500) / 1000) * 140}% - 500px)`,
+  );
   const rotateX = useTransform(smoothedY, [-500, 500], [12, -12]);
   const rotateY = useTransform(smoothedX, [-500, 500], [-12, 12]);
   const shadowX = useTransform(smoothedX, [-500, 500], [50, -50]);
@@ -61,8 +57,6 @@ export default function Hero() {
     }
   };
 
-  if (!mounted) return <div className="min-h-screen bg-[#F7F3E9]" />;
-
   return (
     <section
       ref={containerRef}
@@ -70,21 +64,15 @@ export default function Hero() {
       onMouseLeave={handleMouseLeave}
       className="relative min-h-screen lg:min-h-[90vh] flex flex-col justify-center px-6 md:px-16 py-20 lg:py-0 overflow-hidden bg-[#F7F3E9]"
     >
-      {/* THE GAS GLOW - Hidden on Mobile */}
-      {!isMobile && (
-        <motion.div
-          style={{
-            left: lightX,
-            top: lightY,
-            translateX: "-50%",
-            translateY: "-50%",
-          }}
-          className="absolute w-[1000px] h-[1000px] pointer-events-none z-0 hidden lg:block"
-        >
-          <div className="absolute inset-0 bg-[#C56E3D] opacity-[0.15] blur-[140px] rounded-full" />
-          <div className="absolute inset-[25%] bg-[#A64D32] opacity-[0.25] blur-[90px] rounded-full" />
-        </motion.div>
-      )}
+      {/* THE GAS GLOW - desktop only (CSS), positioned via transform */}
+      <motion.div
+        aria-hidden
+        style={{ x: lightX, y: lightY }}
+        className="absolute left-0 top-0 w-[1000px] h-[1000px] pointer-events-none z-0 hidden lg:block will-change-transform"
+      >
+        <div className="absolute inset-0 bg-[#C56E3D] opacity-[0.15] blur-[140px] rounded-full" />
+        <div className="absolute inset-[25%] bg-[#A64D32] opacity-[0.25] blur-[90px] rounded-full" />
+      </motion.div>
 
       <div className="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
         {/* TEXT CONTENT */}
@@ -105,17 +93,17 @@ export default function Hero() {
 
           <h1 className="flex flex-col gap-1 lg:gap-3">
             <motion.span
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="font-[family-name:var(--font-fraunces)] text-5xl md:text-7xl lg:text-[9.5rem] font-black leading-none tracking-tighter text-[#141B1A]"
+              initial={{ x: -30 }}
+              animate={{ x: 0 }}
+              className="font-[family-name:var(--font-fraunces)] text-5xl md:text-7xl lg:text-[clamp(4rem,8vw,7.25rem)] font-black leading-none tracking-tighter text-[#141B1A]"
             >
               CREATIVE
             </motion.span>
             <motion.span
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ x: 30 }}
+              animate={{ x: 0 }}
               transition={{ delay: 0.2 }}
-              className="font-[family-name:var(--font-playfair)] text-4xl md:text-6xl lg:text-[8.5rem] italic text-[#C56E3D] ml-0 lg:ml-32 leading-none"
+              className="font-[family-name:var(--font-playfair)] text-4xl md:text-6xl lg:text-[clamp(3.25rem,7vw,6.5rem)] italic text-[#C56E3D] ml-0 lg:ml-12 leading-none"
             >
               Ecosystems
             </motion.span>
@@ -157,6 +145,7 @@ export default function Hero() {
                 alt="Snigdha Chandra Paik — Frontend Developer & SEO Specialist from West Bengal"
                 fill
                 priority
+                sizes="(max-width: 768px) 280px, 360px"
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-[#A64D32]/10 mix-blend-overlay opacity-40" />
@@ -165,7 +154,6 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')] z-20" />
     </section>
   );
 }

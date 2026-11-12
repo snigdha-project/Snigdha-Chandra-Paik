@@ -6,8 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const CYCLE_WORDS = ["FRONTEND", "ANIMATION", "SEO", "CREATIVE"];
 
-const COLD_LOAD_MS = 2200;
-const ROUTE_CHANGE_MS = 900;
+const COLD_LOAD_MS = 1100;
+const ROUTE_CHANGE_MS = 500;
 
 export default function UniversalLoader() {
   const pathname = usePathname();
@@ -83,12 +83,6 @@ export default function UniversalLoader() {
             exit={{ y: "100%" }}
             transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1], delay: 0.3 }}
             className="absolute inset-x-0 bottom-0 h-1/2 bg-[#141B1A]"
-          />
-
-          {/* Subtle paper-grain texture */}
-          <div
-            aria-hidden
-            className="absolute inset-0 opacity-[0.06] mix-blend-screen pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]"
           />
 
           {/* Content layer — fades out before curtains split */}

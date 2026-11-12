@@ -70,8 +70,7 @@ export default function Favorites() {
         style={{ y: wallMove }}
         className="absolute inset-0 opacity-[0.15] pointer-events-none"
       >
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/concrete-wall.png')]" />
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/asphalt-dark.png')] mix-blend-overlay" />
+        <div className="absolute inset-0 bg-[url('/textures/concrete-wall.png')]" />
       </motion.div>
 
       {/* 2. PROCEDURAL SVG CRACKS */}

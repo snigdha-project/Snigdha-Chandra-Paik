@@ -100,6 +100,7 @@ function BentoCard({ post, index }: { post: any; index: number }) {
             src={post.image}
             alt={post.title}
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover opacity-30 transition-all duration-1000 group-hover:scale-105 group-hover:opacity-50"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#141B1A] via-[#141B1A]/40 to-transparent" />

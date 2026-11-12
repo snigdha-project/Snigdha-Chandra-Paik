@@ -63,6 +63,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
                     src={project.image}
                     alt={`${project.title} — ${project.category} built by Snigdha Chandra Paik`}
                     fill
+                    sizes="(max-width: 768px) 100vw, 0px"
                     className="object-cover"
                   />
                 </div>
@@ -152,6 +153,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
               src={displayProjects[hoveredIndex].image}
               alt={`${displayProjects[hoveredIndex].title} — ${displayProjects[hoveredIndex].category} built by Snigdha Chandra Paik`}
               fill
+              sizes="450px"
               className="object-cover"
               priority
             />

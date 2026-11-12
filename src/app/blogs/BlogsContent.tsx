@@ -22,9 +22,8 @@ const decodeHTML = (html: string) => {
   return txt.value;
 };
 
-export default function BlogPage() {
-  const [mounted, setMounted] = useState(false);
-  const [posts, setPosts] = useState<any[]>([]);
+export default function BlogPage({ initialPosts }: { initialPosts: any[] }) {
+  const [posts, setPosts] = useState<any[]>(initialPosts);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
@@ -97,10 +96,6 @@ export default function BlogPage() {
     rootMargin: "400px",
   });
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const loadPosts = useCallback(async () => {
     if (isLoading || !hasMore) return;
 
@@ -136,12 +131,10 @@ export default function BlogPage() {
   }, [isLoading, hasMore, posts.length]);
 
   useEffect(() => {
-    if (inView && mounted) {
+    if (inView) {
       loadPosts();
     }
-  }, [inView, mounted, loadPosts]);
-
-  if (!mounted) return <div className="min-h-screen bg-[#E8E4D9]" />;
+  }, [inView, loadPosts]);
 
   const currentMonthYear = new Date()
     .toLocaleDateString("en-US", {
@@ -153,7 +146,7 @@ export default function BlogPage() {
   return (
     <main className="min-h-screen bg-[#E8E4D9] selection:bg-[#141B1A] selection:text-[#E8E4D9] overflow-x-hidden">
       {/* Newspaper Texture Overlay */}
-      <div className="fixed inset-0 pointer-events-none z-50 opacity-20 mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
+      <div className="fixed inset-0 pointer-events-none z-50 opacity-20 mix-blend-multiply bg-[url('/textures/paper-fibers.webp')]" />
 
       <header className="pt-24 md:pt-32 pb-12 px-6 md:px-16 lg:px-24 border-b-4 border-double border-[#141B1A]">
         <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-12">
@@ -162,7 +155,10 @@ export default function BlogPage() {
               <span className="text-[9px] md:text-[10px] font-black tracking-widest text-[#141B1A] border-2 border-[#141B1A] px-2 md:px-3 py-1 uppercase">
                 Late Night Edition
               </span>
-              <span className="text-[9px] md:text-[10px] font-black tracking-widest text-[#141B1A]/60 uppercase">
+              <span
+                suppressHydrationWarning
+                className="text-[9px] md:text-[10px] font-black tracking-widest text-[#141B1A]/60 uppercase"
+              >
                 {currentMonthYear} // FROM DISPATCH
               </span>
             </div>
