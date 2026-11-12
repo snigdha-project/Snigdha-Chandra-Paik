@@ -1,16 +1,8 @@
-import posthog from "posthog-js";
 import { runWhenIdleOrInteracted } from "./lib/defer";
+import { getPostHog } from "./lib/posthog";
 
-const token = process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN;
-
-// Analytics must never compete with rendering/hydration, so it starts after
-// load on first interaction (or after a short delay), not during startup.
+// Analytics must never compete with rendering/hydration: the PostHog bundle is
+// not even downloaded until after load + first interaction (or a short delay).
 runWhenIdleOrInteracted(() => {
-  if (!token) return;
-  posthog.init(token, {
-    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-    defaults: "2026-01-30",
-    capture_exceptions: true,
-    disable_surveys: true, // surveys bundle is unused on this site
-  });
+  void getPostHog();
 });

@@ -62,7 +62,10 @@ export default async function BlogsRoute() {
           blogCollectionSchema(posts),
         ]}
       />
-      <BlogsContent initialPosts={initialPosts} />
+      {/* article bodies are not needed for the list — keep them out of the page payload */}
+      <BlogsContent
+        initialPosts={initialPosts.map(({ content: _content, ...post }) => post)}
+      />
     </>
   );
 }

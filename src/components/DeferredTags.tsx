@@ -28,13 +28,16 @@ export default function DeferredTags() {
       ga.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
       document.head.appendChild(ga);
 
-      // AdSense (auto ads) — loaded late so it never blocks first paint.
-      const ads = document.createElement("script");
-      ads.async = true;
-      ads.crossOrigin = "anonymous";
-      ads.src =
-        "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3704963890684560";
-      document.head.appendChild(ads);
+      // AdSense (auto ads) — staggered after GTM/GA so the three third-party
+      // scripts don't all hit the main thread in the same moment.
+      setTimeout(() => {
+        const ads = document.createElement("script");
+        ads.async = true;
+        ads.crossOrigin = "anonymous";
+        ads.src =
+          "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3704963890684560";
+        document.head.appendChild(ads);
+      }, 2500);
     });
   }, []);
   return null;

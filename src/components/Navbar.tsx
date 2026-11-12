@@ -84,13 +84,9 @@ export default function Navbar() {
             {/* black fill that sweeps across on hover */}
             <span className="pointer-events-none absolute inset-0 z-0 -translate-x-[105%] bg-black transition-transform duration-300 ease-out group-hover:translate-x-0" />
             {/* endlessly nudging download icon (orange accent stays) */}
-            <motion.span
-              animate={{ y: [0, 2.5, 0] }}
-              transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
-              className="relative z-10 text-[#C56E3D]"
-            >
+            <span className="nudge-y relative z-10 text-[#C56E3D]">
               <Download size={13} strokeWidth={2.75} />
-            </motion.span>
+            </span>
             <span className="relative z-10">
               <span className="hidden lg:inline">Download </span>CV
             </span>
@@ -163,12 +159,9 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}
                 className="group mt-6 inline-flex items-center gap-3 self-center rounded-sm border-2 border-[#C58473] px-7 py-3 text-[#F7F3E9] font-[family-name:var(--font-fraunces)] text-2xl font-black uppercase tracking-tight shadow-[4px_4px_0px_#C58473] transition-all duration-300 hover:-translate-y-1 hover:bg-[#C58473] hover:text-[#141B1A] hover:shadow-[6px_6px_0px_#F7F3E9]/20"
               >
-                <motion.span
-                  animate={{ y: [0, 3, 0] }}
-                  transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
-                >
+                <span className="nudge-y">
                   <Download size={20} />
-                </motion.span>
+                </span>
                 Download CV
               </motion.a>
             </div>

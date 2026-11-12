@@ -60,7 +60,9 @@ export default async function Home() {
       <Tech />
       <Projects projects={featuredProjects} />
       <Hobbies />
-      <Blogs posts={latestPosts} />
+      <Blogs
+        posts={latestPosts.map(({ content: _content, ...post }) => post)}
+      />
     </>
   );
 }

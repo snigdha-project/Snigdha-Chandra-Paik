@@ -139,11 +139,7 @@ export default function TechSection() {
         </div>
 
         <div className="mt-32 border-y border-[#141B1A]/10 py-8 relative overflow-hidden">
-          <motion.div
-            animate={{ x: [0, -2500] }}
-            transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
-            className="flex gap-16 whitespace-nowrap"
-          >
+          <div className="marquee-x flex gap-16 whitespace-nowrap">
             {[...allSkills, ...allSkills, ...allSkills].map((skill, index) => (
               <span
                 key={index}
@@ -152,7 +148,7 @@ export default function TechSection() {
                 {skill}
               </span>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

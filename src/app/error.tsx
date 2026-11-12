@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import posthog from "posthog-js";
+import { getPostHog } from "@/lib/posthog";
 
 export default function Error({
   error,
@@ -11,7 +11,8 @@ export default function Error({
   unstable_retry: () => void;
 }) {
   useEffect(() => {
-    posthog.captureException(error);
+    // loads PostHog on demand (and initialises it if it hasn't started yet)
+    void getPostHog().then((posthog) => posthog?.captureException(error));
   }, [error]);
 
   return (

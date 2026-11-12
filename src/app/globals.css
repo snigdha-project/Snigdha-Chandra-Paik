@@ -56,3 +56,36 @@ pre code.hljs *::selection {
     transform: rotate(var(--r, 0deg));
   }
 }
+
+/* Endless decorative motion as CSS (compositor) instead of per-frame JS */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-2500px);
+  }
+}
+.marquee-x {
+  animation: marquee-x 40s linear infinite;
+  will-change: transform;
+}
+@keyframes nudge-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(2.5px);
+  }
+}
+.nudge-y {
+  display: inline-block;
+  animation: nudge-y 1.3s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-x,
+  .nudge-y {
+    animation: none;
+  }
+}

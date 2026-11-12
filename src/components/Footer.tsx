@@ -1,6 +1,6 @@
 "use client";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FaIcon from "./FaIcon";
 import {
   faFacebookF,
   faInstagram,
@@ -75,7 +75,7 @@ export default function Footer() {
                 className="group flex items-center gap-4 text-sm hover:text-[#C58473] transition-all duration-500"
               >
                 <div className="w-9 h-9 rounded-full border border-[#F7F3E9]/10 flex items-center justify-center group-hover:border-[#C58473]/50 transition-colors">
-                  <FontAwesomeIcon
+                  <FaIcon
                     icon={faEnvelope}
                     className="text-[#C58473] text-xs"
                   />
@@ -89,7 +89,7 @@ export default function Footer() {
                 className="group flex items-center gap-4 text-sm hover:text-[#C58473] transition-all duration-500"
               >
                 <div className="w-9 h-9 rounded-full border border-[#F7F3E9]/10 flex items-center justify-center group-hover:border-[#C58473]/50 transition-colors">
-                  <FontAwesomeIcon
+                  <FaIcon
                     icon={faPhone}
                     className="text-[#C58473] text-xs"
                   />
@@ -128,7 +128,7 @@ export default function Footer() {
                   className="relative w-11 h-11 flex items-center justify-center rounded-full border border-[#F7F3E9]/10 hover:border-[#C58473] text-[#F7F3E9]/60 hover:text-[#C58473] transition-all duration-500 group"
                 >
                   <div className="absolute inset-0 rounded-full bg-[#C58473] opacity-0 group-hover:opacity-10 blur-md transition-opacity" />
-                  <FontAwesomeIcon
+                  <FaIcon
                     icon={social.icon}
                     className="text-base relative z-10"
                   />
