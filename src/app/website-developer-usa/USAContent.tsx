@@ -16,8 +16,8 @@ const config: LandingConfig = {
   heroChips: ["Next.js", "HVAC Website Design", "Shopify", "Webflow", "US Time-Zone Overlap"],
   trustLine: "Web Development Company Serving US Businesses, Remotely",
   heroImages: [
-    { src: "/projects/daikin.png", alt: "Daikin TMI, a live Webflow website for a US HVAC company" },
-    { src: "/projects/countryside.png", alt: "Countryside Sewer & Septic, a live Webflow website for a US plumbing company" },
+    { src: "/projects/daikin.webp", alt: "Daikin TMI, a live Webflow website for a US HVAC company" },
+    { src: "/projects/countryside.webp", alt: "Countryside Sewer & Septic, a live Webflow website for a US plumbing company" },
   ],
   nicheSpotlight: {
     eyebrow: "HVAC Website Design",
@@ -29,7 +29,7 @@ const config: LandingConfig = {
       "Built for emergency-call, financing and service-area search intent, not just brand pages",
       "LocalBusiness and service-area schema markup from launch",
     ],
-    image: { src: "/projects/daikin.png", alt: "Daikin TMI, a live HVAC website design project with Webflow and custom code" },
+    image: { src: "/projects/daikin.webp", alt: "Daikin TMI, a live HVAC website design project with Webflow and custom code" },
   },
   stats: [
     { to: 11, suffix: "+", label: "Projects Shipped" },
@@ -93,7 +93,7 @@ const config: LandingConfig = {
       category: "HVAC / Corporate",
       description: "Professional digital solutions for a global HVAC leader, integrating Splide.js and custom code for a seamless technical experience.",
       tech: ["Webflow", "Splide.js", "SEO Audit"],
-      image: "/projects/daikin.png",
+      image: "/projects/daikin.webp",
       link: "https://www.daikin-tmi.com/",
     },
     {
@@ -101,7 +101,7 @@ const config: LandingConfig = {
       category: "SaaS / Automation",
       description: "A high-performance platform built with Webflow, featuring a clean interface and optimised SEO architecture for maximum visibility.",
       tech: ["Webflow", "SEO", "UI/UX"],
-      image: "/projects/AMJ.png",
+      image: "/projects/AMJ.webp",
       link: "https://www.amaginationtechnology.ai/",
     },
     {
@@ -109,7 +109,7 @@ const config: LandingConfig = {
       category: "HVAC / Service",
       description: "Scalable HVAC website architecture focusing on content auditing and interactive elements for an industry-leading service provider.",
       tech: ["Webflow", "Splide.js", "Content Audit"],
-      image: "/projects/unlimitedhp.png",
+      image: "/projects/unlimitedhp.webp",
       link: "https://www.unlimitedhp.com/",
     },
     {
@@ -117,7 +117,7 @@ const config: LandingConfig = {
       category: "Plumbing / Service",
       description: "A strategic web presence for plumbing specialists, using Webflow and content audits to drive local lead generation.",
       tech: ["Webflow", "Splide.js", "SEO Audit"],
-      image: "/projects/countryside.png",
+      image: "/projects/countryside.webp",
       link: "https://countrysidesewerandseptic.com/",
     },
   ],

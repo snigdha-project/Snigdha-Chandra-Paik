@@ -144,7 +144,7 @@ export default function Parents() {
           >
             <div className="relative aspect-[3/4] w-full md:w-[320px] flex-shrink-0 rounded-[2.5rem] overflow-hidden shadow-2xl">
               <Image
-                src="/images/Mother.jpg"
+                src="/images/Mother.webp"
                 alt="Mother"
                 fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-110"
@@ -182,7 +182,7 @@ export default function Parents() {
           >
             <div className="relative aspect-[3/4] w-full md:w-[320px] flex-shrink-0 rounded-[2.5rem] overflow-hidden shadow-2xl">
               <Image
-                src="/images/Father.jpg"
+                src="/images/Father.webp"
                 alt="Father"
                 fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-110"

@@ -16,8 +16,8 @@ const config: LandingConfig = {
   heroChips: ["Next.js", "Three.js", "Shopify", "WooCommerce", "Technical SEO"],
   trustLine: "Website Developer & SEO Specialist, Based in India",
   heroImages: [
-    { src: "/projects/hamarakhet.png", alt: "Hamara Khet agritech platform for Bharat's farmers, a live Next.js project" },
-    { src: "/projects/puribazar.png", alt: "Puribazar ecommerce marketplace, a live Indian web project" },
+    { src: "/projects/hamarakhet.webp", alt: "Hamara Khet agritech platform for Bharat's farmers, a live Next.js project" },
+    { src: "/projects/puribazar.webp", alt: "Puribazar ecommerce marketplace, a live Indian web project" },
   ],
   nicheSpotlight: {
     eyebrow: "Ecommerce Website Development, India",
@@ -29,7 +29,7 @@ const config: LandingConfig = {
       "Shopify developer for India-based DTC and retail brands",
       "Product, category and checkout structure built for ecommerce SEO from day one",
     ],
-    image: { src: "/projects/puribazar.png", alt: "Puribazar, a live multi-vendor WooCommerce and Dokan marketplace built in India" },
+    image: { src: "/projects/puribazar.webp", alt: "Puribazar, a live multi-vendor WooCommerce and Dokan marketplace built in India" },
   },
   stats: [
     { to: 11, suffix: "+", label: "Projects Shipped" },
@@ -93,7 +93,7 @@ const config: LandingConfig = {
       category: "E-Commerce / Marketplace",
       description: "A multi-vendor ecommerce marketplace powered by Dokan and WooCommerce, specialising in regional sweets and traditional artifacts.",
       tech: ["WordPress", "WooCommerce", "Dokan"],
-      image: "/projects/puribazar.png",
+      image: "/projects/puribazar.webp",
       link: "https://www.puribazar.in/",
     },
     {
@@ -101,7 +101,7 @@ const config: LandingConfig = {
       category: "Agritech / AI Platform",
       description: "An AI Mandi for Bharat's farmers: LLM-driven crop advisory and a real-time marketplace built for Indian growers.",
       tech: ["Next.js", "Framer Motion", "Supabase"],
-      image: "/projects/hamarakhet.png",
+      image: "/projects/hamarakhet.webp",
       link: "https://hamarakhet.vercel.app/",
     },
     {
@@ -109,7 +109,7 @@ const config: LandingConfig = {
       category: "Portfolio / Lifestyle",
       description: "An elegant, responsive personal portfolio for a professional makeup artist, with a custom WordPress UI.",
       tech: ["WordPress", "UI/UX Design"],
-      image: "/projects/monalisamandal.png",
+      image: "/projects/monalisamandal.webp",
       link: "https://monalisamandal.com/",
     },
   ],

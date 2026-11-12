@@ -150,6 +150,7 @@ function JellyPet() {
             setDrag(true);
           }}
           onPointerUp={() => setDrag(false)}
+          onPointerCancel={() => setDrag(false)}
           onPointerLeave={() => setDrag(false)}
         >
           <MeshDistortMaterial ref={materialRef} color="#A64D32" radius={1} />
@@ -169,7 +170,8 @@ export default function AboutModel() {
       <Canvas
         camera={{ position: [0, 0, 5], fov: 35 }}
         className="overflow-visible"
-        style={{ pointerEvents: "auto", touchAction: "none" }}
+        // pan-y: vertical swipes scroll the page instead of being trapped by the canvas
+        style={{ pointerEvents: "auto", touchAction: "pan-y" }}
       >
         <ambientLight intensity={1.5} />
         <pointLight position={[10, 10, 10]} intensity={2} />

@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, Loader2, Newspaper } from "lucide-react";
+import { ChevronRight, Loader2, Newspaper, Search, X } from "lucide-react";
 // 1. Updated Import: Pointing to local JSON service
 import { getLocalPosts } from "@/lib/blogService";
+import { buildSearchIndex, searchIndex } from "@/lib/blogSearch";
 
 /**
  * Helper to clean HTML entities
@@ -27,6 +28,69 @@ export default function BlogPage() {
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+
+  // Search: the full list is fetched once, the first time the user focuses
+  // or types in the search box (the page itself still paginates 3 at a time).
+  const [query, setQuery] = useState("");
+  const [allPosts, setAllPosts] = useState<any[] | null>(null);
+  const [isSearchLoading, setIsSearchLoading] = useState(false);
+
+  const ensureAllPosts = useCallback(async () => {
+    if (allPosts || isSearchLoading) return;
+    setIsSearchLoading(true);
+    try {
+      setAllPosts(await getLocalPosts(200, 0));
+    } catch {
+      setAllPosts([]);
+    } finally {
+      setIsSearchLoading(false);
+    }
+  }, [allPosts, isSearchLoading]);
+
+  const isSearching = query.trim().length > 0;
+
+  // Built once when the full post list arrives (not on every keystroke).
+  const searchableIndex = useMemo(
+    () => buildSearchIndex(allPosts ?? []),
+    [allPosts],
+  );
+
+  const search = useMemo(() => {
+    if (!isSearching || !allPosts) return null;
+    const results = searchIndex(searchableIndex, query);
+    const exact = results.filter((r) => r.exact);
+    if (exact.length > 0) {
+      // literal hits first, then close (typo-tolerant) matches as "similar"
+      return {
+        kind: "exact" as const,
+        posts: exact.map((r) => r.post),
+        similar: results.filter((r) => !r.exact).map((r) => r.post).slice(0, 3),
+      };
+    }
+    if (results.length > 0) {
+      return {
+        kind: "similar" as const,
+        posts: results.slice(0, 6).map((r) => r.post),
+        similar: [] as any[],
+      };
+    }
+    return {
+      kind: "none" as const,
+      posts: allPosts.slice(0, 3),
+      similar: [] as any[],
+    };
+  }, [isSearching, allPosts, searchableIndex, query]);
+
+  const sections: { label: string | null; posts: any[] }[] = !isSearching
+    ? [{ label: null, posts }]
+    : !search
+      ? []
+      : [
+          { label: null, posts: search.posts },
+          ...(search.similar.length > 0
+            ? [{ label: "Similar blogs you may like", posts: search.similar }]
+            : []),
+        ];
 
   const { ref, inView } = useInView({
     threshold: 0,
@@ -113,8 +177,66 @@ export default function BlogPage() {
       </header>
 
       <section className="relative z-10 px-6 md:px-16 lg:px-24 max-w-[1400px] mx-auto">
+        {/* SEARCH BAR */}
+        <div className="pt-10 pb-6 md:pt-14 md:pb-8 border-b-2 border-[#141B1A]">
+          <label htmlFor="blog-search" className="sr-only">
+            Search blogs
+          </label>
+          <div className="relative flex items-center border-2 border-[#141B1A] bg-white/60 focus-within:shadow-[6px_6px_0px_#C56E3D] transition-shadow">
+            <Search
+              className="absolute left-4 md:left-6 w-5 h-5 md:w-6 md:h-6 text-[#141B1A]/50 pointer-events-none"
+              strokeWidth={2.5}
+            />
+            <input
+              id="blog-search"
+              type="search"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                ensureAllPosts();
+              }}
+              onFocus={ensureAllPosts}
+              placeholder="Search the archive… (typos are fine)"
+              autoComplete="off"
+              spellCheck={false}
+              className="w-full bg-transparent pl-12 md:pl-16 pr-12 py-4 md:py-6 text-base md:text-xl font-bold text-[#141B1A] placeholder:text-[#141B1A]/35 placeholder:font-semibold outline-none [&::-webkit-search-cancel-button]:hidden"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                aria-label="Clear search"
+                className="absolute right-3 md:right-5 p-1 text-[#141B1A]/60 hover:text-[#C56E3D] transition-colors"
+              >
+                <X className="w-5 h-5 md:w-6 md:h-6" strokeWidth={3} />
+              </button>
+            )}
+          </div>
+          {isSearching && (
+            <p
+              className="mt-4 text-[10px] md:text-xs font-black uppercase tracking-widest text-[#141B1A]/60"
+              aria-live="polite"
+            >
+              {!search
+                ? "Searching the archive…"
+                : search.kind === "exact"
+                  ? `${search.posts.length} ${search.posts.length === 1 ? "result" : "results"} for “${query.trim()}”`
+                  : search.kind === "similar"
+                    ? `No exact match for “${query.trim()}” — did you mean one of these?`
+                    : `Nothing matched “${query.trim()}” — here are some recent blogs`}
+            </p>
+          )}
+        </div>
+
         <div className="flex flex-col">
-          {posts.map((post, index) => (
+          {sections.map((section, si) => (
+            <div key={si} className="flex flex-col">
+              {section.label && (
+                <div className="pt-10 pb-2 text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[#C56E3D]">
+                  {section.label}
+                </div>
+              )}
+          {section.posts.map((post: any, index: number) => (
             <Link
               href={`/blogs/${post.slug}`}
               key={`${post.slug}-${post.id}-${index}`}
@@ -135,24 +257,28 @@ export default function BlogPage() {
                 </div>
                 {/* Desktop View: Hover Reveal */}
                 <div className="hidden md:block w-full h-full">
-                  <AnimatePresence>
-                    {hoveredSlug === post.slug && (
-                      <motion.div
-                        initial={{ x: 100, opacity: 0 }}
-                        animate={{ x: 0, opacity: 0.55 }}
-                        exit={{ x: -100, opacity: 0 }}
-                        transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
-                        className="relative w-full h-full"
-                      >
-                        <Image
-                          src={post.image}
-                          alt={decodeHTML(post.title)}
-                          fill
-                          className="object-cover"
-                        />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {/* Always mounted so the image is fetched before hover;
+                      only its visibility is animated. */}
+                  <motion.div
+                    initial="hide"
+                    animate={hoveredSlug === post.slug ? "show" : "hide"}
+                    variants={{
+                      show: { x: 0, opacity: 0.55 },
+                      // slide out left, then park at the right ready for next entry
+                      hide: { x: -100, opacity: 0, transitionEnd: { x: 100 } },
+                    }}
+                    transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+                    style={{ x: 100 }}
+                    className="relative w-full h-full"
+                  >
+                    <Image
+                      src={post.image}
+                      alt={decodeHTML(post.title)}
+                      fill
+                      sizes="50vw"
+                      className="object-cover"
+                    />
+                  </motion.div>
                 </div>
               </div>
 
@@ -192,10 +318,18 @@ export default function BlogPage() {
               </div>
             </Link>
           ))}
+            </div>
+          ))}
+
+          {isSearching && !search && (
+            <div className="py-16 flex justify-center">
+              <Loader2 className="animate-spin text-[#C56E3D] w-6 h-6 md:w-8 md:h-8" />
+            </div>
+          )}
 
           <div
             ref={ref}
-            className="py-16 md:py-20 flex justify-center items-center"
+            className={`py-16 md:py-20 flex justify-center items-center ${isSearching ? "hidden" : ""}`}
           >
             {hasMore ? (
               <div className="flex flex-col items-center gap-4">

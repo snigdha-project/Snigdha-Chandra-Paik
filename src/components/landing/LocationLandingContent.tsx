@@ -223,7 +223,7 @@ export default function LocationLandingContent({ config }: { config: LandingConf
               className="mt-2 flex items-center gap-3 rounded-full border border-white/10 bg-white/5 py-1.5 pl-1.5 pr-5"
             >
               <div className="relative h-8 w-8 overflow-hidden rounded-full border border-white/20">
-                <Image src="/images/myImage.jpg" alt="Snigdha Chandra Paik" fill sizes="32px" className="object-cover" />
+                <Image src="/images/myImage.webp" alt="Snigdha Chandra Paik" fill sizes="32px" className="object-cover" />
               </div>
               <span className="text-[10px] font-bold text-white/60">
                 Built and supported personally, no agency hand offs
@@ -503,7 +503,7 @@ export default function LocationLandingContent({ config }: { config: LandingConf
 
             <div className="mt-8 flex items-center gap-4 rounded-2xl border-2 border-[#141B1A] bg-[#FFFDF6] p-5">
               <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full border-2 border-[#141B1A]">
-                <Image src="/images/MyAboutImage.jpg" alt="Snigdha Chandra Paik" fill sizes="56px" className="object-cover" />
+                <Image src="/images/MyAboutImage.webp" alt="Snigdha Chandra Paik" fill sizes="56px" className="object-cover" />
               </div>
               <div className="min-w-0">
                 <p className="font-[family-name:var(--font-fraunces)] text-base font-black tracking-tight">

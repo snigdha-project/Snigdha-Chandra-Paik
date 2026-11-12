@@ -52,13 +52,33 @@ async function uploadImage(
   slug: string,
   file: File,
 ): Promise<string> {
-  const ext = fileExtension(file);
+  let ext = fileExtension(file);
+  let buffer: Buffer = Buffer.from(await file.arrayBuffer());
+  let contentType = file.type || "application/octet-stream";
+
+  // Compress to WebP (max 1600px wide) so oversized uploads never reach the
+  // site. SVG/GIF and anything sharp can't decode are stored untouched.
+  if (!["svg", "gif", "webp"].includes(ext)) {
+    try {
+      const sharp = (await import("sharp")).default;
+      buffer = await sharp(buffer)
+        .rotate()
+        .resize({ width: 1600, withoutEnlargement: true })
+        .webp({ quality: 80 })
+        .toBuffer();
+      ext = "webp";
+      contentType = "image/webp";
+    } catch {
+      /* keep original */
+    }
+  }
+
   const path = `${slug}-${Date.now()}.${ext}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
   const { error } = await supabaseAdmin.storage
     .from(bucket)
     .upload(path, buffer, {
-      contentType: file.type || "application/octet-stream",
+      contentType,
+      cacheControl: "31536000",
       upsert: false,
     });
   if (error) throw new Error(`Image upload failed: ${error.message}`);

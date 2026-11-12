@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
+    formats: ["image/avif", "image/webp"],
+    // Images are immutable (new uploads get new filenames), so cache for a year.
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: "https",

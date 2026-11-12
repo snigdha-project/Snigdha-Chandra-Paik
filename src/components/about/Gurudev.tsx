@@ -139,7 +139,7 @@ export default function Tirtharaj() {
               ${isHovered ? "shadow-[0_0_60px_rgba(197,110,61,0.3)] scale-[1.02]" : "shadow-xl md:shadow-2xl"}`}
           >
             <Image
-              src="/images/Gurudev.png"
+              src="/images/Gurudev.webp"
               alt="Tirtharaj Bhowmik"
               fill
               className="object-cover grayscale hover:grayscale-0 transition-all duration-1000"

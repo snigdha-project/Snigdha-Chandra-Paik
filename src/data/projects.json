@@ -5,7 +5,7 @@
     "description": "A high-performance SaaS platform built with Webflow, featuring a clean, slick interface and optimized SEO architecture for maximum digital visibility.",
     "category": "SaaS / Automation",
     "tech": ["Webflow", "SEO", "UI/UX"],
-    "image": "/projects/AMJ.png",
+    "image": "/projects/AMJ.webp",
     "link": "https://www.amaginationtechnology.ai/",
     "featured": true,
     "colorKey": "webflow"
@@ -16,7 +16,7 @@
     "description": "Professional digital solutions for global HVAC leaders, integrating Splide.js and custom code for a seamless, high-fidelity technical experience.",
     "category": "HVAC / Corporate",
     "tech": ["Webflow", "Splide.js", "Custom Code", "SEO Audit"],
-    "image": "/projects/daikin.png",
+    "image": "/projects/daikin.webp",
     "link": "https://www.daikin-tmi.com/",
     "featured": true,
     "colorKey": "webflow"
@@ -27,7 +27,7 @@
     "description": "An elegant, responsive personal portfolio for a professional makeup artist, featuring secure SMTP integration and a custom WordPress UI.",
     "category": "Portfolio / Lifestyle",
     "tech": ["WordPress", "SMTP", "UI/UX Design"],
-    "image": "/projects/monalisamandal.png",
+    "image": "/projects/monalisamandal.webp",
     "link": "https://monalisamandal.com/",
     "featured": false,
     "colorKey": "wordpress"
@@ -38,7 +38,7 @@
     "description": "A robust multi-vendor e-commerce marketplace powered by Dokan and WooCommerce, specializing in regional sweets and traditional artifacts.",
     "category": "E-Commerce / Marketplace",
     "tech": ["WordPress", "WooCommerce", "Dokan", "Payment Gateway"],
-    "image": "/projects/puribazar.png",
+    "image": "/projects/puribazar.webp",
     "link": "https://www.puribazar.in/",
     "featured": false,
     "colorKey": "wordpress"
@@ -49,7 +49,7 @@
     "description": "Scalable HVAC website architecture focusing on content auditing and interactive elements via Splide.js for industry-leading service providers.",
     "category": "HVAC / Service",
     "tech": ["Webflow", "Splide.js", "Content Audit"],
-    "image": "/projects/unlimitedhp.png",
+    "image": "/projects/unlimitedhp.webp",
     "link": "https://www.unlimitedhp.com/",
     "featured": false,
     "colorKey": "webflow"
@@ -60,7 +60,7 @@
     "description": "Strategic web presence for plumbing specialists, utilizing Webflow and content audits to drive local lead generation and user engagement.",
     "category": "Plumbing / Service",
     "tech": ["Webflow", "Splide.js", "SEO Audit"],
-    "image": "/projects/countryside.png",
+    "image": "/projects/countryside.webp",
     "link": "https://countrysidesewerandseptic.com/",
     "featured": false,
     "colorKey": "webflow"
@@ -71,7 +71,7 @@
     "description": "An interactive corporate platform for HVAC experts, utilizing Swiper.js and Splide.js for advanced visual storytelling and technical depth.",
     "category": "HVAC / Enterprise",
     "tech": ["Webflow", "Splide.js", "Swiper.js", "SEO Audit"],
-    "image": "/projects/B&B.png",
+    "image": "/projects/B&B.webp",
     "link": "https://bbmechanicalinc.com/",
     "featured": false,
     "colorKey": "webflow"
@@ -82,7 +82,7 @@
     "description": "A premium Shopify interior design ecosystem specializing in Modern British Heritage, featuring Tailwind CSS and custom inventory management.",
     "category": "E-Commerce / Interior Design",
     "tech": ["Shopify", "Tailwind CSS", "Inventory Management"],
-    "image": "/projects/HOA.png",
+    "image": "/projects/HOA.webp",
     "link": "https://thehouseofabigail.uk/",
     "featured": true,
     "colorKey": "shopify"
@@ -93,7 +93,7 @@
     "description": "A high-conversion clothing brand storefront for UK fashion, blending British heritage style with modern Shopify performance and Tailwind CSS.",
     "category": "E-Commerce / Fashion",
     "tech": ["Shopify", "Tailwind CSS", "Inventory Management"],
-    "image": "/projects/britishco.png",
+    "image": "/projects/britishco.webp",
     "link": "https://thebritishstripeco.com/",
     "featured": true,
     "colorKey": "shopify"
@@ -104,7 +104,7 @@
     "description": "An innovative Next.js application using face detection APIs to provide emotional feedback and smart ring light features based on environment lighting.",
     "category": "Web App / AI",
     "tech": ["Next.js", "Face Detection API", "Vercel", "Tailwind CSS"],
-    "image": "/projects/mirror.png",
+    "image": "/projects/mirror.webp",
     "link": "https://digital-mirror-psi.vercel.app/",
     "featured": true,
     "colorKey": "ai"
@@ -115,7 +115,7 @@
     "description": "An AI Mandi for Bharat's farmers — an agritech platform pairing LLM-driven crop advisory and FLUX image generation with a real-time marketplace, built to give Indian growers fair pricing and accessible intelligence in their language.",
     "category": "Agritech / AI Platform",
     "tech": ["Next.js", "TypeScript", "Framer Motion", "Lenis", "Hugging Face", "Llama 3.3 70B", "FLUX.1-schnell", "NVIDIA NIM", "Supabase"],
-    "image": "/projects/hamarakhet.png",
+    "image": "/projects/hamarakhet.webp",
     "link": "https://hamarakhet.vercel.app/",
     "featured": true,
     "colorKey": "ai"

@@ -16,8 +16,8 @@ const config: LandingConfig = {
   heroChips: ["Next.js", "Shopify Developer", "WooCommerce", "Technical SEO", "Same-Day UK Replies"],
   trustLine: "Web Development Company Serving UK Businesses, Remotely",
   heroImages: [
-    { src: "/projects/HOA.png", alt: "The House of Abigail, a live Shopify store for a UK interior design brand" },
-    { src: "/projects/britishco.png", alt: "The British Stripe Co., a live Shopify store for a UK fashion brand" },
+    { src: "/projects/HOA.webp", alt: "The House of Abigail, a live Shopify store for a UK interior design brand" },
+    { src: "/projects/britishco.webp", alt: "The British Stripe Co., a live Shopify store for a UK fashion brand" },
   ],
   nicheSpotlight: {
     eyebrow: "Shopify Developer, UK",
@@ -29,7 +29,7 @@ const config: LandingConfig = {
       "Tailwind CSS custom builds, not templated themes",
       "Product, collection and checkout structure built for UK ecommerce SEO",
     ],
-    image: { src: "/projects/britishco.png", alt: "The British Stripe Co., a custom Tailwind CSS Shopify build for a UK fashion brand" },
+    image: { src: "/projects/britishco.webp", alt: "The British Stripe Co., a custom Tailwind CSS Shopify build for a UK fashion brand" },
   },
   stats: [
     { to: 11, suffix: "+", label: "Projects Shipped" },
@@ -93,7 +93,7 @@ const config: LandingConfig = {
       category: "E-Commerce / Interior Design",
       description: "A premium Shopify interior design ecosystem specialising in Modern British Heritage, with Tailwind CSS and custom inventory management.",
       tech: ["Shopify", "Tailwind CSS"],
-      image: "/projects/HOA.png",
+      image: "/projects/HOA.webp",
       link: "https://thehouseofabigail.uk/",
     },
     {
@@ -101,7 +101,7 @@ const config: LandingConfig = {
       category: "E-Commerce / Fashion",
       description: "A high-conversion clothing brand storefront for UK fashion, blending British heritage style with modern Shopify performance.",
       tech: ["Shopify", "Tailwind CSS"],
-      image: "/projects/britishco.png",
+      image: "/projects/britishco.webp",
       link: "https://thebritishstripeco.com/",
     },
   ],

@@ -190,7 +190,7 @@ export default function AboutHero() {
               ${interaction.target === "image" ? "shadow-[0_0_80px_rgba(197,110,61,0.4)] scale-[1.01]" : ""}`}
           >
             <Image
-              src="/images/MyAboutImage.jpg"
+              src="/images/MyAboutImage.webp"
               alt="Snigdha Chandra Paik working on Next.js & Three.js frontend projects"
               fill
               className="object-cover"
