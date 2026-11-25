@@ -6,8 +6,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Loader2, Newspaper, Search, X } from "lucide-react";
-// 1. Updated Import: Pointing to local JSON service
-import { getLocalPosts } from "@/lib/blogService";
 import { buildSearchIndex, searchIndex } from "@/lib/blogSearch";
 
 /**
@@ -21,6 +19,13 @@ const decodeHTML = (html: string) => {
   txt.innerHTML = html;
   return txt.value;
 };
+
+// Posts come from WordPress via our own API route (keeps the CMS server-side).
+async function getLocalPosts(limit: number, offset: number): Promise<any[]> {
+  const res = await fetch(`/api/posts?limit=${limit}&offset=${offset}`);
+  if (!res.ok) throw new Error(`Failed to load posts (${res.status})`);
+  return res.json();
+}
 
 export default function BlogPage({ initialPosts }: { initialPosts: any[] }) {
   const [posts, setPosts] = useState<any[]>(initialPosts);
@@ -102,8 +107,7 @@ export default function BlogPage({ initialPosts }: { initialPosts: any[] }) {
     setIsLoading(true);
     try {
       const offset = posts.length;
-      // 2. Updated Fetch: Calling local service instead of WP proxy
-      const newLocalPosts = await getLocalPosts(3, offset);
+            const newLocalPosts = await getLocalPosts(3, offset);
 
       if (!newLocalPosts || newLocalPosts.length === 0) {
         setHasMore(false);

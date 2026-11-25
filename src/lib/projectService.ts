@@ -1,8 +1,5 @@
-import {
-  supabasePublic,
-  publicImageUrl,
-  PROJECT_IMAGES_BUCKET,
-} from "./supabase/public";
+import { wpQuery, wpQueryAll } from "./wordpress";
+import { stripTags } from "./wpText";
 
 export type Project = {
   id: number;
@@ -24,54 +21,89 @@ export type ProjectWithCaseStudy = Project & {
   metaDescription: string | null;
 };
 
-type Row = {
-  id: number;
+// Projects are a custom post type provided by the "Portfolio Projects"
+// WordPress plugin (wordpress/portfolio-projects in this repo).
+type WpProject = {
+  databaseId: number;
   slug: string;
-  title: string;
-  description: string;
-  category: string;
+  title: string | null;
+  excerpt: string | null;
+  content: string | null;
+  category: string | null;
   tech: string[] | null;
-  image_path: string;
   link: string | null;
-  featured: boolean;
-  color_key: string | null;
-  case_study: string | null;
-  meta_title: string | null;
-  meta_description: string | null;
-  order_index: number;
+  featured: boolean | null;
+  colorKey: string | null;
+  metaTitle: string | null;
+  metaDescription: string | null;
+  featuredImage: { node: { sourceUrl: string | null } | null } | null;
 };
 
-const PROJECT_COLUMNS =
-  "id, slug, title, description, category, tech, image_path, link, featured, color_key, case_study, meta_title, meta_description, order_index";
+const FALLBACK_IMAGE = "/OG/projectsOG.png";
 
-function toProject(row: Row): Project {
+const PROJECT_FIELDS = `
+  databaseId
+  slug
+  title
+  excerpt
+  content
+  category
+  tech
+  link
+  featured
+  colorKey
+  metaTitle
+  metaDescription
+  featuredImage { node { sourceUrl } }
+`;
+
+// menuOrder ascending (the "Order" field in WordPress), then newest first.
+const ALL_PROJECTS_QUERY = `
+  query Projects($after: String) {
+    projects(first: 100, after: $after, where: { status: PUBLISH, orderby: [{ field: MENU_ORDER, order: ASC }, { field: DATE, order: DESC }] }) {
+      pageInfo { hasNextPage endCursor }
+      nodes { ${PROJECT_FIELDS} }
+    }
+  }
+`;
+
+const PROJECT_BY_SLUG_QUERY = `
+  query Project($slug: ID!) {
+    project(id: $slug, idType: SLUG) { status ${PROJECT_FIELDS} }
+  }
+`;
+
+function hasContent(html: string | null): boolean {
+  return Boolean(html && stripTags(html).length > 0);
+}
+
+function toProject(p: WpProject): Project {
   return {
-    id: row.id,
-    slug: row.slug,
-    title: row.title,
-    description: row.description,
-    category: row.category,
-    tech: row.tech ?? [],
-    image: publicImageUrl(PROJECT_IMAGES_BUCKET, row.image_path),
-    link: row.link,
-    featured: row.featured,
-    colorKey: row.color_key,
-    hasCaseStudy: row.case_study !== null && row.case_study.trim().length > 0,
+    id: p.databaseId,
+    slug: p.slug,
+    title: stripTags(p.title ?? ""),
+    description: stripTags(p.excerpt ?? ""),
+    category: p.category ?? "",
+    tech: p.tech ?? [],
+    image: p.featuredImage?.node?.sourceUrl || FALLBACK_IMAGE,
+    link: p.link,
+    featured: Boolean(p.featured),
+    colorKey: p.colorKey,
+    hasCaseStudy: hasContent(p.content),
   };
 }
 
-export async function getProjects(): Promise<Project[]> {
-  const { data, error } = await supabasePublic
-    .from("projects")
-    .select(PROJECT_COLUMNS)
-    .order("order_index", { ascending: true })
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error("getProjects failed:", error.message);
+async function fetchAllProjects(): Promise<WpProject[]> {
+  try {
+    return await wpQueryAll<WpProject>(ALL_PROJECTS_QUERY, "projects");
+  } catch (e) {
+    console.error("getProjects failed:", e instanceof Error ? e.message : e);
     return [];
   }
-  return (data as Row[]).map(toProject);
+}
+
+export async function getProjects(): Promise<Project[]> {
+  return (await fetchAllProjects()).map(toProject);
 }
 
 export async function getFeaturedProjects(): Promise<Project[]> {
@@ -81,79 +113,26 @@ export async function getFeaturedProjects(): Promise<Project[]> {
 export async function getProjectBySlug(
   slug: string,
 ): Promise<ProjectWithCaseStudy | null> {
-  const { data, error } = await supabasePublic
-    .from("projects")
-    .select(PROJECT_COLUMNS)
-    .eq("slug", slug)
-    .maybeSingle();
-
-  if (error || !data) return null;
-  const row = data as Row;
-  if (!row.case_study || row.case_study.trim().length === 0) return null;
-  return {
-    ...toProject(row),
-    caseStudy: row.case_study,
-    metaTitle: row.meta_title,
-    metaDescription: row.meta_description,
-  };
-}
-
-export type ProjectEditRow = {
-  id: number;
-  slug: string;
-  title: string;
-  description: string;
-  category: string;
-  tech: string[];
-  imagePath: string;
-  imageUrl: string;
-  link: string | null;
-  featured: boolean;
-  colorKey: string | null;
-  caseStudy: string;
-  metaTitle: string;
-  metaDescription: string;
-  orderIndex: number;
-};
-
-export async function getProjectForEdit(slug: string): Promise<ProjectEditRow | null> {
-  const { data, error } = await supabasePublic
-    .from("projects")
-    .select(PROJECT_COLUMNS)
-    .eq("slug", slug)
-    .maybeSingle();
-
-  if (error || !data) return null;
-  const row = data as Row;
-  return {
-    id: row.id,
-    slug: row.slug,
-    title: row.title,
-    description: row.description,
-    category: row.category,
-    tech: row.tech ?? [],
-    imagePath: row.image_path,
-    imageUrl: publicImageUrl(PROJECT_IMAGES_BUCKET, row.image_path),
-    link: row.link,
-    featured: row.featured,
-    colorKey: row.color_key,
-    caseStudy: row.case_study ?? "",
-    metaTitle: row.meta_title ?? "",
-    metaDescription: row.meta_description ?? "",
-    orderIndex: row.order_index,
-  };
+  try {
+    const data = await wpQuery<{
+      project: (WpProject & { status: string }) | null;
+    }>(PROJECT_BY_SLUG_QUERY, { slug });
+    const p = data.project;
+    if (!p || p.status !== "publish" || !hasContent(p.content)) return null;
+    return {
+      ...toProject(p),
+      caseStudy: p.content ?? "",
+      metaTitle: p.metaTitle,
+      metaDescription: p.metaDescription,
+    };
+  } catch (e) {
+    console.error("getProjectBySlug failed:", e instanceof Error ? e.message : e);
+    return null;
+  }
 }
 
 export async function getProjectSlugsWithCaseStudy(): Promise<string[]> {
-  const { data, error } = await supabasePublic
-    .from("projects")
-    .select("slug, case_study")
-    .not("case_study", "is", null);
-
-  if (error || !data) return [];
-  return data
-    .filter((r: { slug: string; case_study: string | null }) =>
-      Boolean(r.case_study && r.case_study.trim().length > 0),
-    )
-    .map((r: { slug: string }) => r.slug);
+  return (await fetchAllProjects())
+    .filter((p) => hasContent(p.content))
+    .map((p) => p.slug);
 }

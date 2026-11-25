@@ -95,7 +95,7 @@ All schemas validate against [validator.schema.org](https://validator.schema.org
 **Styling** — Tailwind CSS 4, custom design tokens, Fraunces + Playfair Display + Plus Jakarta Sans + Monsieur La Doulaise via `next/font`
 **Animation** — Framer Motion 12, Lenis smooth scroll, custom Canvas2D fluid simulation
 **3D** — Three.js (r183), React Three Fiber, Drei
-**Content** — Local JSON for projects and blog posts, Sanity client wired for future CMS swap
+**Content** — Headless WordPress (WPGraphQL) for projects and blog posts; `wordpress/portfolio-projects` plugin adds the Projects type
 **Forms** — Zoho Forms public endpoint, AJAX submission with optimistic UI
 **Analytics** — Google Tag Manager (GTM-M225DLQQ), deferred via `next/script` with `strategy="afterInteractive"`
 **Icons** — Lucide React, FontAwesome Brands & Solid

@@ -1,8 +1,5 @@
-import {
-  supabasePublic,
-  publicImageUrl,
-  BLOG_IMAGES_BUCKET,
-} from "./supabase/public";
+import { wpQueryAll, wpQuery } from "./wordpress";
+import { stripTags } from "./wpText";
 
 export type Post = {
   id: string; // formatted as "VOL. 01"
@@ -17,18 +14,52 @@ export type Post = {
   content: string;
 };
 
-type Row = {
-  id: number;
+type WpPost = {
+  databaseId: number;
   slug: string;
-  title: string;
-  meta_title: string | null;
-  meta_description: string | null;
-  category: string;
-  date: string; // ISO yyyy-mm-dd
-  image_path: string;
-  excerpt: string;
-  content: string;
+  title: string | null;
+  date: string; // "2026-04-11T00:00:00"
+  excerpt: string | null;
+  content: string | null;
+  metaTitle: string | null;
+  metaDescription: string | null;
+  categories: { nodes: { name: string }[] } | null;
+  featuredImage: { node: { sourceUrl: string | null } | null } | null;
 };
+
+const FALLBACK_IMAGE = "/OG/blogsOG.png";
+
+const POST_FIELDS = `
+  databaseId
+  slug
+  title
+  date
+  excerpt
+  content
+  metaTitle
+  metaDescription
+  categories { nodes { name } }
+  featuredImage { node { sourceUrl } }
+`;
+
+const ALL_POSTS_QUERY = `
+  query Posts($after: String) {
+    posts(first: 100, after: $after, where: { status: PUBLISH, orderby: { field: DATE, order: DESC } }) {
+      pageInfo { hasNextPage endCursor }
+      nodes { ${POST_FIELDS} }
+    }
+  }
+`;
+
+const POST_BY_SLUG_QUERY = `
+  query Post($slug: ID!) {
+    post(id: $slug, idType: SLUG) { status ${POST_FIELDS} }
+  }
+`;
+
+function isoDate(wpDate: string): string {
+  return wpDate.slice(0, 10);
+}
 
 function formatDate(iso: string): string {
   return new Date(iso)
@@ -40,116 +71,57 @@ function formatDate(iso: string): string {
     .toUpperCase();
 }
 
-function toPost(row: Row): Post {
+function toPost(p: WpPost): Post {
+  const content = p.content ?? "";
+  const excerpt = stripTags(p.excerpt ?? "") || stripTags(content).slice(0, 160);
   return {
-    id: `VOL. ${String(row.id).padStart(2, "0")}`,
-    slug: row.slug,
-    title: row.title,
-    metaTitle: row.meta_title ?? undefined,
-    metaDescription: row.meta_description ?? undefined,
-    category: row.category,
-    date: formatDate(row.date),
-    image: publicImageUrl(BLOG_IMAGES_BUCKET, row.image_path),
-    excerpt: row.excerpt,
-    content: row.content,
+    id: `VOL. ${String(p.databaseId).padStart(2, "0")}`,
+    slug: p.slug,
+    title: stripTags(p.title ?? ""),
+    metaTitle: p.metaTitle?.trim() || undefined,
+    metaDescription: p.metaDescription?.trim() || undefined,
+    category: p.categories?.nodes[0]?.name ?? "General",
+    date: formatDate(isoDate(p.date)),
+    image: p.featuredImage?.node?.sourceUrl || FALLBACK_IMAGE,
+    excerpt,
+    content,
   };
 }
 
 // Raw ISO date variant — for sitemap/seo schemas that need the unformatted date.
 export type PostWithRawDate = Omit<Post, "date"> & { date: string; rawDate: string };
 
-export async function getLocalPosts(limit = 3, offset = 0): Promise<Post[]> {
-  const { data, error } = await supabasePublic
-    .from("posts")
-    .select(
-      "id, slug, title, meta_title, meta_description, category, date, image_path, excerpt, content",
-    )
-    .order("date", { ascending: false })
-    .range(offset, offset + limit - 1);
-
-  if (error) {
-    console.error("getLocalPosts failed:", error.message);
+async function fetchAllPosts(): Promise<WpPost[]> {
+  try {
+    return await wpQueryAll<WpPost>(ALL_POSTS_QUERY, "posts");
+  } catch (e) {
+    console.error("fetchAllPosts failed:", e instanceof Error ? e.message : e);
     return [];
   }
-  return (data as Row[]).map(toPost);
+}
+
+// WPGraphQL paginates by cursor, not offset, so offset/limit is applied to the
+// (cached) full list. The list is small, and the request is cached by Next.
+export async function getLocalPosts(limit = 3, offset = 0): Promise<Post[]> {
+  const all = await fetchAllPosts();
+  return all.slice(offset, offset + limit).map(toPost);
 }
 
 // NOTE: getPostBySlug intentionally keeps the date in raw ISO form (yyyy-mm-dd),
 // because [slug]/page.tsx feeds it to blogPostingSchema which requires an ISO
 // date. List views call getLocalPosts (above) which formats the date for UI.
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const { data, error } = await supabasePublic
-    .from("posts")
-    .select(
-      "id, slug, title, meta_title, meta_description, category, date, image_path, excerpt, content",
-    )
-    .eq("slug", slug)
-    .maybeSingle();
-
-  if (error || !data) return null;
-  const row = data as Row;
-  return {
-    ...toPost(row),
-    date: row.date,
-  };
-}
-
-export type PostEditRow = {
-  id: number;
-  slug: string;
-  title: string;
-  metaTitle: string;
-  metaDescription: string;
-  category: string;
-  date: string; // raw ISO yyyy-mm-dd
-  imagePath: string;
-  imageUrl: string;
-  excerpt: string;
-  content: string;
-};
-
-export async function getPostForEdit(slug: string): Promise<PostEditRow | null> {
-  const { data, error } = await supabasePublic
-    .from("posts")
-    .select(
-      "id, slug, title, meta_title, meta_description, category, date, image_path, excerpt, content",
-    )
-    .eq("slug", slug)
-    .maybeSingle();
-
-  if (error || !data) return null;
-  const row = data as Row;
-  return {
-    id: row.id,
-    slug: row.slug,
-    title: row.title,
-    metaTitle: row.meta_title ?? "",
-    metaDescription: row.meta_description ?? "",
-    category: row.category,
-    date: row.date,
-    imagePath: row.image_path,
-    imageUrl: publicImageUrl(BLOG_IMAGES_BUCKET, row.image_path),
-    excerpt: row.excerpt,
-    content: row.content,
-  };
-}
-
-export type PostSummary = {
-  id: number;
-  slug: string;
-  title: string;
-  category: string;
-  date: string; // raw ISO yyyy-mm-dd
-};
-
-// Lightweight listing for the admin dashboard.
-export async function getAllPostSummaries(): Promise<PostSummary[]> {
-  const { data, error } = await supabasePublic
-    .from("posts")
-    .select("id, slug, title, category, date")
-    .order("date", { ascending: false });
-  if (error || !data) return [];
-  return data as PostSummary[];
+  try {
+    const data = await wpQuery<{ post: (WpPost & { status: string }) | null }>(
+      POST_BY_SLUG_QUERY,
+      { slug },
+    );
+    if (!data.post || data.post.status !== "publish") return null;
+    return { ...toPost(data.post), date: isoDate(data.post.date) };
+  } catch (e) {
+    console.error("getPostBySlug failed:", e instanceof Error ? e.message : e);
+    return null;
+  }
 }
 
 // For sitemap.ts and seo schemas which need ISO dates.
@@ -165,22 +137,18 @@ export async function getAllPostsForSeo(): Promise<
     content: string;
   }[]
 > {
-  const { data, error } = await supabasePublic
-    .from("posts")
-    .select(
-      "slug, title, meta_title, meta_description, category, date, image_path, excerpt, content",
-    )
-    .order("date", { ascending: false });
-
-  if (error || !data) return [];
-  return (data as Row[]).map((row) => ({
-    slug: row.slug,
-    title: row.title,
-    metaTitle: row.meta_title ?? undefined,
-    metaDescription: row.meta_description ?? undefined,
-    excerpt: row.excerpt,
-    date: row.date, // raw ISO
-    image: publicImageUrl(BLOG_IMAGES_BUCKET, row.image_path),
-    content: row.content,
-  }));
+  const all = await fetchAllPosts();
+  return all.map((p) => {
+    const post = toPost(p);
+    return {
+      slug: post.slug,
+      title: post.title,
+      metaTitle: post.metaTitle,
+      metaDescription: post.metaDescription,
+      excerpt: post.excerpt,
+      date: isoDate(p.date), // raw ISO
+      image: post.image,
+      content: post.content,
+    };
+  });
 }

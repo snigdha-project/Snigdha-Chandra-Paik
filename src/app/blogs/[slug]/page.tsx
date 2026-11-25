@@ -26,7 +26,7 @@ type Props = {
 };
 
 // Pre-render every post at build time (served as static HTML). New/edited posts
-// are refreshed by revalidatePath() in the admin actions; unknown slugs are
+// are refreshed by /api/revalidate (called from WordPress); unknown slugs are
 // still rendered on demand.
 export async function generateStaticParams() {
   const posts = await getAllPostsForSeo();
