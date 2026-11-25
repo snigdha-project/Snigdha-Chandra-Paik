@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Portfolio Tools
  * Description: Adds a "Tools" content type (calculators, image tools, custom embedded tools) to the portfolio CMS. Each tool is defined in WordPress, rendered by the Next.js site and exposed through WPGraphQL.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author: Snigdha Chandra Paik
@@ -96,6 +96,12 @@ function ptl_starters() {
 				array( 'when' => 'conversions < 1', 'text' => 'At this budget you would get less than one conversion a month. Raise the budget or improve the conversion rate.' ),
 			),
 			'disclaimer' => 'Estimates only. Real results depend on your market, creative and landing page.',
+			'cta'        => array(
+				'title'   => 'Need help with this?',
+				'text'    => 'Tell me about your business and I will help you get there.',
+				'button'  => 'Talk to me',
+				'message' => 'I would like help with this.',
+			),
 		),
 		'image-compressor' => array(
 			'quality'       => 80,
@@ -292,6 +298,7 @@ function ptl_render_box( $post ) {
 					<strong>inputs</strong>: <code>key</code> (letters, digits, _), <code>label</code>, <code>type</code> (<code>number</code> | <code>select</code>), <code>default</code>, optional <code>min</code>, <code>max</code>, <code>step</code>, <code>prefix</code>, <code>suffix</code>, <code>help</code>; selects use <code>options</code>: [{"label","value"}].<br>
 					<strong>outputs</strong> (calculated top to bottom; may use inputs and earlier outputs): <code>key</code>, <code>label</code>, <code>formula</code>, optional <code>decimals</code>, <code>prefix</code>, <code>suffix</code>, <code>highlight</code> (true = big card), <code>help</code>.<br>
 					<strong>insights</strong> (optional): [{"when": "roi &lt; 0", "text": "…"}] shown when the condition is true. <strong>disclaimer</strong> (optional).<br>
+					<strong>cta</strong> (optional): {"title", "text", "button", "message"} is the card under the results. The button opens the contact form prefilled with the visitor's numbers and <code>message</code> (use <code>{tool}</code> for the tool name).<br>
 					Formulas support <code>+ - * / % ^</code>, comparisons, <code>&amp;&amp; || !</code>, and <code>min max round floor ceil abs sqrt pow log if(cond, a, b)</code>.
 				</div>
 				<div class="description ptl-help" data-ptl-types="image-compressor">

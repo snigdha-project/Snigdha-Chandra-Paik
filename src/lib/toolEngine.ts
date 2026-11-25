@@ -31,11 +31,28 @@ export type ToolOutput = {
 
 export type ToolInsight = { when: string; text: string };
 
+// Call-to-action card under the results. The contact form is prefilled with the
+// visitor's numbers plus `message` (an opening line about what they want).
+export type ToolCta = {
+  title: string;
+  text: string;
+  button: string;
+  message: string;
+};
+
 export type ToolConfig = {
   inputs: ToolInput[];
   outputs: ToolOutput[];
   insights: ToolInsight[];
   disclaimer?: string;
+  cta: ToolCta;
+};
+
+export const DEFAULT_CTA: ToolCta = {
+  title: "Want help turning these numbers into results?",
+  text: "Tell me about your business and I will show you how to get there.",
+  button: "Talk to me",
+  message: "I'd like help with this.",
 };
 
 export type ToolFaq = { q: string; a: string };
@@ -320,7 +337,14 @@ export function parseToolConfig(json: string | null): ToolConfig | null {
     }
 
     if (!inputs.length || !outputs.length) return null;
-    return { inputs, outputs, insights, disclaimer: str(raw.disclaimer) };
+    const c = (raw.cta && typeof raw.cta === "object" ? raw.cta : {}) as Record<string, unknown>;
+    const cta: ToolCta = {
+      title: str(c.title) ?? DEFAULT_CTA.title,
+      text: str(c.text) ?? DEFAULT_CTA.text,
+      button: str(c.button) ?? DEFAULT_CTA.button,
+      message: str(c.message) ?? DEFAULT_CTA.message,
+    };
+    return { inputs, outputs, insights, disclaimer: str(raw.disclaimer), cta };
   } catch {
     return null;
   }

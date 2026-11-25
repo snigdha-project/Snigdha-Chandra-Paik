@@ -26,6 +26,13 @@ const ROI_OUTPUTS_TAIL = [
   { key: "max_cpa", label: "Break-even cost per conversion", formula: "value * margin / 100", prefix: "₹", decimals: 0, help: "The most you can pay per conversion before you lose money." },
 ];
 
+const adsCta = (platform: string) => ({
+  title: `Need help setting up your ${platform} Ads?`,
+  text: "I will plan the campaigns, build the landing page and tune everything so these numbers turn into real leads and sales.",
+  button: "Get my ads set up",
+  message: `I'd like help setting up and running ${platform} Ads for my business.`,
+});
+
 const ROI_INSIGHTS = [
   { when: "conversions < 1", text: "At this budget you would get fewer than one conversion a month. Raise the budget or improve your conversion rate before judging the channel." },
   { when: "conversions >= 1 && profit < 0", text: "You are losing money at these numbers: your cost per conversion is above the break-even figure. Lower your cost, lift your conversion rate or raise your order value." },
@@ -56,6 +63,7 @@ export const SEED_TOOLS: SeedTool[] = [
         { key: "conversions", label: "Estimated conversions", formula: "clicks * cr / 100", decimals: 1 },
         ...ROI_OUTPUTS_TAIL,
       ],
+      cta: adsCta("Google"),
       insights: ROI_INSIGHTS,
       disclaimer: "Estimates for planning only. Actual results depend on your keywords, ads, landing page and competition.",
     },
@@ -94,6 +102,7 @@ export const SEED_TOOLS: SeedTool[] = [
         { key: "conversions", label: "Estimated conversions", formula: "clicks * cr / 100", decimals: 1 },
         ...ROI_OUTPUTS_TAIL,
       ],
+      cta: adsCta("Meta (Facebook and Instagram)"),
       insights: ROI_INSIGHTS,
       disclaimer: "Estimates for planning only. Meta delivery varies by audience, creative quality, season and learning phase.",
     },
@@ -134,6 +143,12 @@ export const SEED_TOOLS: SeedTool[] = [
       insights: [
         { when: "margin < 15", text: "Margins below 15% leave very little room for paid ads. Raise prices, reduce costs or focus on repeat purchases." },
       ],
+      cta: {
+        title: "Not hitting your break-even ROAS?",
+        text: "I will audit your funnel and ads and show you where the money is leaking.",
+        button: "Get a free review",
+        message: "My ads are not reaching break-even ROAS and I would like a review.",
+      },
       disclaimer: "Uses gross margin on the order value you enter and ignores shipping, returns and agency fees unless you include them in the margin.",
     },
     faq: [

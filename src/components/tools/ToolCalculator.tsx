@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Info, RotateCcw, Lightbulb } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, Info, RotateCcw, Lightbulb } from "lucide-react";
 import {
   calculate,
   formatValue,
@@ -20,7 +21,42 @@ function clamp(n: number, i: ToolInput): number {
   return v;
 }
 
-export default function ToolCalculator({ config }: { config: ToolConfig }) {
+// Builds the text that prefills the contact form's "Project Details" box.
+function buildMessage(
+  title: string,
+  config: ToolConfig,
+  raw: Record<string, string>,
+  values: Record<string, number>,
+): string {
+  const inputLines = config.inputs.map((i) => {
+    const v = parseFloat(raw[i.key] ?? "");
+    const shown =
+      i.type === "select"
+        ? (i.options?.find((o) => o.value === v)?.label ?? raw[i.key])
+        : `${i.prefix ?? ""}${new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(Number.isNaN(v) ? 0 : v)}${i.suffix ?? ""}`;
+    return `- ${i.label}: ${shown}`;
+  });
+  const resultLines = config.outputs
+    .filter((o) => o.highlight)
+    .map((o) => `- ${o.label}: ${formatValue(values[o.key], o)}`);
+  return [
+    `Hi Snigdha, I just used your "${title}" tool.`,
+    "",
+    config.cta.message.replace(/\{tool\}/g, title),
+    "",
+    "My numbers:",
+    ...inputLines,
+    ...(resultLines.length ? ["", "Estimated results:", ...resultLines] : []),
+  ].join("\n");
+}
+
+export default function ToolCalculator({
+  config,
+  title,
+}: {
+  config: ToolConfig;
+  title: string;
+}) {
   // Raw strings so the user can clear a field while typing.
   const [raw, setRaw] = useState<Record<string, string>>(() => defaults(config));
 
@@ -32,6 +68,16 @@ export default function ToolCalculator({ config }: { config: ToolConfig }) {
     }
     return calculate(config, values);
   }, [config, raw]);
+
+  const contactHref = useMemo(() => {
+    const values: Record<string, number> = {};
+    for (const i of config.inputs) {
+      const parsed = parseFloat(raw[i.key] ?? "");
+      values[i.key] = clamp(Number.isNaN(parsed) ? 0 : parsed, i);
+    }
+    const msg = buildMessage(title, config, raw, { ...values, ...result.values });
+    return `/contact?message=${encodeURIComponent(msg)}`;
+  }, [title, config, raw, result]);
 
   const highlighted = config.outputs.filter((o) => o.highlight);
   const regular = config.outputs.filter((o) => !o.highlight);
@@ -192,6 +238,25 @@ export default function ToolCalculator({ config }: { config: ToolConfig }) {
             ))}
           </ul>
         )}
+
+        <div className="rounded-[2rem] bg-gradient-to-br from-[#C56E3D]/20 to-[#C56E3D]/5 border border-[#C56E3D]/30 p-6 md:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div>
+            <h2 className="font-[family-name:var(--font-fraunces)] text-2xl md:text-3xl text-white font-black tracking-tighter leading-[1.05]">
+              {config.cta.title}
+            </h2>
+            <p className="mt-2 text-white/60 leading-relaxed max-w-xl">{config.cta.text}</p>
+          </div>
+          <Link
+            href={contactHref}
+            className="group inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full bg-[#C56E3D] hover:bg-[#A64D32] text-white text-[10px] uppercase tracking-[0.35em] font-black transition-colors shrink-0"
+          >
+            {config.cta.button}
+            <ArrowUpRight
+              size={14}
+              className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
+          </Link>
+        </div>
 
         {config.disclaimer && (
           <p className="flex gap-2 text-xs text-white/35 leading-relaxed">

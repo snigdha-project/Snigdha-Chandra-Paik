@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import {
@@ -7,6 +8,7 @@ import {
   faqSchema,
 } from "@/lib/seo";
 import ContactContent from "./ContactContent";
+import PrefillMessage from "./PrefillMessage";
 
 const TITLE = "Contact Snigdha Paik | Frontend & SEO Expert";
 const DESCRIPTION =
@@ -73,6 +75,9 @@ export default function ContactRoute() {
         ]}
       />
       <ContactContent />
+      <Suspense fallback={null}>
+        <PrefillMessage />
+      </Suspense>
     </>
   );
 }

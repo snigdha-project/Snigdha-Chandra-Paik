@@ -15,7 +15,7 @@ export default function ToolRunner({
 }) {
   switch (runtime.type) {
     case "calculator":
-      return <ToolCalculator config={runtime.config} />;
+      return <ToolCalculator config={runtime.config} title={title} />;
     case "image-compressor":
       return <ImageCompressor config={runtime.config} />;
     case "embed":
