@@ -1,6 +1,7 @@
 import { SITE_URL, SITE_NAME } from "@/lib/seo";
 import { getAllPostsForSeo } from "@/lib/blogService";
 import { getProjects } from "@/lib/projectService";
+import { getTools } from "@/lib/toolService";
 
 // GEO (Generative Engine Optimization): an llms.txt is a curated, plain-markdown
 // map of the site for AI engines (ChatGPT, Perplexity, Claude, Gemini, etc.) so
@@ -21,9 +22,10 @@ function techSuffix(tech: string[]): string {
 }
 
 export async function GET() {
-  const [posts, projects] = await Promise.all([
+  const [posts, projects, tools] = await Promise.all([
     getAllPostsForSeo(),
     getProjects(),
+    getTools(),
   ]);
 
   const caseStudies = projects.filter((p) => p.hasCaseStudy);
@@ -77,6 +79,11 @@ export async function GET() {
   lines.push(
     `- [Blog](${SITE_URL}/blogs): Articles on frontend development, animation, SEO and automation.`,
   );
+  if (tools.length) {
+    lines.push(
+      `- [Tools](${SITE_URL}/tools): Free online tools: calculators, image compressor and more.`,
+    );
+  }
   lines.push(
     `- [Contact](${SITE_URL}/contact): Hire Snigdha or start a new project.`,
   );
@@ -100,6 +107,15 @@ export async function GET() {
       lines.push(
         `- [${p.title}](${p.link ?? `${SITE_URL}/projects`}): ${clean(p.description)}${techSuffix(p.tech)}`,
       );
+    }
+    lines.push("");
+  }
+
+  if (tools.length) {
+    lines.push("## Free Tools");
+    lines.push("");
+    for (const t of tools) {
+      lines.push(`- [${t.title}](${SITE_URL}/tools/${t.slug}): ${clean(t.description)}`);
     }
     lines.push("");
   }

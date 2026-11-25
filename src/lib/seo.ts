@@ -260,3 +260,52 @@ export function blogPostingSchema(post: {
     mainEntityOfPage: `${SITE_URL}/blogs/${post.slug}`,
   };
 }
+
+export function toolsCollectionSchema(
+  tools: { slug: string; title: string; description: string }[],
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${SITE_URL}/tools#collection`,
+    url: `${SITE_URL}/tools`,
+    name: "Free Online Tools | Snigdha Chandra Paik",
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: tools.map((tool, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `${SITE_URL}/tools/${tool.slug}`,
+        name: tool.title,
+      })),
+    },
+  };
+}
+
+export function toolSchema(tool: {
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+  modified: string;
+  type?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "@id": `${SITE_URL}/tools/${tool.slug}#app`,
+    url: `${SITE_URL}/tools/${tool.slug}`,
+    name: tool.title,
+    description: tool.description,
+    applicationCategory: tool.type === "calculator" ? "BusinessApplication" : "UtilitiesApplication",
+    applicationSubCategory: tool.category,
+    operatingSystem: "Any",
+    browserRequirements: "Requires JavaScript",
+    isAccessibleForFree: true,
+    dateModified: tool.modified,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+    creator: { "@id": PERSON_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+  };
+}

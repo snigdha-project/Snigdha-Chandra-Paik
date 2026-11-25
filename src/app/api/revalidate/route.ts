@@ -17,7 +17,10 @@ export async function POST(request: NextRequest) {
 
   revalidateTag(WP_CACHE_TAG, "max");
   revalidatePath("/");
-  if (body.type === "project") {
+  if (body.type === "tool") {
+    revalidatePath("/tools");
+    if (body.slug) revalidatePath(`/tools/${body.slug}`);
+  } else if (body.type === "project") {
     revalidatePath("/projects");
     if (body.slug) revalidatePath(`/projects/${body.slug}`);
   } else {

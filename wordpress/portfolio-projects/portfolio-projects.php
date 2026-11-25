@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Portfolio Projects
  * Description: Adds a "Projects" content type (with case studies) to the portfolio CMS and exposes it through WPGraphQL. Also exposes the Yoast SEO title/description for posts and projects.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author: Snigdha Chandra Paik
