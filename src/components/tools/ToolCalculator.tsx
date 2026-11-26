@@ -9,6 +9,12 @@ import {
   type ToolConfig,
   type ToolInput,
 } from "@/lib/toolEngine";
+import {
+  CURRENCIES,
+  convertAmount,
+  withSymbol,
+  type CurrencyCode,
+} from "@/lib/currencies";
 
 const defaults = (config: ToolConfig) =>
   Object.fromEntries(config.inputs.map((i) => [i.key, String(i.default)]));
@@ -21,24 +27,37 @@ function clamp(n: number, i: ToolInput): number {
   return v;
 }
 
+// An input is a money amount when its prefix or suffix uses the {cur} token.
+const isMoney = (i: ToolInput) =>
+  `${i.prefix ?? ""}${i.suffix ?? ""}`.includes("{cur}");
+
 // Builds the text that prefills the contact form's "Project Details" box.
 function buildMessage(
   title: string,
   config: ToolConfig,
   raw: Record<string, string>,
   values: Record<string, number>,
+  symbol: string,
+  locale: string,
 ): string {
   const inputLines = config.inputs.map((i) => {
     const v = parseFloat(raw[i.key] ?? "");
     const shown =
       i.type === "select"
         ? (i.options?.find((o) => o.value === v)?.label ?? raw[i.key])
-        : `${i.prefix ?? ""}${new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(Number.isNaN(v) ? 0 : v)}${i.suffix ?? ""}`;
-    return `- ${i.label}: ${shown}`;
+        : `${withSymbol(i.prefix, symbol) ?? ""}${new Intl.NumberFormat(locale, { maximumFractionDigits: 3 }).format(Number.isNaN(v) ? 0 : v)}${withSymbol(i.suffix, symbol) ?? ""}`;
+    return `- ${withSymbol(i.label, symbol)}: ${shown}`;
   });
   const resultLines = config.outputs
     .filter((o) => o.highlight)
-    .map((o) => `- ${o.label}: ${formatValue(values[o.key], o)}`);
+    .map(
+      (o) =>
+        `- ${withSymbol(o.label, symbol)}: ${formatValue(
+          values[o.key],
+          { decimals: o.decimals, prefix: withSymbol(o.prefix, symbol), suffix: withSymbol(o.suffix, symbol) },
+          locale,
+        )}`,
+    );
   return [
     `Hi Snigdha, I just used your "${title}" tool.`,
     "",
@@ -59,6 +78,33 @@ export default function ToolCalculator({
 }) {
   // Raw strings so the user can clear a field while typing.
   const [raw, setRaw] = useState<Record<string, string>>(() => defaults(config));
+  const [currency, setCurrency] = useState<CurrencyCode>(
+    config.currency?.default ?? "INR",
+  );
+
+  const cur = CURRENCIES[currency];
+  // Config amounts are written in the config's default currency.
+  const baseCurrency = config.currency?.default ?? "INR";
+  const sym = (s: string | undefined) => withSymbol(s, cur.symbol);
+
+  const changeCurrency = (next: CurrencyCode) => {
+    if (next === currency) return;
+    setRaw((prev) => {
+      const out = { ...prev };
+      for (const i of config.inputs) {
+        if (i.type !== "number" || !isMoney(i)) continue;
+        const n = parseFloat(prev[i.key] ?? "");
+        if (!Number.isNaN(n)) out[i.key] = String(convertAmount(n, currency, next));
+      }
+      return out;
+    });
+    setCurrency(next);
+  };
+
+  const reset = () => {
+    setCurrency(baseCurrency);
+    setRaw(defaults(config));
+  };
 
   const result = useMemo(() => {
     const values: Record<string, number> = {};
@@ -75,9 +121,19 @@ export default function ToolCalculator({
       const parsed = parseFloat(raw[i.key] ?? "");
       values[i.key] = clamp(Number.isNaN(parsed) ? 0 : parsed, i);
     }
-    const msg = buildMessage(title, config, raw, { ...values, ...result.values });
+    const msg = buildMessage(
+      title,
+      config,
+      raw,
+      { ...values, ...result.values },
+      cur.symbol,
+      cur.locale,
+    );
     return `/contact?message=${encodeURIComponent(msg)}`;
-  }, [title, config, raw, result]);
+  }, [title, config, raw, result, cur]);
+
+  const fmt = (v: number, o: { decimals: number; prefix?: string; suffix?: string }) =>
+    formatValue(v, { decimals: o.decimals, prefix: sym(o.prefix), suffix: sym(o.suffix) }, cur.locale);
 
   const highlighted = config.outputs.filter((o) => o.highlight);
   const regular = config.outputs.filter((o) => !o.highlight);
@@ -96,22 +152,48 @@ export default function ToolCalculator({
           </span>
           <button
             type="button"
-            onClick={() => setRaw(defaults(config))}
+            onClick={reset}
             className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] font-black text-white/50 hover:text-[#C56E3D] transition-colors"
           >
             <RotateCcw size={12} /> Reset
           </button>
         </div>
 
+        {config.currency && config.currency.options.length > 1 && (
+          <div className="flex flex-col gap-2">
+            <label htmlFor="tool-currency" className="text-sm font-bold text-white/85">
+              Currency
+            </label>
+            <select
+              id="tool-currency"
+              value={currency}
+              onChange={(e) => changeCurrency(e.target.value as CurrencyCode)}
+              className="w-full rounded-xl bg-white/[0.04] border border-white/10 px-4 py-3.5 text-white font-semibold focus:outline-none focus:border-[#C56E3D] transition-colors"
+            >
+              {config.currency.options.map((code) => (
+                <option key={code} value={code} className="bg-[#0F0F0F]">
+                  {code} ({CURRENCIES[code].symbol.trim()})
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-white/40 leading-relaxed">
+              Switching converts your amounts at approximate rates.
+            </p>
+          </div>
+        )}
+
         {config.inputs.map((i) => {
           const id = `tool-${i.key}`;
+          const prefix = sym(i.prefix);
+          const suffix = sym(i.suffix);
+          const help = sym(i.help);
           return (
             <div key={i.key} className="flex flex-col gap-2">
               <label
                 htmlFor={id}
                 className="text-sm font-bold text-white/85 leading-snug"
               >
-                {i.label}
+                {sym(i.label)}
               </label>
 
               {i.type === "select" ? (
@@ -129,9 +211,9 @@ export default function ToolCalculator({
                 </select>
               ) : (
                 <div className="flex items-stretch rounded-xl bg-white/[0.04] border border-white/10 focus-within:border-[#C56E3D] transition-colors overflow-hidden">
-                  {i.prefix && (
-                    <span className="px-4 flex items-center text-white/45 font-bold border-r border-white/10">
-                      {i.prefix}
+                  {prefix && (
+                    <span className="px-4 flex items-center whitespace-nowrap text-white/45 font-bold border-r border-white/10">
+                      {prefix}
                     </span>
                   )}
                   <input
@@ -143,20 +225,20 @@ export default function ToolCalculator({
                     step={i.step ?? "any"}
                     value={raw[i.key]}
                     onChange={(e) => setRaw((r) => ({ ...r, [i.key]: e.target.value }))}
-                    aria-describedby={i.help ? `${id}-help` : undefined}
+                    aria-describedby={help ? `${id}-help` : undefined}
                     className="w-full min-w-0 bg-transparent px-4 py-3.5 text-white font-semibold focus:outline-none"
                   />
-                  {i.suffix && (
-                    <span className="px-4 flex items-center text-white/45 font-bold border-l border-white/10">
-                      {i.suffix}
+                  {suffix && (
+                    <span className="px-4 flex items-center whitespace-nowrap text-white/45 font-bold border-l border-white/10">
+                      {suffix}
                     </span>
                   )}
                 </div>
               )}
 
-              {i.help && (
+              {help && (
                 <p id={`${id}-help`} className="text-xs text-white/40 leading-relaxed">
-                  {i.help}
+                  {help}
                 </p>
               )}
             </div>
@@ -187,14 +269,14 @@ export default function ToolCalculator({
                 className="rounded-[2rem] bg-gradient-to-br from-[#C56E3D]/20 to-[#C56E3D]/5 border border-[#C56E3D]/30 p-6 md:p-7"
               >
                 <span className="text-[10px] uppercase tracking-[0.3em] font-black text-[#C56E3D] block">
-                  {o.label}
+                  {sym(o.label)}
                 </span>
                 <span className="mt-3 block font-[family-name:var(--font-fraunces)] text-4xl md:text-5xl font-black text-white tracking-tighter break-words">
-                  {formatValue(result.values[o.key], o)}
+                  {fmt(result.values[o.key], o)}
                 </span>
                 {o.help && (
                   <span className="mt-3 block text-xs text-white/50 leading-relaxed">
-                    {o.help}
+                    {sym(o.help)}
                   </span>
                 )}
               </div>
@@ -210,15 +292,15 @@ export default function ToolCalculator({
                 className="flex items-baseline justify-between gap-6 px-6 md:px-8 py-4"
               >
                 <dt className="text-sm text-white/65 font-medium">
-                  {o.label}
+                  {sym(o.label)}
                   {o.help && (
                     <span className="block text-xs text-white/35 font-normal mt-0.5">
-                      {o.help}
+                      {sym(o.help)}
                     </span>
                   )}
                 </dt>
                 <dd className="text-lg md:text-xl font-black text-white tabular-nums text-right shrink-0">
-                  {formatValue(result.values[o.key], o)}
+                  {fmt(result.values[o.key], o)}
                 </dd>
               </div>
             ))}
@@ -233,7 +315,7 @@ export default function ToolCalculator({
                 className="flex gap-3 rounded-2xl border border-[#C56E3D]/25 bg-[#C56E3D]/[0.06] px-5 py-4 text-sm text-white/80 leading-relaxed"
               >
                 <Lightbulb size={18} className="text-[#C56E3D] shrink-0 mt-0.5" aria-hidden />
-                {text}
+                {sym(text)}
               </li>
             ))}
           </ul>
@@ -261,7 +343,7 @@ export default function ToolCalculator({
         {config.disclaimer && (
           <p className="flex gap-2 text-xs text-white/35 leading-relaxed">
             <Info size={14} className="shrink-0 mt-0.5" aria-hidden />
-            {config.disclaimer}
+            {sym(config.disclaimer)}
           </p>
         )}
       </div>

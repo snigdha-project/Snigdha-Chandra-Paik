@@ -18,12 +18,12 @@ export type SeedTool = {
 };
 
 const ROI_OUTPUTS_TAIL = [
-  { key: "cpa", label: "Cost per conversion", formula: "if(conversions > 0, budget / conversions, 0)", prefix: "₹", decimals: 0, help: "What each lead or sale costs you in ad spend." },
-  { key: "revenue", label: "Estimated revenue", formula: "conversions * value", prefix: "₹", decimals: 0 },
-  { key: "roas", label: "ROAS", formula: "if(budget > 0, revenue / budget, 0)", suffix: "x", decimals: 2, highlight: true, help: "Revenue earned for every ₹1 spent on ads." },
-  { key: "profit", label: "Estimated profit", formula: "revenue * margin / 100 - budget", prefix: "₹", decimals: 0, highlight: true, help: "Gross profit after paying for the ads." },
+  { key: "cpa", label: "Cost per conversion", formula: "if(conversions > 0, budget / conversions, 0)", prefix: "{cur}", decimals: 0, help: "What each lead or sale costs you in ad spend." },
+  { key: "revenue", label: "Estimated revenue", formula: "conversions * value", prefix: "{cur}", decimals: 0 },
+  { key: "roas", label: "ROAS", formula: "if(budget > 0, revenue / budget, 0)", suffix: "x", decimals: 2, highlight: true, help: "Revenue earned for every {cur}1 spent on ads." },
+  { key: "profit", label: "Estimated profit", formula: "revenue * margin / 100 - budget", prefix: "{cur}", decimals: 0, highlight: true, help: "Gross profit after paying for the ads." },
   { key: "roi", label: "ROI", formula: "if(budget > 0, profit / budget * 100, 0)", suffix: "%", decimals: 1 },
-  { key: "max_cpa", label: "Break-even cost per conversion", formula: "value * margin / 100", prefix: "₹", decimals: 0, help: "The most you can pay per conversion before you lose money." },
+  { key: "max_cpa", label: "Break-even cost per conversion", formula: "value * margin / 100", prefix: "{cur}", decimals: 0, help: "The most you can pay per conversion before you lose money." },
 ];
 
 const adsCta = (platform: string) => ({
@@ -44,7 +44,7 @@ export const SEED_TOOLS: SeedTool[] = [
     type: "calculator",
     slug: "google-ads-budget-roi-calculator",
     title: "Google Ads Budget & ROI Calculator",
-    excerpt: "Estimate clicks, conversions, cost per lead, ROAS and profit from your Google Ads budget before you spend a rupee.",
+    excerpt: "Estimate clicks, conversions, cost per lead, ROAS and profit from your Google Ads budget before you spend anything.",
     category: "Advertising",
     icon: "megaphone",
     order: 1,
@@ -52,10 +52,10 @@ export const SEED_TOOLS: SeedTool[] = [
     metaDescription: "Free Google Ads calculator. Enter your budget, CPC and conversion rate to estimate clicks, cost per conversion, ROAS, profit and break-even CPA.",
     config: {
       inputs: [
-        { key: "budget", label: "Monthly ad budget", type: "number", default: 50000, min: 0, step: 1000, prefix: "₹", help: "What you plan to spend on Google Ads each month." },
-        { key: "cpc", label: "Average cost per click (CPC)", type: "number", default: 30, min: 0.01, step: 0.5, prefix: "₹", help: "Find this in Google Ads or the Keyword Planner." },
+        { key: "budget", label: "Monthly ad budget", type: "number", default: 50000, min: 0, step: 1000, prefix: "{cur}", help: "What you plan to spend on Google Ads each month." },
+        { key: "cpc", label: "Average cost per click (CPC)", type: "number", default: 30, min: 0.01, step: 0.5, prefix: "{cur}", help: "Find this in Google Ads or the Keyword Planner." },
         { key: "cr", label: "Conversion rate", type: "number", default: 3, min: 0, max: 100, step: 0.1, suffix: "%", help: "Share of clicks that become a lead or sale." },
-        { key: "value", label: "Average order / lead value", type: "number", default: 3000, min: 0, step: 100, prefix: "₹" },
+        { key: "value", label: "Average order / lead value", type: "number", default: 3000, min: 0, step: 100, prefix: "{cur}" },
         { key: "margin", label: "Profit margin", type: "number", default: 40, min: 0, max: 100, step: 1, suffix: "%", help: "Gross margin on each sale, before ad costs." },
       ],
       outputs: [
@@ -64,6 +64,7 @@ export const SEED_TOOLS: SeedTool[] = [
         ...ROI_OUTPUTS_TAIL,
       ],
       cta: adsCta("Google"),
+      currency: { default: "INR", options: ["INR", "USD", "GBP", "EUR", "AED", "AUD", "CAD", "SGD"] },
       insights: ROI_INSIGHTS,
       disclaimer: "Estimates for planning only. Actual results depend on your keywords, ads, landing page and competition.",
     },
@@ -74,7 +75,7 @@ export const SEED_TOOLS: SeedTool[] = [
       { q: "Does this include my agency or management fees?", a: "No. Add those to the monthly budget field if you want the profit figure to include them." },
     ],
     content:
-      "<h2>How this Google Ads calculator works</h2><p>The calculator turns your monthly budget into clicks (budget divided by cost per click), then into conversions using your conversion rate. From the number of conversions it works out what each conversion costs you, the revenue you can expect, and the profit left after paying for the ads.</p><h2>The numbers that matter</h2><ul><li><strong>ROAS</strong> (return on ad spend) is revenue divided by ad spend. It tells you how hard each rupee works.</li><li><strong>Break-even cost per conversion</strong> is the most you can pay for a lead or sale before the campaign loses money. If your actual cost per conversion is higher, fix the funnel before raising the budget.</li><li><strong>ROI</strong> includes your margin, so it shows real profit instead of just revenue.</li></ul><h2>How to improve your results</h2><p>Three levers move these numbers: a lower CPC (better Quality Score and tighter keywords), a higher conversion rate (a faster, clearer landing page) and a higher order value (bundles, upsells). Change one input at a time in the calculator to see which lever matters most for your business.</p>",
+      "<h2>How this Google Ads calculator works</h2><p>The calculator turns your monthly budget into clicks (budget divided by cost per click), then into conversions using your conversion rate. From the number of conversions it works out what each conversion costs you, the revenue you can expect, and the profit left after paying for the ads.</p><h2>The numbers that matter</h2><ul><li><strong>ROAS</strong> (return on ad spend) is revenue divided by ad spend. It tells you how hard your money works.</li><li><strong>Break-even cost per conversion</strong> is the most you can pay for a lead or sale before the campaign loses money. If your actual cost per conversion is higher, fix the funnel before raising the budget.</li><li><strong>ROI</strong> includes your margin, so it shows real profit instead of just revenue.</li></ul><h2>How to improve your results</h2><p>Three levers move these numbers: a lower CPC (better Quality Score and tighter keywords), a higher conversion rate (a faster, clearer landing page) and a higher order value (bundles, upsells). Change one input at a time in the calculator to see which lever matters most for your business.</p>",
   },
   {
     type: "calculator",
@@ -88,21 +89,22 @@ export const SEED_TOOLS: SeedTool[] = [
     metaDescription: "Free Meta Ads calculator for Facebook and Instagram. Enter budget, CPM, CTR and conversion rate to estimate clicks, CPA, ROAS, profit and break-even.",
     config: {
       inputs: [
-        { key: "budget", label: "Monthly ad budget", type: "number", default: 50000, min: 0, step: 1000, prefix: "₹" },
-        { key: "cpm", label: "CPM (cost per 1,000 impressions)", type: "number", default: 150, min: 0.01, step: 5, prefix: "₹", help: "Shown in Ads Manager. Typical range is ₹100 to ₹300 in India." },
+        { key: "budget", label: "Monthly ad budget", type: "number", default: 50000, min: 0, step: 1000, prefix: "{cur}" },
+        { key: "cpm", label: "CPM (cost per 1,000 impressions)", type: "number", default: 150, min: 0.01, step: 5, prefix: "{cur}", help: "Shown in Ads Manager as cost per 1,000 impressions." },
         { key: "ctr", label: "Click-through rate (CTR)", type: "number", default: 1, min: 0, max: 100, step: 0.1, suffix: "%", help: "Link click-through rate. 1% to 2% is common." },
         { key: "cr", label: "Conversion rate", type: "number", default: 1.5, min: 0, max: 100, step: 0.1, suffix: "%", help: "Share of link clicks that become a lead or sale." },
-        { key: "value", label: "Average order / lead value", type: "number", default: 3000, min: 0, step: 100, prefix: "₹" },
+        { key: "value", label: "Average order / lead value", type: "number", default: 3000, min: 0, step: 100, prefix: "{cur}" },
         { key: "margin", label: "Profit margin", type: "number", default: 40, min: 0, max: 100, step: 1, suffix: "%" },
       ],
       outputs: [
         { key: "impressions", label: "Estimated impressions", formula: "if(cpm > 0, budget / cpm * 1000, 0)", decimals: 0 },
         { key: "clicks", label: "Estimated link clicks", formula: "impressions * ctr / 100", decimals: 0 },
-        { key: "cpc", label: "Cost per click", formula: "if(clicks > 0, budget / clicks, 0)", prefix: "₹", decimals: 2 },
+        { key: "cpc", label: "Cost per click", formula: "if(clicks > 0, budget / clicks, 0)", prefix: "{cur}", decimals: 2 },
         { key: "conversions", label: "Estimated conversions", formula: "clicks * cr / 100", decimals: 1 },
         ...ROI_OUTPUTS_TAIL,
       ],
       cta: adsCta("Meta (Facebook and Instagram)"),
+      currency: { default: "INR", options: ["INR", "USD", "GBP", "EUR", "AED", "AUD", "CAD", "SGD"] },
       insights: ROI_INSIGHTS,
       disclaimer: "Estimates for planning only. Meta delivery varies by audience, creative quality, season and learning phase.",
     },
@@ -127,19 +129,20 @@ export const SEED_TOOLS: SeedTool[] = [
     metaDescription: "Free break-even ROAS calculator. Enter your margin, order value and ad spend to find break-even ROAS, maximum CPA and the target ROAS for your profit goal.",
     config: {
       inputs: [
-        { key: "price", label: "Average order value", type: "number", default: 2000, min: 0, step: 100, prefix: "₹" },
+        { key: "price", label: "Average order value", type: "number", default: 2000, min: 0, step: 100, prefix: "{cur}" },
         { key: "margin", label: "Profit margin", type: "number", default: 40, min: 1, max: 100, step: 1, suffix: "%", help: "Gross margin on each sale, before ad costs." },
-        { key: "spend", label: "Monthly ad spend", type: "number", default: 50000, min: 0, step: 1000, prefix: "₹" },
-        { key: "target", label: "Monthly profit goal", type: "number", default: 20000, min: 0, step: 1000, prefix: "₹", help: "Profit you want after paying for ads." },
+        { key: "spend", label: "Monthly ad spend", type: "number", default: 50000, min: 0, step: 1000, prefix: "{cur}" },
+        { key: "target", label: "Monthly profit goal", type: "number", default: 20000, min: 0, step: 1000, prefix: "{cur}", help: "Profit you want after paying for ads." },
       ],
       outputs: [
         { key: "be_roas", label: "Break-even ROAS", formula: "if(margin > 0, 100 / margin, 0)", suffix: "x", decimals: 2, highlight: true, help: "Below this ROAS every sale loses money." },
-        { key: "max_cpa", label: "Maximum cost per sale", formula: "price * margin / 100", prefix: "₹", decimals: 0, highlight: true, help: "Pay more than this per sale and you lose money." },
+        { key: "max_cpa", label: "Maximum cost per sale", formula: "price * margin / 100", prefix: "{cur}", decimals: 0, highlight: true, help: "Pay more than this per sale and you lose money." },
         { key: "be_orders", label: "Orders needed to break even", formula: "if(max_cpa > 0, spend / max_cpa, 0)", decimals: 0 },
-        { key: "be_revenue", label: "Revenue needed to break even", formula: "be_orders * price", prefix: "₹", decimals: 0 },
-        { key: "target_revenue", label: "Revenue needed for your profit goal", formula: "if(margin > 0, (spend + target) * 100 / margin, 0)", prefix: "₹", decimals: 0 },
+        { key: "be_revenue", label: "Revenue needed to break even", formula: "be_orders * price", prefix: "{cur}", decimals: 0 },
+        { key: "target_revenue", label: "Revenue needed for your profit goal", formula: "if(margin > 0, (spend + target) * 100 / margin, 0)", prefix: "{cur}", decimals: 0 },
         { key: "target_roas", label: "Target ROAS for your profit goal", formula: "if(spend > 0, target_revenue / spend, 0)", suffix: "x", decimals: 2, highlight: true },
       ],
+      currency: { default: "INR", options: ["INR", "USD", "GBP", "EUR", "AED", "AUD", "CAD", "SGD"] },
       insights: [
         { when: "margin < 15", text: "Margins below 15% leave very little room for paid ads. Raise prices, reduce costs or focus on repeat purchases." },
       ],

@@ -46,6 +46,8 @@ export type ToolConfig = {
   insights: ToolInsight[];
   disclaimer?: string;
   cta: ToolCta;
+  /** When set, visitors can pick a currency; use {cur} in prefix/suffix/labels. */
+  currency?: CurrencyConfig;
 };
 
 export const DEFAULT_CTA: ToolCta = {
@@ -56,6 +58,8 @@ export const DEFAULT_CTA: ToolCta = {
 };
 
 export type ToolFaq = { q: string; a: string };
+
+import { CURRENCY_CODES, isCurrencyCode, type CurrencyConfig } from "./currencies";
 
 // ---------------------------------------------------------------------------
 // Tokeniser + parser
@@ -344,7 +348,16 @@ export function parseToolConfig(json: string | null): ToolConfig | null {
       button: str(c.button) ?? DEFAULT_CTA.button,
       message: str(c.message) ?? DEFAULT_CTA.message,
     };
-    return { inputs, outputs, insights, disclaimer: str(raw.disclaimer), cta };
+    let currency: CurrencyConfig | undefined;
+    if (raw.currency) {
+      const c = (typeof raw.currency === "object" ? raw.currency : {}) as Record<string, unknown>;
+      const options = Array.isArray(c.options) ? c.options.filter(isCurrencyCode) : [...CURRENCY_CODES];
+      const unique = Array.from(new Set(options));
+      if (unique.length) {
+        currency = { default: isCurrencyCode(c.default) && unique.includes(c.default) ? c.default : unique[0], options: unique };
+      }
+    }
+    return { inputs, outputs, insights, disclaimer: str(raw.disclaimer), cta, currency };
   } catch {
     return null;
   }
@@ -399,11 +412,12 @@ export function calculate(config: ToolConfig, inputValues: Record<string, number
 export function formatValue(
   v: number,
   o: { decimals: number; prefix?: string; suffix?: string },
+  locale = "en-IN",
 ): string {
   if (!Number.isFinite(v)) return "—";
-  const body = new Intl.NumberFormat("en-IN", {
+  const body = new Intl.NumberFormat(locale, {
     minimumFractionDigits: o.decimals,
     maximumFractionDigits: o.decimals,
-  }).format(v);
-  return `${v < 0 && o.prefix ? "-" : ""}${o.prefix ?? ""}${o.prefix && v < 0 ? body.replace("-", "") : body}${o.suffix ?? ""}`;
+  }).format(Math.abs(v));
+  return `${v < 0 ? "-" : ""}${o.prefix ?? ""}${body}${o.suffix ?? ""}`;
 }

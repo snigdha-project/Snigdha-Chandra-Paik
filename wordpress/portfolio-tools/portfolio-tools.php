@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Portfolio Tools
  * Description: Adds a "Tools" content type (calculators, image tools, custom embedded tools) to the portfolio CMS. Each tool is defined in WordPress, rendered by the Next.js site and exposed through WPGraphQL.
- * Version: 1.1.1
+ * Version: 1.2.0
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author: Snigdha Chandra Paik
@@ -73,8 +73,8 @@ function ptl_starters() {
 	return array(
 		'calculator'       => array(
 			'inputs'     => array(
-				array( 'key' => 'budget', 'label' => 'Monthly budget', 'type' => 'number', 'default' => 50000, 'min' => 0, 'step' => 1000, 'prefix' => '₹', 'help' => 'What you plan to spend each month.' ),
-				array( 'key' => 'cpc', 'label' => 'Cost per click', 'type' => 'number', 'default' => 25, 'min' => 0.01, 'step' => 0.5, 'prefix' => '₹' ),
+				array( 'key' => 'budget', 'label' => 'Monthly budget', 'type' => 'number', 'default' => 50000, 'min' => 0, 'step' => 1000, 'prefix' => '{cur}', 'help' => 'What you plan to spend each month.' ),
+				array( 'key' => 'cpc', 'label' => 'Cost per click', 'type' => 'number', 'default' => 25, 'min' => 0.01, 'step' => 0.5, 'prefix' => '{cur}' ),
 				array( 'key' => 'cr', 'label' => 'Conversion rate', 'type' => 'number', 'default' => 3, 'min' => 0, 'max' => 100, 'step' => 0.1, 'suffix' => '%' ),
 				array(
 					'key'     => 'goal',
@@ -90,7 +90,7 @@ function ptl_starters() {
 			'outputs'    => array(
 				array( 'key' => 'clicks', 'label' => 'Clicks', 'formula' => 'budget / cpc', 'decimals' => 0 ),
 				array( 'key' => 'conversions', 'label' => 'Conversions', 'formula' => 'clicks * cr / 100', 'decimals' => 1, 'highlight' => true ),
-				array( 'key' => 'cpa', 'label' => 'Cost per conversion', 'formula' => 'if(conversions > 0, budget / conversions, 0)', 'decimals' => 0, 'prefix' => '₹' ),
+				array( 'key' => 'cpa', 'label' => 'Cost per conversion', 'formula' => 'if(conversions > 0, budget / conversions, 0)', 'decimals' => 0, 'prefix' => '{cur}' ),
 			),
 			'insights'   => array(
 				array( 'when' => 'conversions < 1', 'text' => 'At this budget you would get less than one conversion a month. Raise the budget or improve the conversion rate.' ),
@@ -298,6 +298,7 @@ function ptl_render_box( $post ) {
 					<strong>inputs</strong>: <code>key</code> (letters, digits, _), <code>label</code>, <code>type</code> (<code>number</code> | <code>select</code>), <code>default</code>, optional <code>min</code>, <code>max</code>, <code>step</code>, <code>prefix</code>, <code>suffix</code>, <code>help</code>; selects use <code>options</code>: [{"label","value"}].<br>
 					<strong>outputs</strong> (calculated top to bottom; may use inputs and earlier outputs): <code>key</code>, <code>label</code>, <code>formula</code>, optional <code>decimals</code>, <code>prefix</code>, <code>suffix</code>, <code>highlight</code> (true = big card), <code>help</code>.<br>
 					<strong>insights</strong> (optional): [{"when": "roi &lt; 0", "text": "…"}] shown when the condition is true. <strong>disclaimer</strong> (optional).<br>
+					<strong>currency</strong> (optional): {"default": "INR", "options": ["INR", "USD", "GBP", "EUR", "AED", "AUD", "CAD", "SGD"]} adds a currency picker. Write amounts in the default currency and use <code>{cur}</code> for the symbol, e.g. <code>"prefix": "{cur}"</code>. Switching converts the visitor's amounts at approximate rates.<br>
 					<strong>cta</strong> (optional): {"title", "text", "button", "message"} is the card under the results. The button opens the contact form prefilled with the visitor's numbers and <code>message</code> (use <code>{tool}</code> for the tool name).<br>
 					Formulas support <code>+ - * / % ^</code>, comparisons, <code>&amp;&amp; || !</code>, and <code>min max round floor ceil abs sqrt pow log if(cond, a, b)</code>.
 				</div>
