@@ -10,8 +10,10 @@ import {
   normalizeToolType,
   parseEmbedConfig,
   parseImageConfig,
+  parseSeoAuditConfig,
   type EmbedConfig,
   type ImageCompressorConfig,
+  type SeoAuditConfig,
   type ToolType,
 } from "./toolTypes";
 
@@ -33,7 +35,8 @@ export type Tool = {
 export type ToolRuntime =
   | { type: "calculator"; config: ToolConfig }
   | { type: "image-compressor"; config: ImageCompressorConfig }
-  | { type: "embed"; config: EmbedConfig; code: string };
+  | { type: "embed"; config: EmbedConfig; code: string }
+  | { type: "seo-audit"; config: SeoAuditConfig };
 
 export type ToolDetail = Tool & {
   runtime: ToolRuntime;
@@ -117,6 +120,8 @@ function toRuntime(t: WpTool): ToolRuntime | null {
     }
     case "image-compressor":
       return { type, config: parseImageConfig(t.config) };
+    case "seo-audit":
+      return { type, config: parseSeoAuditConfig(t.config) };
     case "embed": {
       const code = t.code?.trim();
       return code ? { type, config: parseEmbedConfig(t.config), code } : null;

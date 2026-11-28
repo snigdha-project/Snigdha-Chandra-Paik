@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Portfolio Tools
  * Description: Adds a "Tools" content type (calculators, image tools, custom embedded tools) to the portfolio CMS. Each tool is defined in WordPress, rendered by the Next.js site and exposed through WPGraphQL.
- * Version: 1.2.0
+ * Version: 1.3.0
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author: Snigdha Chandra Paik
@@ -23,6 +23,7 @@
  *   calculator        inputs + formulas defined in the settings JSON
  *   image-compressor  built into the site; settings JSON tunes the defaults
  *   embed             your own HTML/CSS/JS, run in a sandboxed frame
+ *   seo-audit         visitor pastes a link and gets an on-page SEO report
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -44,6 +45,7 @@ function ptl_type_options() {
 		'calculator'       => 'Calculator (inputs + formulas)',
 		'image-compressor' => 'Image compressor (built in)',
 		'embed'            => 'Custom embed (your own HTML / JS)',
+		'seo-audit'        => 'SEO health report (built in)',
 	);
 }
 
@@ -109,6 +111,14 @@ function ptl_starters() {
 			'maxWidth'      => 0,
 			'maxFiles'      => 20,
 			'maxFileSizeMB' => 25,
+		),
+		'seo-audit'        => array(
+			'cta' => array(
+				'title'   => 'Want these problems fixed?',
+				'text'    => 'I will fix the issues in this report and help your website get found.',
+				'button'  => 'Fix my SEO',
+				'message' => 'I would like help fixing the SEO of my website.',
+			),
 		),
 		'embed'            => array(
 			'height'     => 520,
@@ -289,7 +299,7 @@ function ptl_render_box( $post ) {
 				<?php endif; ?>
 			</td>
 		</tr>
-		<tr class="ptl-row" data-ptl-types="calculator image-compressor embed">
+		<tr class="ptl-row" data-ptl-types="calculator image-compressor embed seo-audit">
 			<th><label for="pp_tool_config">Settings (JSON)</label></th>
 			<td>
 				<textarea id="pp_tool_config" name="pp_tool_config" class="large-text code" rows="16" spellcheck="false"><?php echo esc_textarea( $get( 'config' ) ); ?></textarea>
@@ -304,6 +314,9 @@ function ptl_render_box( $post ) {
 				</div>
 				<div class="description ptl-help" data-ptl-types="image-compressor">
 					All optional: <code>quality</code> (10-100, default 80), <code>format</code> (<code>webp</code> | <code>jpeg</code>), <code>maxWidth</code> (pixels, 0 = keep size), <code>maxFiles</code> (default 20), <code>maxFileSizeMB</code> (default 25). Images are processed in the visitor's browser and never uploaded.
+				</div>
+				<div class="description ptl-help" data-ptl-types="seo-audit">
+					All optional: <code>cta</code> {"title", "text", "button", "message"} is the card under the report (the button opens the contact form with the website, score and problems filled in) and <code>disclaimer</code>.
 				</div>
 				<div class="description ptl-help" data-ptl-types="embed">
 					Optional: <code>height</code> (pixels, default 520) and <code>autoHeight</code> (true = the frame grows with your content).

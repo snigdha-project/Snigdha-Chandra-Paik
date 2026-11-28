@@ -106,6 +106,10 @@ async function main() {
     if (r.status >= 300) {
       console.error(`  ✗ ${t.slug}: ${r.status} ${JSON.stringify(r.body).slice(0, 200)}`);
       process.exitCode = 1;
+    } else if (r.body.meta?.pp_tool_type !== t.type) {
+      await wp(`/wp/v2/tools/${r.body.id}`, { method: "POST", body: JSON.stringify({ status: "draft" }) });
+      console.error(`  ✗ ${t.slug}: the WordPress plugin does not know type "${t.type}". Upload the latest wordpress/portfolio-tools.zip, then run again. Left as a draft.`);
+      process.exitCode = 1;
     } else {
       console.log(`  ✓ ${existing ? "updated" : "created"} ${t.slug} #${r.body.id}`);
     }

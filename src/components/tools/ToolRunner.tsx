@@ -1,6 +1,7 @@
 import ToolCalculator from "./ToolCalculator";
 import ImageCompressor from "./ImageCompressor";
 import EmbedTool from "./EmbedTool";
+import SeoAudit from "./SeoAudit";
 import type { ToolRuntime } from "@/lib/toolService";
 
 // Picks the interface for a tool by the type chosen in WordPress.
@@ -20,5 +21,7 @@ export default function ToolRunner({
       return <ImageCompressor config={runtime.config} />;
     case "embed":
       return <EmbedTool code={runtime.code} config={runtime.config} title={title} />;
+    case "seo-audit":
+      return <SeoAudit config={runtime.config} title={title} />;
   }
 }

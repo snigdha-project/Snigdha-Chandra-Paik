@@ -2,7 +2,7 @@
 // After seeding, WordPress is the source of truth — edit tools there.
 
 export type SeedTool = {
-  type: "calculator" | "image-compressor" | "embed";
+  type: "calculator" | "image-compressor" | "embed" | "seo-audit";
   code?: string; // embed tools: HTML/CSS/JS run in the sandboxed frame
   slug: string;
   title: string;
@@ -161,6 +161,33 @@ export const SEED_TOOLS: SeedTool[] = [
     ],
     content:
       "<h2>Why break-even ROAS matters</h2><p>A ROAS number means nothing until you compare it with your margin. A 3x ROAS is great for a 50% margin product and a loss for a 25% margin one. This calculator turns your margin into the single number you need to beat.</p><h2>What each result tells you</h2><ul><li><strong>Break-even ROAS</strong> is the floor for every campaign you run.</li><li><strong>Maximum cost per sale</strong> is the ceiling for what you can pay to acquire a customer.</li><li><strong>Target ROAS</strong> is what you must reach to hit your profit goal, not just break even. Use it as the target in your ad platform's bidding settings.</li></ul>",
+  },
+  {
+    type: "seo-audit",
+    slug: "website-seo-health-report",
+    title: "Free Website SEO Health Report",
+    excerpt: "Paste your website link and get an instant SEO score, a list of what is wrong and how to fix it.",
+    category: "Writing & SEO",
+    icon: "search",
+    order: 3,
+    metaTitle: "Free Website SEO Checker: Instant SEO Health Report",
+    metaDescription: "Check your website's SEO for free. Get a score for titles, meta tags, headings, crawling, speed and security, with clear steps to fix each problem.",
+    config: {
+      cta: {
+        title: "Want these problems fixed?",
+        text: "I will fix the issues in this report and help your website get found on Google.",
+        button: "Fix my SEO",
+        message: "I'd like help fixing the SEO of my website.",
+      },
+    },
+    faq: [
+      { q: "What does the report check?", a: "The page title, meta description, indexing rules, headings, text, image descriptions, links, robots.txt, sitemap, social sharing tags, structured data, HTTPS, response time and compression." },
+      { q: "Does it check my whole website?", a: "No. It checks the one page you paste, plus your robots.txt and sitemap. Paste another page's link to check that page too." },
+      { q: "Does it show my Google ranking?", a: "No. Rankings, backlinks and keyword data need paid data sources. This report covers the on-page and technical basics you control." },
+      { q: "Why could my website not be checked?", a: "Some websites block automated visitors, are slow to respond or have an invalid SSL certificate. The error message says which it was." },
+    ],
+    content:
+      "<h2>Start with the red items</h2><p>Items marked to fix can keep a page out of search results or make it look broken in them. Work through those first, then the improvements.</p><h2>What a good score means</h2><p>A high score means the technical basics are in place. Ranking also depends on useful content, relevant keywords and links from other websites, so treat this as the foundation, not the whole job.</p>",
   },
   {
     type: "image-compressor",
